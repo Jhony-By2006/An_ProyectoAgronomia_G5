@@ -7,10 +7,10 @@ import { RecursoadministracionComponent } from './pages/recursoadministracion/re
 
 @Component({
   selector: 'app-root',
-  imports: [
-  ProveedorComponent, 
-  RecursoComponent,
-  RecursoadministracionComponent
+  imports:[
+  // ProveedorComponent, 
+  // RecursoComponent,
+  // RecursoadministracionComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
