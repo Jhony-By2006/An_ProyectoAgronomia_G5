@@ -1,59 +1,45 @@
-# AnProyectoAgronomiaG5
+# Proyecto Frontend para la aplicacion de un sector de sector de Agronomia
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.3.
+Este proyecto ha sido generado usando [Angular CLI](https://github.com/angular/angular-cli) version 21.2.3.
 
-## Development server
+# Instalacion de dependencias
 
-To start a local development server, run:
+Para clonar el repositorio de nuestro proyecto que se encuentra en 
+githu, una vez clonado y abierto la carpeta donde se encuentra el proyecto tenemos que usar el comando:
+
+```bash
+npm install 
+```
+Esto lo que hace es descargar las dependencias del proyecto,
+un caso seria la carpeta de "node_modules" y otro seria package/lock.json
+
+
+# Comando para iniciar un servidor local de desarrollo
+
+Se utiliza el comando: 
 
 ```bash
 ng serve
 ```
+Lo que hace es que permite lanzar el servidor de manera local, al final del texto que manda debe lanzar el `http://localhost:4200/` ya con esa direccion podemos ingresar a la pagina donde se realizan los cambios del proyecto.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## Code scaffolding
+# Codigos de las Herramientas que tiene Angular CLI
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+1. Codigo para crear un nuevo componente:
 
 ```bash
 ng generate component component-name
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+2. Para generar un nuevo servicio ejecute:
 
 ```bash
-ng generate --help
+ng generate service service-name
 ```
 
-## Building
-
-To build the project run:
+3. Para generar los archivos para configurar las variables de entorno:
 
 ```bash
-ng build
+ng generate environments
 ```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

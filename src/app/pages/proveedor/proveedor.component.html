@@ -1,1 +1,25 @@
-<p>proveedor works!</p>
+<div class="contenedor-seccion">
+    <h1 class="titulo proveedor-header">Lista de Proveedores</h1>
+    
+    <ul class="lista-items">
+        @for (item of proveedores; track item.idProveedor) {
+            <li class="elemento-categoria">
+                <div class="info">
+                    <span class="nombre">
+                        {{ item.nombreProveedor }} {{ item.apellidoProveedor }}
+                    </span>
+                    
+                    <span class="id">RUC: {{ item.rucProveedor }}</span>
+                    <span class="id">Email: {{ item.emailProveedor }}</span>
+                    <span class="id">ID Sistema: {{ item.idProveedor }}</span>
+                    
+                    <span class="id">
+                        Estado: {{ item.estadoProveedor ? 'Activo' : 'Inactivo' }}
+                    </span>
+                </div>
+            </li>
+        } @empty {
+            <p>No se encontraron proveedores registrados.</p>
+        }
+    </ul>
+</div>
