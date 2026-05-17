@@ -1,0 +1,40 @@
+services:
+  #Base de Datos usamos MySQL 8.0
+  db:
+    image: mysql:8.0 #imagen
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456 #contraseña root
+      MYSQL_DATABASE: agronomia_db
+    ports:
+      - "4000:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # Administrador de Base de Datos
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - "7000:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: 123456 #contraseña root
+    depends_on:
+      - db
+
+  # Frontend en Angular
+  frontend:
+    image: node:20-alpine
+    working_dir: /app
+    ports:
+      - "4001:4200"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: sh -c "npm install && npx ng serve --host 0.0.0.0"
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
