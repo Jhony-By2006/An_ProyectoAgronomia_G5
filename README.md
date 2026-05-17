@@ -23,10 +23,9 @@ ng serve
 ```
 Lo que hace es que permite lanzar el servidor de manera local, al final del texto que manda debe lanzar el `http://localhost:4200/` ya con esa direccion podemos ingresar a la pagina donde se realizan los cambios del proyecto.
 
-<<<<<<< HEAD
-=======
-Once the server is running, open your browser and navigate to `http://localhost:4001/`. The application will automatically reload whenever you modify any of the source files.
->>>>>>> origin/master
+# Docker
+El localhost de docker es  `http://localhost:4001/`
+
 
 # Codigos de las Herramientas que tiene Angular CLI
 
