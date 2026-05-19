@@ -13,18 +13,8 @@ npm install
 Esto lo que hace es descargar las dependencias del proyecto,
 un caso seria la carpeta de "node_modules" y otro seria package/lock.json
 
-
-# Comando para iniciar un servidor local de desarrollo
-
-Se utiliza el comando: 
-
-```bash
-ng serve
-```
-Lo que hace es que permite lanzar el servidor de manera local, al final del texto que manda debe lanzar el `http://localhost:4200/` ya con esa direccion podemos ingresar a la pagina donde se realizan los cambios del proyecto.
-
 # Docker
-El localhost de docker es  `http://localhost:4001/`
+El localhost de docker es  `http://localhost:7302/`
 
 
 # Codigos de las Herramientas que tiene Angular CLI
