@@ -1,0 +1,27 @@
+<div class="contenedor-seccion">
+    <h1 class="titulo proveedor-header">Lista de Productos Finales</h1>
+    
+    <ul class="lista-items">
+        @for (item of productosFinales; track item.idProductoFinal) {
+            <li class="elemento-categoria">
+                <div class="info">
+                    <span class="nombre">
+                        {{ item.nombreProdF }}
+                    </span>
+                    
+                    <span class="id">Nombre: {{ item.nombreProdF }}</span>
+                    <span class="id">Descripción: {{ item.descripcionProdF }}</span>
+                    <span class="id">Precio: {{ item.precioVentaProdF }}</span>
+                    <span class="id">Cantidad: {{ item.cantidadProducidaProdF }}</span>
+                    <span class="id">ID Sistema: {{ item.idProductoFinal }}</span>
+                    
+                    <span class="id">
+                        Estado: {{ item.estadoProdF ? 'Activo' : 'Inactivo' }}
+                    </span>
+                </div>
+            </li>
+        } @empty {
+            <p>No se encontraron productos finales registrados.</p>
+        }
+    </ul>
+</div>

@@ -1,0 +1,25 @@
+<div class="contenedor-seccion">
+    <h1 class="titulo proveedor-header">Lista de Inventario</h1>
+    
+    <ul class="lista-items">
+        @for (item of inventario; track item.idInventario) {
+            <li class="elemento-categoria">
+                <div class="info">
+                    <span class="nombre">
+                        {{ item.nombreInven }}
+                    </span>
+                    
+                    <span class="id">Nombre: {{ item.nombreInven }}</span>
+                    <span class="id">Cantidad Actual: {{ item.stockActualInven }}</span>
+                    <span class="id">ID Sistema: {{ item.idInventario }}</span>
+                    
+                    <span class="id">
+                        Estado: {{ item.estadoInven ? 'Activo' : 'Inactivo' }}
+                    </span>
+                </div>
+            </li>
+        } @empty {
+            <p>No se encontraron items en el inventario.</p>
+        }
+    </ul>
+</div>
