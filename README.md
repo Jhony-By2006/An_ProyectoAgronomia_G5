@@ -12,6 +12,9 @@ npm install
 ```
 Esto lo que hace es descargar las dependencias del proyecto,
 un caso seria la carpeta de "node_modules" y otro seria package/lock.json
+# Angular CLI
+El localhost de Angular CLI es `http://localhost:4200/`
+
 
 # Docker
 El localhost de docker es  `http://localhost:7302/`
