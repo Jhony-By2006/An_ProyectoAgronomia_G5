@@ -1,0 +1,52 @@
+<div class="contenedor-seccion">
+
+    <h1 class="titulo administracion-header">
+        Lista de Administraciones
+    </h1>
+
+    <ul class="lista-items">
+
+        @for (item of administraciones; track item.idAdministracion) {
+
+            <li class="elemento-categoria">
+
+                <div class="info">
+
+                    <span class="nombre">
+                        {{ item.nombre }}
+                    </span>
+
+                    <span class="id">
+                        Descripción: {{ item.descripcion }}
+                    </span>
+
+                    <span class="id">
+                        Fecha Registro: {{ item.fechaRegistro }}
+                    </span>
+
+                    <span class="id">
+                        Responsable: {{ item.responsable }}
+                    </span>
+
+                    <span class="id">
+                        ID Sistema: {{ item.idAdministracion }}
+                    </span>
+
+                    <span class="id">
+                        Estado:
+                        {{ item.estadoAdmin ? 'Activo' : 'Inactivo' }}
+                    </span>
+
+                </div>
+
+            </li>
+
+        } @empty {
+
+            <p>No se encontraron registros de administración.</p>
+
+        }
+
+    </ul>
+
+</div>
