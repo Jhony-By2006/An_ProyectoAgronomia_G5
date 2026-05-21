@@ -1,1 +1,53 @@
 <p>trabajador works!</p>
+<div class="contenedor-seccion">
+
+    <h1 class="titulo trabajador-header">
+        Lista de Trabajadores
+    </h1>
+
+    <ul class="lista-items">
+
+        @for (item of trabajadores; track item.idTrabajador) {
+
+            <li class="elemento-categoria">
+
+                <div class="info">
+
+                    <span class="nombre">
+                        {{ item.nombre }} {{ item.apellido }}
+                    </span>
+
+                    <span class="id">
+                        Cargo: {{ item.cargo }}
+                    </span>
+
+                    <span class="id">
+                        Teléfono: {{ item.telefono }}
+                    </span>
+
+                    <span class="id">
+                        Email: {{ item.email }}
+                    </span>
+
+                    <span class="id">
+                        ID Sistema: {{ item.idTrabajador }}
+                    </span>
+
+                    <span class="id">
+                        Estado:
+                        {{ item.estadoTrabajador ? 'Activo' : 'Inactivo' }}
+                    </span>
+
+                </div>
+
+            </li>
+
+        } @empty {
+
+            <p>No se encontraron trabajadores registrados.</p>
+
+        }
+
+    </ul>
+
+</div>

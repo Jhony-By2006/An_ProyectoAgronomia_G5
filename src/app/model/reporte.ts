@@ -9,3 +9,4 @@ export class Reporte {
   estadoReporte: boolean;
 
 }
+
