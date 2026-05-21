@@ -1,6 +1,6 @@
-import { Injectable, inject } from '@angular/core';
-import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http'; //Realiza peticiones HTTP (GET, POST, etc.)
+import { inject, Injectable } from '@angular/core';
+import { environment } from '../../environments/environment.development';
+import { HttpClient } from '@angular/common/http';
 import { Recurso } from '../model/recurso';
 
 @Injectable({
@@ -8,9 +8,9 @@ import { Recurso } from '../model/recurso';
 })
 export class RecursoService {
 
-  private url = `${environment.HOST}/Recurso`; //Se conecta con el constructor(private http: HttpClient);
+  private url: string = `${environment.HOST}/Recurso`;
 
-  private readonly http = inject(HttpClient); //El HttpClient nos permite usar las funciones como GET, POST, etc.
+  private readonly http = inject(HttpClient);
 
   findAll() {
     return this.http.get<Recurso[]>(this.url);

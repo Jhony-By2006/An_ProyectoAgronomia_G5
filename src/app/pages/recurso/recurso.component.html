@@ -1,1 +1,26 @@
-<p>recurso works!</p>
+<div class="contenedor-seccion">
+    <h1 class="titulo recurso-header">Lista de Recursos</h1>
+    
+    <ul class="lista-items">
+        @for (item of recursos; track item.idRecurso) {
+            <li class="elemento-categoria">
+                <div class="info">
+                    <span class="nombre">
+                        {{ item.nombreRecurso }}
+                    </span>
+                    <br>
+                    <span class="id">Id del Recurso: {{ item.idRecurso }}</span><br>
+                    <span class="id">Tipo: {{ item.tipoRecurso }}</span><br>
+                    <span class="id">Cantidad: {{ item.cantidadRecurso }} {{ item.unidadMedidaRecurso }}</span><br>
+                    <span class="id">Costo: {{ item.costoRecurso }}</span><br>
+                    <span class="id">Fecha de Ingreso: {{ item.fechaIngresoRecurso }}</span><br>
+                    <span class="id">
+                        Estado: {{ item.estadoRecurso ? 'Activo' : 'Inactivo' }}
+                    </span>
+                </div>
+            </li>
+        } @empty {
+            <p>No se encontraron recursos registrados.</p>
+        }
+    </ul>
+</div>
