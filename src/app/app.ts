@@ -12,8 +12,8 @@ import { MetodoPagoComponent } from './pages/metodopago/metodopago.component';
   imports:[
     RecursoComponent, ProveedorComponent,
     InventarioComponent, ProductoFinalComponent,
-    PagoComponent, MetodoPagoComponent 
-
+    PagoComponent, MetodoPagoComponent,  
+    
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'

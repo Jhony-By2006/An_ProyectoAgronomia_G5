@@ -28,7 +28,7 @@ services:
 
   # Frontend en Angular
   frontend:
-    image: node:20-alpine
+    image: node:24-alpine
     working_dir: /app
     ports:
       - "7302:4200"
