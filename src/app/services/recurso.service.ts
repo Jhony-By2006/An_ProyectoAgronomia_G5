@@ -8,7 +8,7 @@ import { Recurso } from '../model/recurso';
 })
 export class RecursoService {
 
-  private url = `${environment.HOST}/Recursos`; //Se conecta con el constructor(private http: HttpClient);
+  private url = `${environment.HOST}/Recurso`; //Se conecta con el constructor(private http: HttpClient);
 
   private readonly http = inject(HttpClient); //El HttpClient nos permite usar las funciones como GET, POST, etc.
 

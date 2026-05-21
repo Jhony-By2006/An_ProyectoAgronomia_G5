@@ -10,7 +10,7 @@ import { Proveedor } from '../model/proveedor'; //Importa el modelo de datos par
 
 export class ProveedorService {
 
-  private url = `${environment.HOST}/Proveedores`; //Se conecta con el constructor(private http: HttpClient);
+  private url = `${environment.HOST}/Proveedor`; //Se conecta con el constructor(private http: HttpClient);
   
   private readonly http = inject(HttpClient); //El HttpClient nos permite usar las funciones como GET, POST, etc.
 

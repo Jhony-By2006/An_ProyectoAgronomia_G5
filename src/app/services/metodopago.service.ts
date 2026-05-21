@@ -8,7 +8,7 @@ import { MetodoPago } from '../model/metodopago';
   providedIn: 'root',
 })
 export class MetodoPagoService {
-  private url = `${environment.HOST}/MetodosPago`;
+  private url = `${environment.HOST}/MetodoPago`;
   private readonly http = inject(HttpClient);
 
   findAll(): Observable<MetodoPago[]> {

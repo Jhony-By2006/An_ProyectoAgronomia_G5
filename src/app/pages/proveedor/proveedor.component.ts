@@ -1,4 +1,4 @@
-import { Component , inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Proveedor } from '../../model/proveedor';
 import { ProveedorService } from '../../services/proveedor.service';
 
@@ -8,14 +8,11 @@ import { ProveedorService } from '../../services/proveedor.service';
   templateUrl: './proveedor.component.html',
   styleUrl: './proveedor.component.css',
 })
-export class ProveedorComponent {
-  protected proveedores: Proveedor[] = []; //Array para almacenar la lista de proveedores obtenida del backend
-  private readonly  proveedorService = inject(ProveedorService); //Inyecta el servicio ProveedorService para poder usar sus métodos
+export class ProveedorComponent implements OnInit {
+  protected proveedores: Proveedor[] = [];
+  private readonly proveedorService = inject(ProveedorService);
 
-  ngOnInit () : void {
-
-    this.proveedorService.findAll().subscribe(data => this.proveedores = data); //Llama al método findAll del servicio para obtener la lista de proveedores
-
+  ngOnInit(): void {
+    this.proveedorService.findAll().subscribe(data => this.proveedores = data);
   }
-
 }

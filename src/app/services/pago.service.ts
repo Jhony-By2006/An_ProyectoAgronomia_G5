@@ -8,7 +8,7 @@ import { Pago } from '../model/pago';
 })
 export class PagoService {
 
-  private url = `${environment.HOST}/Pagos`; 
+  private url = `${environment.HOST}/pagos`; 
   
   private readonly http = inject(HttpClient); 
 
