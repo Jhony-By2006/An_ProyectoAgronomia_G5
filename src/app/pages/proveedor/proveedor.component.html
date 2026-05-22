@@ -1,24 +1,49 @@
 <div class="contenedor-seccion">
     <h1 class="titulo proveedor-header">Lista de Proveedores</h1>
-    
-    <ul class="lista-items">
-        @for (item of proveedores; track item.idProveedor) {
-            <li class="elemento-categoria">
-                <div class="info">
-                    <span class="nombre">
-                        {{ item.nombreProveedor }} {{ item.apellidoProveedor }}
-                    </span>
-                    <br>
-                    <span class="id">RUC: {{ item.rucProveedor }}</span><br>
-                    <span class="id">Email: {{ item.emailProveedor }}</span><br>
-                    <span class="id">Id del Proveedor: {{ item.idProveedor }}</span><br>
-                    <span class="id">
-                        Estado: {{ item.estadoProveedor ? 'Activo' : 'Inactivo' }}
-                    </span>
-                </div>
-            </li>
-        } @empty {
-            <p>No se encontraron proveedores registrados.</p>
-        }
-    </ul>
+
+    <table mat-table [dataSource]="$dataSource()" class="mat-elevation-z8" style="width: 100%;">
+
+      <ng-container matColumnDef="idProveedor">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let element"> {{element.idProveedor}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nombreProveedor">
+        <th mat-header-cell *matHeaderCellDef> Nombre </th>
+        <td mat-cell *matCellDef="let element"> {{element.nombreProveedor}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="apellidoProveedor">
+        <th mat-header-cell *matHeaderCellDef> Apellido </th>
+        <td mat-cell *matCellDef="let element"> {{element.apellidoProveedor}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="rucProveedor">
+        <th mat-header-cell *matHeaderCellDef> RUC </th>
+        <td mat-cell *matCellDef="let element"> {{element.rucProveedor}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="direccionProveedor">
+        <th mat-header-cell *matHeaderCellDef> Dirección </th>
+        <td mat-cell *matCellDef="let element"> {{element.direccionProveedor}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="telefonoProveedor">
+        <th mat-header-cell *matHeaderCellDef> Teléfono </th>
+        <td mat-cell *matCellDef="let element"> {{element.telefonoProveedor}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="emailProveedor">
+        <th mat-header-cell *matHeaderCellDef> Email </th>
+        <td mat-cell *matCellDef="let element"> {{element.emailProveedor}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="estadoProveedor">
+        <th mat-header-cell *matHeaderCellDef> Estado </th>
+        <td mat-cell *matCellDef="let element"> {{element.estadoProveedor ? 'Activo' : 'Inactivo'}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
 </div>

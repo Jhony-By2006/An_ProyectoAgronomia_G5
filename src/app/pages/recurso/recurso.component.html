@@ -1,26 +1,39 @@
-<div class="contenedor-seccion">
-    <h1 class="titulo recurso-header">Lista de Recursos</h1>
-    
-    <ul class="lista-items">
-        @for (item of recursos; track item.idRecurso) {
-            <li class="elemento-categoria">
-                <div class="info">
-                    <span class="nombre">
-                        {{ item.nombreRecurso }}
-                    </span>
-                    <br>
-                    <span class="id">Id del Recurso: {{ item.idRecurso }}</span><br>
-                    <span class="id">Tipo: {{ item.tipoRecurso }}</span><br>
-                    <span class="id">Cantidad: {{ item.cantidadRecurso }} {{ item.unidadMedidaRecurso }}</span><br>
-                    <span class="id">Costo: {{ item.costoRecurso }}</span><br>
-                    <span class="id">Fecha de Ingreso: {{ item.fechaIngresoRecurso }}</span><br>
-                    <span class="id">
-                        Estado: {{ item.estadoRecurso ? 'Activo' : 'Inactivo' }}
-                    </span>
-                </div>
-            </li>
-        } @empty {
-            <p>No se encontraron recursos registrados.</p>
-        }
-    </ul>
+<div class="contenedor-seccion" style="padding: 20px;">
+    <h1 class="titulo recurso-header">Lista de Recursos Agrícolas</h1>
+
+    <table mat-table [dataSource]="$dataSource()" class="mat-elevation-z8" style="width: 100%;">
+
+      <ng-container matColumnDef="idRecurso">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let element"> {{element.idRecurso}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nombreRecurso">
+        <th mat-header-cell *matHeaderCellDef> Nombre </th>
+        <td mat-cell *matCellDef="let element"> {{element.nombreRecurso}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="tipoRecurso">
+        <th mat-header-cell *matHeaderCellDef> Tipo </th>
+        <td mat-cell *matCellDef="let element"> {{element.tipoRecurso}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cantidadRecurso">
+        <th mat-header-cell *matHeaderCellDef> Cantidad </th>
+        <td mat-cell *matCellDef="let element"> {{element.cantidadRecurso}} {{element.unidadMedidaRecurso}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="costoRecurso">
+        <th mat-header-cell *matHeaderCellDef> Costo </th>
+        <td mat-cell *matCellDef="let element"> S/ {{element.costoRecurso}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="estadoRecurso">
+        <th mat-header-cell *matHeaderCellDef> Estado </th>
+        <td mat-cell *matCellDef="let element"> {{element.estadoRecurso ? 'Activo' : 'Inactivo'}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
 </div>
