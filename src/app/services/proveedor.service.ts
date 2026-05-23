@@ -1,21 +1,14 @@
-import { HttpClient } from '@angular/common/http'; //Realiza peticiones HTTP (GET, POST, etc.)
-import { inject, Injectable } from '@angular/core'; // Inyecta dependencias y declara servicios de angular
-import { environment } from '../../environments/environment.development'; //Importa la configuración del entorno de desarrollo para obtener la URL a base de la API
-import { Proveedor } from '../model/proveedor'; //Importa el modelo de datos para los proveedores
-
+import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment.development';
+import { Proveedor } from '../model/proveedor'; 
+import { GenericSignalService } from './generic-signal.service'; // Se importa la clase generica para reutilizar el codigo y evitar repetir el mismo codigo en cada servicio
 
 @Injectable({
   providedIn: 'root',
 })
 
-export class ProveedorService {
+export class ProveedorService extends GenericSignalService<Proveedor> { // La clase generica es para reutilizar codigo y evitar repetir el mismo codigo en cada servicio, se le pasa el tipo de dato que se va a manejar en este caso Proveedor
 
-  private url = `${environment.HOST}/Proveedor`; //Se conecta con el constructor(private http: HttpClient);
-  
-  private readonly http = inject(HttpClient); //El HttpClient nos permite usar las funciones como GET, POST, etc.
-
-  findAll() { //Pide al backend la lista de proveedores registradors
-    return this.http.get<Proveedor[]>(this.url); 
-  }
+  protected override url: string = `${environment.HOST}/Proveedor`;  // Se sobreescribe la url para que apunte a la ruta de proveedores en el backend
 
 }

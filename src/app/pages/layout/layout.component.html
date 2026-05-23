@@ -3,24 +3,30 @@
     <button mat-icon-button (click)="sidenav.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
-    <span>RENTAPP</span>
+    <span>PROYECTO DE AGRONOMÍA</span>
     <span class="example-spacer"></span>
   </mat-toolbar>
 
   <mat-sidenav-container class="example-sidenav-container">
-    <mat-sidenav #sidenav mode="push" style="width: 250px">
-      <div class="nav-section-label">Menú</div>
-      <mat-divider></mat-divider>
-
-      <button mat-menu-item routerLink="/pages/recurso" routerLinkActive="active" (click)="sidenav.toggle()">
-        <mat-icon>inventory_2</mat-icon>
+    <mat-sidenav #sidenav mode="side" opened>
+      <div class="nav-section-label">Gestión</div>
+      
+      <button mat-menu-item routerLink="/pages/recurso" routerLinkActive="active">
+        <mat-icon>layers</mat-icon>
         <span>Recursos</span>
       </button>
-      <button mat-menu-item routerLink="/pages/proveedor" routerLinkActive="active" (click)="sidenav.toggle()">
+      
+      <button mat-menu-item routerLink="/pages/proveedor" routerLinkActive="active">
         <mat-icon>people</mat-icon>
         <span>Proveedores</span>
       </button>
-      <mat-divider></mat-divider>
+
+      <mat-divider style="margin: 10px 0;"></mat-divider>
+
+      <button mat-menu-item>
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Cerrar sesión</span>
+      </button>
     </mat-sidenav>
 
     <mat-sidenav-content>
