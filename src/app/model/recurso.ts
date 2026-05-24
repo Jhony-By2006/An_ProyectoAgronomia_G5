@@ -1,8 +1,8 @@
-// import { Proveedor } from './proveedor';
+import { Proveedor } from './proveedor';
 
 export class Recurso {
-   idRecurso: number;
-   // proveedor: Proveedor; 
+    idRecurso: number;
+    proveedor?: Proveedor; 
     nombreRecurso: string;
     tipoRecurso: string;
     cantidadRecurso: number;

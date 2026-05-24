@@ -1,36 +1,89 @@
 <div class="example-container">
-  <mat-toolbar color="primary">
-    <button mat-icon-button (click)="sidenav.toggle()">
+
+  <mat-toolbar color="primary" class="app-toolbar">
+    <button mat-icon-button (click)="sidenav.toggle()" class="menu-toggle">
       <mat-icon>menu</mat-icon>
     </button>
-    <span>PROYECTO DE AGRONOMÍA</span>
+    <img src="Logo Proyecto Agronomia.png" alt="Logo" class="brand-logo">
     <span class="example-spacer"></span>
   </mat-toolbar>
 
   <mat-sidenav-container class="example-sidenav-container">
-    <mat-sidenav #sidenav mode="side" opened>
+
+    <mat-sidenav #sidenav mode="side" opened class="app-sidenav">
+
+        <mat-divider class="nav-divider"></mat-divider>
+
       <div class="nav-section-label">Gestión</div>
-      
-      <button mat-menu-item routerLink="/pages/recurso" routerLinkActive="active">
-        <mat-icon>layers</mat-icon>
-        <span>Recursos</span>
+
+      <button mat-menu-item routerLink="/pages/administracion" routerLinkActive="active">
+        <mat-icon>settings</mat-icon>
+        <span>Administración</span>
       </button>
-      
+
+      <button mat-menu-item routerLink="/pages/inventario" routerLinkActive="active">
+        <mat-icon>inventory_2</mat-icon>
+        <span>Inventario</span>
+      </button>
+
+      <button mat-menu-item routerLink="/pages/metodo-pago" routerLinkActive="active">
+        <mat-icon>credit_card</mat-icon>
+        <span>Métodos de Pago</span>
+      </button>
+
+      <button mat-menu-item routerLink="/pages/pago" routerLinkActive="active">
+        <mat-icon>credit_card</mat-icon>
+        <span>Pagos</span>
+      </button>
+
+      <button mat-menu-item routerLink="/pages/producto-final" routerLinkActive="active">
+        <mat-icon>inventory</mat-icon>
+        <span>Productos Finales</span>
+      </button>
+
+      <button mat-menu-item routerLink="/pages/producto-inicial" routerLinkActive="active">
+        <mat-icon>inventory</mat-icon>
+        <span>Productos Iniciales</span>
+      </button>
+
       <button mat-menu-item routerLink="/pages/proveedor" routerLinkActive="active">
         <mat-icon>people</mat-icon>
         <span>Proveedores</span>
       </button>
 
-      <mat-divider style="margin: 10px 0;"></mat-divider>
+      <button mat-menu-item routerLink="/pages/recurso" routerLinkActive="active">
+        <mat-icon>layers</mat-icon>
+        <span>Recursos</span>
+      </button>
 
-      <button mat-menu-item>
+      <button mat-menu-item routerLink="/pages/recurso-admin" routerLinkActive="active">
+        <mat-icon>settings</mat-icon>
+        <span>Recursos Admin</span>
+      </button>
+
+      <button mat-menu-item routerLink="/pages/reporte" routerLinkActive="active">
+        <mat-icon>bar_chart</mat-icon>
+        <span>Reportes</span>
+      </button>
+
+      <button mat-menu-item routerLink="/pages/trabajador" routerLinkActive="active">
+        <mat-icon>people</mat-icon>
+        <span>Trabajadores</span>
+      </button>
+
+      <mat-divider class="nav-divider"></mat-divider>
+
+      <button mat-menu-item class="btn-logout">
         <mat-icon>exit_to_app</mat-icon>
         <span>Cerrar sesión</span>
       </button>
+
     </mat-sidenav>
 
     <mat-sidenav-content>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
+
   </mat-sidenav-container>
+
 </div>
