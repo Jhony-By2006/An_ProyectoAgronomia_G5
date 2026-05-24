@@ -1,114 +1,100 @@
-<div class="example-container">
+<div class="form-page">
 
-    <mat-form-field>
-        <mat-label>Buscar</mat-label>
-        <input
-            matInput
-            (keyup)="applyFilter($event)"
-            placeholder="Buscar trabajador">
-    </mat-form-field>
+  <h2 class="form-title">Gestión de Trabajadores</h2>
 
-    <div class="mat-elevation-z8">
+  <form [formGroup]="$form()" (submit)="operate()"
+        class="form-card" #frmTrabajador="ngForm">
 
-        <table mat-table [dataSource]="$dataSource()" matSort>
+    <div [hidden]="true">
+      <mat-form-field>
+        <mat-label>ID</mat-label>
+        <input matInput placeholder="ID" formControlName="idTrabajador">
+      </mat-form-field>
+    </div>
 
-            <!-- ID -->
-            <ng-container matColumnDef="idTrabajador">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-                <td mat-cell *matCellDef="let element">
-                    {{ element.idTrabajador }}
-                </td>
-            </ng-container>
+    <div class="form-grid">
 
-            <!-- NOMBRE -->
-            <ng-container matColumnDef="nombre">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
-                <td mat-cell *matCellDef="let element">
-                    {{ element.nombre }}
-                </td>
-            </ng-container>
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput placeholder="Nombre" formControlName="nombre">
 
-            <!-- APELLIDO -->
-            <ng-container matColumnDef="apellido">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Apellido</th>
-                <td mat-cell *matCellDef="let element">
-                    {{ element.apellido }}
-                </td>
-            </ng-container>
+        @if ($f()['nombre'].errors?.['required'] && $f()['nombre'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
 
-            <!-- CARGO -->
-            <ng-container matColumnDef="cargo">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Cargo</th>
-                <td mat-cell *matCellDef="let element">
-                    {{ element.cargo }}
-                </td>
-            </ng-container>
+      </mat-form-field>
 
-            <!-- TELEFONO -->
-            <ng-container matColumnDef="telefono">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Telefono</th>
-                <td mat-cell *matCellDef="let element">
-                    {{ element.telefono }}
-                </td>
-            </ng-container>
+      <mat-form-field appearance="outline">
+        <mat-label>Apellido</mat-label>
+        <input matInput placeholder="Apellido" formControlName="apellido">
 
-            <!-- EMAIL -->
-            <ng-container matColumnDef="email">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
-                <td mat-cell *matCellDef="let element">
-                    {{ element.email }}
-                </td>
-            </ng-container>
+        @if ($f()['apellido'].errors?.['required'] && $f()['apellido'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
 
-            <!-- ESTADO -->
-            <ng-container matColumnDef="estadoTrabajador">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
-                <td mat-cell *matCellDef="let element">
-                    {{ element.estadoTrabajador ? 'Activo' : 'Inactivo' }}
-                </td>
-            </ng-container>
+      </mat-form-field>
 
-            <!-- ACTIONS -->
-            <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <mat-form-field appearance="outline">
+        <mat-label>Cargo</mat-label>
+        <input matInput placeholder="Cargo" formControlName="cargo">
 
-                <td mat-cell *matCellDef="let element">
+        @if ($f()['cargo'].errors?.['required'] && $f()['cargo'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
 
-                    <button
-                        mat-icon-button
-                        color="primary"
-                        [routerLink]="['/pages/trabajador/edit', element.idTrabajador]">
+      </mat-form-field>
 
-                        <mat-icon>edit</mat-icon>
+      <mat-form-field appearance="outline">
+        <mat-label>Teléfono</mat-label>
+        <input matInput placeholder="Teléfono" formControlName="telefono">
 
-                    </button>
+        @if ($f()['telefono'].errors?.['required'] && $f()['telefono'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
 
-                    <button
-                        mat-icon-button
-                        color="warn"
-                        (click)="delete(element.idTrabajador)">
+      </mat-form-field>
 
-                        <mat-icon>delete</mat-icon>
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="Email" formControlName="email">
 
-                    </button>
+        @if ($f()['email'].errors?.['required'] && $f()['email'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
 
-                </td>
-            </ng-container>
+      </mat-form-field>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-        </table>
-
-        <mat-paginator
-            [pageSizeOptions]="[5, 10, 20]"
-            showFirstLastButtons>
-
-        </mat-paginator>
+      <mat-form-field appearance="outline">
+        <mat-label>Estado</mat-label>
+        <input matInput placeholder="Estado" formControlName="estadoTrabajador">
+      </mat-form-field>
 
     </div>
 
-</div>
+    <div class="form-actions">
 
-<router-outlet></router-outlet>
+      <button mat-flat-button
+              type="button"
+              class="btn-cancel"
+              routerLink="/pages/trabajador">
+
+        <mat-icon>cancel</mat-icon>
+        <span>Cancelar</span>
+
+      </button>
+
+      <button mat-flat-button
+              type="submit"
+              class="btn-submit"
+              [disabled]="frmTrabajador.invalid">
+
+        <mat-icon>done</mat-icon>
+        <span>Guardar</span>
+
+      </button>
+
+    </div>
+
+  </form>
+
+</div>

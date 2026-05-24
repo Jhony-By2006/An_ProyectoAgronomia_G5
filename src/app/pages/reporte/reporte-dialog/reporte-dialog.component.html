@@ -1,29 +1,63 @@
-<h2 mat-dialog-title>Detalle del Reporte</h2>
+<h2 mat-dialog-title class="dialog-title">
+  Detalle del Reporte
+</h2>
 
-<mat-dialog-content>
+<mat-dialog-content class="dialog-content">
 
-    <p><strong>ID:</strong> {{ reporte.idReporte }}</p>
+  <div class="info-grid">
 
-    <p><strong>Titulo:</strong> {{ reporte.titulo }}</p>
+    <div class="info-item">
+      <strong>ID:</strong>
+      <span>{{ reporte.idReporte }}</span>
+    </div>
 
-    <p><strong>Tipo:</strong> {{ reporte.tipoReporte }}</p>
+    <div class="info-item">
+      <strong>Título:</strong>
+      <span>{{ reporte.titulo }}</span>
+    </div>
 
-    <p><strong>Fecha:</strong> {{ reporte.fechaGeneracion }}</p>
+    <div class="info-item">
+      <strong>Tipo:</strong>
+      <span>{{ reporte.tipoReporte }}</span>
+    </div>
 
-    <p><strong>Generado Por:</strong> {{ reporte.generadoPor }}</p>
+    <div class="info-item">
+      <strong>Fecha:</strong>
+      <span>{{ reporte.fechaGeneracion }}</span>
+    </div>
 
-    <p><strong>Contenido:</strong></p>
+    <div class="info-item">
+      <strong>Generado Por:</strong>
+      <span>{{ reporte.generadoPor }}</span>
+    </div>
 
-    <textarea rows="10" readonly>
+    <div class="info-item">
+      <strong>Estado:</strong>
+      <span>
+        {{ reporte.estadoReporte ? 'Activo' : 'Inactivo' }}
+      </span>
+    </div>
+
+  </div>
+
+  <div class="contenido-box">
+
+    <strong>Contenido:</strong>
+
+    <textarea readonly rows="10">
 {{ reporte.contenido }}
     </textarea>
+
+  </div>
 
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
 
-    <button mat-button (click)="close()">
-        Cerrar
-    </button>
+  <button mat-flat-button class="btn-close" (click)="close()">
+
+    Cerrar
+
+  </button>
 
 </mat-dialog-actions>

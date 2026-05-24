@@ -1,93 +1,60 @@
-import { Component, effect, inject, signal, untracked, viewChild } from '@angular/core';
-import { Trabajador } from '../../../model/trabajador';
-import { TrabajadorService } from '../../../services/trabajador.service';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
+import { Component, computed, effect, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatInputModule } from '@angular/material/input';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { TrabajadorService } from '../../../services/trabajador.service';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Trabajador } from '../../../model/trabajador';
 import { switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-trabajador-edit',
   imports: [
-    MatTableModule,
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatPaginatorModule,
-    MatSortModule,
     MatButtonModule,
     MatIconModule,
-    RouterLink,
-    RouterOutlet,
-    MatSnackBarModule
+    RouterLink
   ],
   templateUrl: './trabajador-edit.component.html',
   styleUrl: './trabajador-edit.component.css',
 })
 export class TrabajadorEditComponent {
 
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly trabajadorService = inject(TrabajadorService);
-  private readonly snackBar = inject(MatSnackBar);
 
-  protected $dataSource = signal(new MatTableDataSource<Trabajador>());
-  protected $paginator = viewChild(MatPaginator);
-  protected $sort = viewChild(MatSort);
+  protected $form = signal(new FormGroup({
+    idTrabajador: new FormControl<number | null>(null),
+    nombre: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(70)]),
+    apellido: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(70)]),
+    cargo: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(70)]),
+    telefono: new FormControl<string>('', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]),
+    email: new FormControl<string>('', [Validators.required, Validators.email]),
+    estadoTrabajador: new FormControl<boolean | null>(true),
+  }));
 
-  protected $trabajadores = this.trabajadorService.$listChange;
+  private readonly $params = toSignal(this.route.params, { initialValue: {} });
 
-  protected displayedColumns: string[] = [
-    'idTrabajador',
-    'nombre',
-    'apellido',
-    'cargo',
-    'telefono',
-    'email',
-    'estadoTrabajador',
-    'actions'
-  ];
+  protected $id = computed(() => this.$params()['id']);
+  protected $isEdit = computed(() => !!this.$id());
+  protected $f = computed(() => this.$form().controls);
 
   constructor() {
 
-    this.trabajadorService.findAll()
-      .subscribe(data => this.trabajadorService.setListChange(data));
-
     effect(() => {
 
-      const data = this.$trabajadores();
-      const p = this.$paginator();
-      const s = this.$sort();
-      const ds = this.$dataSource();
+      const id = this.$id();
 
-      ds.data = data;
-      ds.paginator = p ? p : null;
-      ds.sort = s ? s : null;
+      if(id){
 
-    });
-
-    effect(() => {
-
-      const message = this.trabajadorService.$messageChange();
-
-      if(message){
-
-        this.snackBar.open(
-          message,
-          'INFO',
-          {
-            duration: 2000,
-            horizontalPosition: 'right',
-            verticalPosition: 'top'
-          }
-        );
-
-        untracked(() =>
-          this.trabajadorService.setMessageChange('')
-        );
+        this.trabajadorService.findById(id)
+          .subscribe(data => this.$form().patchValue(data));
 
       }
 
@@ -95,28 +62,27 @@ export class TrabajadorEditComponent {
 
   }
 
-  applyFilter(e: any){
+  operate(){
 
-    const filterValue = e.target.value;
-    this.$dataSource().filter = filterValue.trim().toLowerCase();
+    const form = this.$form();
+    const isEdit = this.$isEdit();
 
-  }
+    if(form.invalid) return;
 
-  delete(idTrabajador: number){
+    const trabajador: Trabajador = form.value as Trabajador;
 
-    const ok = window.confirm('Are you sure to delete?');
+    const operation$ = isEdit
+      ? this.trabajadorService.update(trabajador.idTrabajador!, trabajador)
+      : this.trabajadorService.save(trabajador);
 
-    if(ok){
-
-      this.trabajadorService.delete(idTrabajador)
-      .pipe(
-        switchMap(() => this.trabajadorService.findAll()),
-        tap(data => this.trabajadorService.setListChange(data)),
-        tap(() => this.trabajadorService.setMessageChange('DELETED'))
-      )
-      .subscribe();
-
-    }
+    operation$.pipe(
+      switchMap(() => this.trabajadorService.findAll()),
+      tap(data => this.trabajadorService.setListChange(data)),
+      tap(() => this.trabajadorService.setMessageChange(isEdit ? 'UPDATED' : 'CREATED'))
+    )
+    .subscribe(() => {
+      this.router.navigate(['/pages/trabajador']);
+    });
 
   }
 

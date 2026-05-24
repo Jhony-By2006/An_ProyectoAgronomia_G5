@@ -1,43 +1,99 @@
-/* Contenedor principal del formulario */
-.example-container {
-    display: flex;
-    flex-direction: column;
-    padding: 25px;
-    background: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    max-width: 600px; /* Limitamos el ancho para que no se estire demasiado */
-    margin: 20px auto; /* Centrado en pantalla */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
 }
 
-/* Asegurar que los campos ocupen todo el ancho disponible */
-.example-container > * {
-    width: 100%;
-    margin-bottom: 10px;
+.page-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1B4332;
 }
 
-/* Estilo para mensajes de error de validación */
-.invalid {
-    color: #d32f2f;
-    font-size: 0.8rem;
-    margin-top: -10px;
-    margin-bottom: 10px;
-    display: block;
+.btn-registrar {
+  background-color: #2F6B52 !important;
+  color: #fff !important;
+  border-radius: 24px !important;
+  font-weight: 500 !important;
+  padding: 0 20px !important;
+  height: 42px !important;
 }
 
-/* Estilo para los botones */
-.example-container button {
-    margin-top: 15px;
-    padding: 10px;
+/* ── Buscador — respeta mat-form-field ── */
+.search-field {
+  width: 380px;
+  margin-bottom: 16px;
 }
 
-.cancel-button {
-    background-color: #f44336;
-    color: white;
-    margin-left: 10px;
+.search-field .mdc-notched-outline__leading,
+.search-field .mdc-notched-outline__notch,
+.search-field .mdc-notched-outline__trailing {
+  border-color: #1B4332 !important;
 }
 
-/* Espaciado para el formulario */
-mat-form-field {
-    margin-top: 10px;
+.search-field .mat-mdc-floating-label {
+  color: #1B4332 !important;
+}
+
+/* ── Tabla ── */
+.table-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+table {
+  width: 100%;
+}
+
+.mat-mdc-table {
+  background: transparent !important;
+}
+
+.mat-mdc-header-cell {
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  color: #2D6A4F !important;
+}
+
+.mat-mdc-cell {
+  font-size: 13.5px;
+}
+
+/* ── Badges de estado ── */
+.badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-active {
+  background: #D8F3DC;
+  color: #1B4332;
+}
+
+.badge-inactive {
+  background: #fde8e8;
+  color: #b91c1c;
+}
+
+/* ── Botones de acción ── */
+.btn-edit .mat-icon {
+  color: #2D6A4F;
+}
+
+.btn-delete .mat-icon {
+  color: #e57373;
+}
+
+/* ── Sin datos ── */
+.no-data {
+  text-align: center;
+  padding: 40px !important;
+  color: #888;
+  font-style: italic;
 }

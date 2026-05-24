@@ -1,6 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogTitle,
+  MatDialogRef
+} from '@angular/material/dialog';
 import { Reporte } from '../../../model/reporte';
 
 @Component({
@@ -12,11 +18,11 @@ import { Reporte } from '../../../model/reporte';
     MatButtonModule
   ],
   templateUrl: './reporte-dialog.component.html',
-  styleUrl: './reporte-dialog.component.css'
+  styleUrl: './reporte-dialog.component.css',
 })
 export class ReporteDialogComponent {
 
-  protected reporte!: Reporte;
+  protected reporte: Reporte = inject(MAT_DIALOG_DATA);
 
   private readonly dialogRef = inject(MatDialogRef<ReporteDialogComponent>);
 
