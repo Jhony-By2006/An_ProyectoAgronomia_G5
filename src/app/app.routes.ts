@@ -3,6 +3,7 @@ import { RecursoComponent } from './pages/recurso/recurso.component';
 import { ProveedorComponent } from './pages/proveedor/proveedor.component';
 import { ProveedorEditComponent } from './pages/proveedor/proveedor-edit/proveedor-edit.component';
 import { RecursoEditComponent } from './pages/recurso/recurso-edit/recurso-edit.component';
+import { AdministracionComponent } from './pages/administracion/administracion.component'; // <-- 1. Importas tu componente
 
 export const routes: Routes = [
   { 
@@ -21,4 +22,5 @@ export const routes: Routes = [
       { path: 'edit/:id', component: RecursoEditComponent },
     ],
   },
+  { path: 'pages/administracion', component: AdministracionComponent}
 ];

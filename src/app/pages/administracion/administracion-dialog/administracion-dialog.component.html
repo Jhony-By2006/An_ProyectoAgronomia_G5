@@ -1,0 +1,63 @@
+<mat-toolbar color="primary" class="dialog-toolbar">
+  <span>{{ $administracion().idAdministracion ? 'Editar' : 'Registrar' }} Administración</span>
+  <button mat-icon-button (click)="close()" class="close-icon">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-dialog-content class="dialog-container">
+  @let admin = $administracion();
+
+  <form (submit)="operate()" class="form-container" #frmAdmin="ngForm">
+    
+    <div class="form-grid">
+      
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput placeholder="Nombre de la sede/área" [(ngModel)]="admin.nombre" name="nombre" required #nombreField="ngModel">
+        @if (nombreField.invalid && nombreField.touched) {
+          <small class="invalid">Es requerido</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Responsable</mat-label>
+        <input matInput placeholder="Nombre del encargado" [(ngModel)]="admin.responsable" name="responsable" required #respField="ngModel">
+        @if (respField.invalid && respField.touched) {
+          <small class="invalid">Es requerido</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha Registro</mat-label>
+        <input matInput type="date" [(ngModel)]="admin.fechaRegistro" name="fechaRegistro">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Estado de Administración</mat-label>
+        <mat-select [(ngModel)]="admin.estadoAdmin" name="estadoAdmin">
+          <mat-option [value]="true">Activo</mat-option>
+          <mat-option [value]="false">Inactivo</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Descripción</mat-label>
+        <textarea matInput placeholder="Detalles o anotaciones adicionales" [(ngModel)]="admin.descripcion" name="descripcion" rows="3"></textarea>
+      </mat-form-field>
+
+    </div>
+
+    <div class="form-actions">
+      <button mat-flat-button type="button" class="btn-cancel" (click)="close()">
+        <mat-icon>cancel</mat-icon>
+        <span>Cancelar</span>
+      </button>
+      <button mat-flat-button type="submit" class="btn-submit" [disabled]="frmAdmin.invalid">
+        <mat-icon>done</mat-icon>
+        <span>Guardar</span>
+      </button>
+    </div>
+
+  </form>
+</mat-dialog-content>

@@ -1,52 +1,75 @@
-<div class="contenedor-seccion">
 
-    <h1 class="titulo administracion-header">
-        Lista de Administraciones
-    </h1>
+<div class="page-header">
+  <h2 class="page-title">Gestión de Administración</h2>
+  <button mat-flat-button class="btn-registrar" (click)="openDialog()">
+    <mat-icon>add</mat-icon> Registrar Administración
+  </button>
+</div>
 
-    <ul class="lista-items">
+<mat-form-field class="search-field" appearance="outline">
+  <mat-label>Buscar Administración</mat-label>
+  <mat-icon matPrefix>search</mat-icon>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Central" #input>
+</mat-form-field>
 
-        @for (item of administraciones; track item.idAdministracion) {
+<div class="table-card">
+  <table mat-table [dataSource]="$dataSource()" matSort>
 
-            <li class="elemento-categoria">
+    <ng-container matColumnDef="idAdministracion">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+      <td mat-cell *matCellDef="let row"> {{row.idAdministracion}} </td>
+    </ng-container>
 
-                <div class="info">
+    <ng-container matColumnDef="nombre">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+      <td mat-cell *matCellDef="let row"> {{row.nombre}} </td>
+    </ng-container>
 
-                    <span class="nombre">
-                        {{ item.nombre }}
-                    </span>
+    <ng-container matColumnDef="descripcion">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+      <td mat-cell *matCellDef="let row"> {{row.descripcion}} </td>
+    </ng-container>
 
-                    <span class="id">
-                        Descripción: {{ item.descripcion }}
-                    </span>
+    <ng-container matColumnDef="fechaRegistro">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Registro </th>
+      <td mat-cell *matCellDef="let row"> {{row.fechaRegistro}} </td>
+    </ng-container>
 
-                    <span class="id">
-                        Fecha Registro: {{ item.fechaRegistro }}
-                    </span>
+    <ng-container matColumnDef="responsable">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Responsable </th>
+      <td mat-cell *matCellDef="let row"> {{row.responsable}} </td>
+    </ng-container>
 
-                    <span class="id">
-                        Responsable: {{ item.responsable }}
-                    </span>
+    <ng-container matColumnDef="estadoAdmin">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+      <td mat-cell *matCellDef="let row">
+        <span [class]="row.estadoAdmin ? 'badge badge-active' : 'badge badge-inactive'">
+          {{ row.estadoAdmin ? 'Activo' : 'Inactivo' }}
+        </span>
+      </td>
+    </ng-container>
 
-                    <span class="id">
-                        ID Sistema: {{ item.idAdministracion }}
-                    </span>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Acciones </th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-icon-button class="btn-edit" (click)="openDialog(row)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button class="btn-delete" (click)="delete(row.idAdministracion)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
 
-                    <span class="id">
-                        Estado:
-                        {{ item.estadoAdmin ? 'Activo' : 'Inactivo' }}
-                    </span>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-                </div>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell no-data" colspan="7">
+        No hay resultados para "{{input.value}}"
+      </td>
+    </tr>
+  </table>
 
-            </li>
-
-        } @empty {
-
-            <p>No se encontraron registros de administración.</p>
-
-        }
-
-    </ul>
-
+  <mat-paginator [pageSizeOptions]="[5, 10, 25]" aria-label="Seleccionar página"></mat-paginator>
 </div>

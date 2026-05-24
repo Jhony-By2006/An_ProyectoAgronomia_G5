@@ -23,8 +23,8 @@ import { switchMap, tap } from 'rxjs';
     MatSortModule,
     MatButtonModule,
     MatIconModule,
-    RouterLink,
-    RouterOutlet,
+    //RouterLink,
+    //RouterOutlet,
     MatSnackBarModule
   ],
   templateUrl: './reporte.component.html',
