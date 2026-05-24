@@ -1,0 +1,72 @@
+<mat-dialog-content>
+
+    <mat-toolbar>
+        <span>Reporte Info</span>
+    </mat-toolbar>
+
+    <div class="example-container">
+
+        <mat-form-field>
+            <input
+                matInput
+                placeholder="Título"
+                [(ngModel)]="$reporte().titulo">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input
+                matInput
+                placeholder="Tipo Reporte"
+                [(ngModel)]="$reporte().tipoReporte">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input
+                matInput
+                placeholder="Fecha Generación"
+                [(ngModel)]="$reporte().fechaGeneracion">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input
+                matInput
+                placeholder="Contenido"
+                [(ngModel)]="$reporte().contenido">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input
+                matInput
+                placeholder="Generado Por"
+                [(ngModel)]="$reporte().generadoPor">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input
+                matInput
+                placeholder="Estado Reporte"
+                [(ngModel)]="$reporte().estadoReporte">
+        </mat-form-field>
+
+        <button mat-flat-button (click)="operate()">
+
+            <span>OK</span>
+
+            <mat-icon>done</mat-icon>
+
+        </button>
+
+        <button
+            mat-flat-button
+            class="cancel-button"
+            (click)="close()">
+
+            <span>Cancel</span>
+
+            <mat-icon>cancel</mat-icon>
+
+        </button>
+
+    </div>
+
+</mat-dialog-content>

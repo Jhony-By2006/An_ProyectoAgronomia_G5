@@ -1,100 +1,177 @@
-<div class="form-page">
+<router-outlet></router-outlet>
 
-  <h2 class="form-title">Gestión de Trabajadores</h2>
+<div class="page-header">
+  <h2 class="page-title">Gestión de Trabajadores</h2>
 
-  <form [formGroup]="$form()" (submit)="operate()"
-        class="form-card" #frmTrabajador="ngForm">
+  <button
+    mat-flat-button
+    class="btn-registrar"
+    routerLink="/pages/trabajador/new">
 
-    <div [hidden]="true">
-      <mat-form-field>
-        <mat-label>ID</mat-label>
-        <input matInput placeholder="ID" formControlName="idTrabajador">
-      </mat-form-field>
-    </div>
+    <mat-icon>add</mat-icon>
+    Registrar Trabajador
 
-    <div class="form-grid">
+  </button>
+</div>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input matInput placeholder="Nombre" formControlName="nombre">
+<mat-form-field class="search-field" appearance="outline">
 
-        @if ($f()['nombre'].errors?.['required'] && $f()['nombre'].touched) {
-          <small class="invalid">Es requerido</small>
-        }
+  <mat-label>Buscar Trabajadores</mat-label>
 
-      </mat-form-field>
+  <mat-icon matPrefix>search</mat-icon>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Apellido</mat-label>
-        <input matInput placeholder="Apellido" formControlName="apellido">
+  <input
+    matInput
+    (keyup)="applyFilter($event)"
+    placeholder="Ej. Carlos"
+    #input>
 
-        @if ($f()['apellido'].errors?.['required'] && $f()['apellido'].touched) {
-          <small class="invalid">Es requerido</small>
-        }
+</mat-form-field>
 
-      </mat-form-field>
+<div class="table-card">
 
-      <mat-form-field appearance="outline">
-        <mat-label>Cargo</mat-label>
-        <input matInput placeholder="Cargo" formControlName="cargo">
+  <table mat-table [dataSource]="$dataSource()" matSort>
 
-        @if ($f()['cargo'].errors?.['required'] && $f()['cargo'].touched) {
-          <small class="invalid">Es requerido</small>
-        }
+    <ng-container matColumnDef="idTrabajador">
 
-      </mat-form-field>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        ID
+      </th>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Teléfono</mat-label>
-        <input matInput placeholder="Teléfono" formControlName="telefono">
+      <td mat-cell *matCellDef="let row">
+        {{row.idTrabajador}}
+      </td>
 
-        @if ($f()['telefono'].errors?.['required'] && $f()['telefono'].touched) {
-          <small class="invalid">Es requerido</small>
-        }
+    </ng-container>
 
-      </mat-form-field>
+    <ng-container matColumnDef="nombre">
 
-      <mat-form-field appearance="outline" class="field-span2">
-        <mat-label>Email</mat-label>
-        <input matInput placeholder="Email" formControlName="email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Nombre
+      </th>
 
-        @if ($f()['email'].errors?.['required'] && $f()['email'].touched) {
-          <small class="invalid">Es requerido</small>
-        }
+      <td mat-cell *matCellDef="let row">
+        {{row.nombre}}
+      </td>
 
-      </mat-form-field>
+    </ng-container>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Estado</mat-label>
-        <input matInput placeholder="Estado" formControlName="estadoTrabajador">
-      </mat-form-field>
+    <ng-container matColumnDef="apellido">
 
-    </div>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Apellido
+      </th>
 
-    <div class="form-actions">
+      <td mat-cell *matCellDef="let row">
+        {{row.apellido}}
+      </td>
 
-      <button mat-flat-button
-              type="button"
-              class="btn-cancel"
-              routerLink="/pages/trabajador">
+    </ng-container>
 
-        <mat-icon>cancel</mat-icon>
-        <span>Cancelar</span>
+    <ng-container matColumnDef="cargo">
 
-      </button>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Cargo
+      </th>
 
-      <button mat-flat-button
-              type="submit"
-              class="btn-submit"
-              [disabled]="frmTrabajador.invalid">
+      <td mat-cell *matCellDef="let row">
+        {{row.cargo}}
+      </td>
 
-        <mat-icon>done</mat-icon>
-        <span>Guardar</span>
+    </ng-container>
 
-      </button>
+    <ng-container matColumnDef="telefono">
 
-    </div>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Teléfono
+      </th>
 
-  </form>
+      <td mat-cell *matCellDef="let row">
+        {{row.telefono}}
+      </td>
+
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Email
+      </th>
+
+      <td mat-cell *matCellDef="let row">
+        {{row.email}}
+      </td>
+
+    </ng-container>
+
+    <ng-container matColumnDef="estadoTrabajador">
+
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Estado
+      </th>
+
+      <td mat-cell *matCellDef="let row">
+
+        <span [class]="row.estadoTrabajador ? 'badge badge-active' : 'badge badge-inactive'">
+
+          {{ row.estadoTrabajador ? 'Disponible' : 'No disponible' }}
+
+        </span>
+
+      </td>
+
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+
+      <th mat-header-cell *matHeaderCellDef>
+        Acciones
+      </th>
+
+      <td mat-cell *matCellDef="let row">
+
+        <button
+          mat-icon-button
+          class="btn-edit"
+          [routerLink]="['edit', row.idTrabajador]">
+
+          <mat-icon>edit</mat-icon>
+
+        </button>
+
+        <button
+          mat-icon-button
+          class="btn-delete"
+          (click)="delete(row.idTrabajador)">
+
+          <mat-icon>delete</mat-icon>
+
+        </button>
+
+      </td>
+
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+
+      <td class="mat-cell no-data" colspan="8">
+
+        No hay resultados para "{{input.value}}"
+
+      </td>
+
+    </tr>
+
+  </table>
+
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 25]"
+    aria-label="Seleccionar página">
+
+  </mat-paginator>
 
 </div>
