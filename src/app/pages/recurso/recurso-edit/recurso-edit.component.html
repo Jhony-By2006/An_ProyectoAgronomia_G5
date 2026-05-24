@@ -1,1 +1,82 @@
-<p>recurso-edit works!</p>
+<div class="form-page">
+  <h2 class="form-title">Gestión de Recursos</h2>
+
+  <form [formGroup]="$form()" (submit)="operate()" class="form-card" #frmRecurso="ngForm">
+
+    <div [hidden]="true">
+      <mat-form-field>
+        <mat-label>ID</mat-label>
+        <input matInput placeholder="ID" formControlName="idRecurso">
+      </mat-form-field>
+    </div>
+
+    <div class="form-grid">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre Recurso</mat-label>
+        <input matInput placeholder="Ej. Urea" formControlName="nombreRecurso">
+        @if ($f()['nombreRecurso'].errors?.['required'] && $f()['nombreRecurso'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Tipo Recurso</mat-label>
+        <input matInput placeholder="Ej. Fertilizante" formControlName="tipoRecurso">
+        @if ($f()['tipoRecurso'].errors?.['required'] && $f()['tipoRecurso'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Cantidad</mat-label>
+        <input type="number" matInput placeholder="Cantidad" formControlName="cantidadRecurso">
+        @if ($f()['cantidadRecurso'].errors?.['required'] && $f()['cantidadRecurso'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Unidad de Medida</mat-label>
+        <input matInput placeholder="Ej. Kg, Litros" formControlName="unidadMedidaRecurso">
+        @if ($f()['unidadMedidaRecurso'].errors?.['required'] && $f()['unidadMedidaRecurso'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Costo</mat-label>
+        <input type="number" matInput placeholder="Costo" formControlName="costoRecurso">
+        @if ($f()['costoRecurso'].errors?.['required'] && $f()['costoRecurso'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha Ingreso</mat-label>
+        <input matInput placeholder="AAAA-MM-DD" formControlName="fechaIngresoRecurso">
+        @if ($f()['fechaIngresoRecurso'].errors?.['required'] && $f()['fechaIngresoRecurso'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Estado</mat-label>
+        <input matInput placeholder="Estado" formControlName="estadoRecurso">
+      </mat-form-field>
+
+    </div>
+
+    <div class="form-actions">
+      <button mat-flat-button type="button" class="btn-cancel" routerLink="/pages/recurso">
+        <mat-icon>cancel</mat-icon>
+        <span>Cancelar</span>
+      </button>
+      <button mat-flat-button type="submit" class="btn-submit" [disabled]="frmRecurso.invalid">
+        <mat-icon>done</mat-icon>
+        <span>Guardar</span>
+      </button>
+    </div>
+
+  </form>
+</div>

@@ -1,61 +1,73 @@
-<form [formGroup]="$form()" (submit)="operate()" class="example-container" #frmProveedor="ngForm">
+<div class="form-page">
+  <h2 class="form-title">Gestión de Proveedores</h2>
+
+  <form [formGroup]="$form()" (submit)="operate()"
+        class="form-card" #frmProveedor="ngForm">
 
     <div [hidden]="true">
-        <mat-form-field>
-            <mat-label>ID</mat-label>
-            <input matInput placeholder="ID" formControlName="idProveedor">
-        </mat-form-field>
+      <mat-form-field>
+        <mat-label>ID</mat-label>
+        <input matInput placeholder="ID" formControlName="idProveedor">
+      </mat-form-field>
     </div>
 
-    <mat-form-field>
-        <mat-label>NOMBRE</mat-label>
+    <div class="form-grid">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
         <input matInput placeholder="Nombre" formControlName="nombreProveedor">
         @if ($f()['nombreProveedor'].errors?.['required'] && $f()['nombreProveedor'].touched) {
-            <small class="invalid">Es requerido</small>
+          <small class="invalid">Es requerido</small>
         }
-    </mat-form-field>
+      </mat-form-field>
 
-    <mat-form-field>
-        <mat-label>APELLIDO</mat-label>
+      <mat-form-field appearance="outline">
+        <mat-label>Apellido</mat-label>
         <input matInput placeholder="Apellido" formControlName="apellidoProveedor">
-    </mat-form-field>
+      </mat-form-field>
 
-    <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>RUC</mat-label>
         <input matInput placeholder="RUC" formControlName="rucProveedor">
         @if ($f()['rucProveedor'].errors?.['required'] && $f()['rucProveedor'].touched) {
-            <small class="invalid">Es requerido</small>
+          <small class="invalid">Es requerido</small>
         }
-    </mat-form-field>
+      </mat-form-field>
 
-    <mat-form-field>
-        <mat-label>DIRECCIÓN</mat-label>
-        <input matInput placeholder="Dirección" formControlName="direccionProveedor">
-    </mat-form-field>
-
-    <mat-form-field>
-        <mat-label>TELÉFONO</mat-label>
+      <mat-form-field appearance="outline">
+        <mat-label>Teléfono</mat-label>
         <input matInput placeholder="Teléfono" formControlName="telefonoProveedor">
-    </mat-form-field>
+      </mat-form-field>
 
-    <mat-form-field>
-        <mat-label>EMAIL</mat-label>
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Dirección</mat-label>
+        <input matInput placeholder="Dirección" formControlName="direccionProveedor">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Email</mat-label>
         <input matInput placeholder="Email" formControlName="emailProveedor">
-    </mat-form-field>
+      </mat-form-field>
 
-    <mat-form-field>
-        <mat-label>ESTADO</mat-label>
+      <mat-form-field appearance="outline">
+        <mat-label>Estado</mat-label>
         <input matInput placeholder="Estado" formControlName="estadoProveedor">
-    </mat-form-field>
+      </mat-form-field>
 
-    <button mat-flat-button type="submit" [disabled]="frmProveedor.invalid">
-        <span>OK</span>
-        <mat-icon>done</mat-icon>
-    </button>
+    </div>
 
-    <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/proveedor">
-        <span>Cancel</span>
+    <div class="form-actions">
+      <button mat-flat-button type="button"
+              class="btn-cancel" routerLink="/pages/proveedor">
         <mat-icon>cancel</mat-icon>
-    </button>
+        <span>Cancelar</span>
+      </button>
+      <button mat-flat-button type="submit"
+              class="btn-submit" [disabled]="frmProveedor.invalid">
+        <mat-icon>done</mat-icon>
+        <span>Guardar</span>
+      </button>
+    </div>
 
-</form>
+  </form>
+</div>

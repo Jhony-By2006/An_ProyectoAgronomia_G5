@@ -1,43 +1,100 @@
-/* Estilo base para el contenedor principal de la tabla */
-.mat-elevation-z8 {
-    background: #fcfcfc; /* Fondo claro del mockup */
-    padding: 20px;
-    border-radius: 15px; /* Bordes redondeados */
-    margin-top: 20px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+/* ── Header ── */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
 }
 
-/* Ajuste de la tabla para que ocupe el 100% */
+.page-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1B4332;
+}
+
+.btn-registrar {
+  background-color: #2F6B52 !important;
+  color: #fff !important;
+  border-radius: 24px !important;
+  font-weight: 500 !important;
+  padding: 0 20px !important;
+  height: 42px !important;
+}
+
+/* ── Buscador — respeta mat-form-field ── */
+.search-field {
+  width: 380px;
+  margin-bottom: 16px;
+}
+
+.search-field .mdc-notched-outline__leading,
+.search-field .mdc-notched-outline__notch,
+.search-field .mdc-notched-outline__trailing {
+  border-color: #1B4332 !important;
+}
+
+.search-field .mat-mdc-floating-label {
+  color: #1B4332 !important;
+}
+
+/* ── Tabla ── */
+.table-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
 table {
-    width: 100%;
+  width: 100%;
 }
 
-/* Ajuste de los campos de entrada de Material */
-.mat-mdc-form-field {
-    font-size: 14px;
-    width: 100%;
-}
-
-/* Espaciado para los botones de acción */
-td button {
-    margin-right: 5px;
-}
-
-/* Asegurar que las columnas tengan una apariencia limpia */
 .mat-mdc-table {
-    background: transparent !important;
+  background: transparent !important;
 }
 
-/* Estilo para las cabeceras de la tabla */
 .mat-mdc-header-cell {
-    font-weight: bold;
-    color: #333;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  color: #2D6A4F !important;
 }
 
-/* Ajuste opcional para el botón 'Registrar Proveedor' si usas flotante como en la imagen */
-button[mat-fab] {
-    float: right;
-    margin-top: 10px;
-    background-color: #2e7d32; /* Un color verde agronómico */
-    color: white;
+.mat-mdc-cell {
+  font-size: 13.5px;
+}
+
+/* ── Badges de estado ── */
+.badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-active {
+  background: #D8F3DC;
+  color: #1B4332;
+}
+
+.badge-inactive {
+  background: #fde8e8;
+  color: #b91c1c;
+}
+
+/* ── Botones de acción ── */
+.btn-edit .mat-icon {
+  color: #2D6A4F;
+}
+
+.btn-delete .mat-icon {
+  color: #e57373;
+}
+
+/* ── Sin datos ── */
+.no-data {
+  text-align: center;
+  padding: 40px !important;
+  color: #888;
+  font-style: italic;
 }
