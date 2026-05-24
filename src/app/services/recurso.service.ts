@@ -1,18 +1,12 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { HttpClient } from '@angular/common/http';
-import { Recurso } from '../model/recurso';
+import { Recurso } from '../model/recurso'; 
+import { GenericSignalService } from './generic-signal.service'; // Importamos la clase genérica
 
 @Injectable({
   providedIn: 'root',
 })
-export class RecursoService {
-
-  private url: string = `${environment.HOST}/Recurso`;
-
-  private readonly http = inject(HttpClient);
-
-  findAll() {
-    return this.http.get<Recurso[]>(this.url);
-  }
+export class RecursoService extends GenericSignalService<Recurso> { 
+  // Sobreescribimos la url para que apunte a la ruta de recursos en el backend
+  protected override url: string = `${environment.HOST}/recursos`;  
 }
