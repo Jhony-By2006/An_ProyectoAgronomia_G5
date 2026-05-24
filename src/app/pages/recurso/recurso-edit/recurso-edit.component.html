@@ -12,6 +12,20 @@
 
     <div class="form-grid">
 
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Proveedor</mat-label>
+        <mat-select formControlName="proveedor" [compareWith]="compareObjects">
+          @for (p of $proveedoresList(); track p.idProveedor) {
+            <mat-option [value]="p">
+              {{ p.nombreProveedor }} {{ p.apellidoProveedor }} (RUC: {{ p.rucProveedor }})
+            </mat-option>
+          }
+        </mat-select>
+        @if ($f()['proveedor'].errors?.['required'] && $f()['proveedor'].touched) {
+          <small class="invalid">Seleccionar un proveedor es requerido</small>
+        }
+      </mat-form-field>
+
       <mat-form-field appearance="outline">
         <mat-label>Nombre Recurso</mat-label>
         <input matInput placeholder="Ej. Urea" formControlName="nombreRecurso">
@@ -62,7 +76,10 @@
 
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Estado</mat-label>
-        <input matInput placeholder="Estado" formControlName="estadoRecurso">
+        <mat-select formControlName="estadoRecurso">
+          <mat-option [value]="true">Disponible</mat-option>
+          <mat-option [value]="false">No disponible</mat-option>
+        </mat-select>
       </mat-form-field>
 
     </div>

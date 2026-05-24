@@ -8,5 +8,5 @@ import { GenericSignalService } from './generic-signal.service'; // Importamos l
 })
 export class RecursoService extends GenericSignalService<Recurso> { 
   // Sobreescribimos la url para que apunte a la ruta de recursos en el backend
-  protected override url: string = `${environment.HOST}/recursos`;  
+  protected override url: string = `${environment.HOST}/Recurso`;  
 }

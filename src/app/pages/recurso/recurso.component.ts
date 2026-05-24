@@ -48,7 +48,7 @@ export class RecursoComponent {
 
 
   protected displayedColumns: string[] = [
-    'idRecurso', 'nombreRecurso', 'tipoRecurso', 'cantidadRecurso', 
+    'idRecurso', 'nombreRecurso','proveedor', 'tipoRecurso', 'cantidadRecurso', 
     'unidadMedidaRecurso', 'costoRecurso', 'fechaIngresoRecurso', 'estadoRecurso', 'actions'
   ];
 
