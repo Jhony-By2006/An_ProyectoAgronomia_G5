@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Detalle del Reporte</h2>
+
+<mat-dialog-content>
+
+    <p><strong>ID:</strong> {{ reporte.idReporte }}</p>
+
+    <p><strong>Titulo:</strong> {{ reporte.titulo }}</p>
+
+    <p><strong>Tipo:</strong> {{ reporte.tipoReporte }}</p>
+
+    <p><strong>Fecha:</strong> {{ reporte.fechaGeneracion }}</p>
+
+    <p><strong>Generado Por:</strong> {{ reporte.generadoPor }}</p>
+
+    <p><strong>Contenido:</strong></p>
+
+    <textarea rows="10" readonly>
+{{ reporte.contenido }}
+    </textarea>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+    <button mat-button (click)="close()">
+        Cerrar
+    </button>
+
+</mat-dialog-actions>
