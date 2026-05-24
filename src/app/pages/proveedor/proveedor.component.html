@@ -1,49 +1,81 @@
-<div class="contenedor-seccion">
-    <h1 class="titulo proveedor-header">Lista de Proveedores</h1>
+<router-outlet></router-outlet>
 
-    <table mat-table [dataSource]="$dataSource()" class="mat-elevation-z8" style="width: 100%;">
+<div class="header-container">
+    <h2>Gestión de Proveedores</h2>
+    <button mat-flat-button color="primary" routerLink="/pages/proveedor/new">
+        <mat-icon>add</mat-icon> Registrar Proveedor
+    </button>
+</div>
 
-      <ng-container matColumnDef="idProveedor">
-        <th mat-header-cell *matHeaderCellDef> ID </th>
-        <td mat-cell *matCellDef="let element"> {{element.idProveedor}} </td>
-      </ng-container>
+<mat-form-field>
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Carlos" #input>
+</mat-form-field>
 
-      <ng-container matColumnDef="nombreProveedor">
-        <th mat-header-cell *matHeaderCellDef> Nombre </th>
-        <td mat-cell *matCellDef="let element"> {{element.nombreProveedor}} </td>
-      </ng-container>
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="$dataSource()" matSort>
 
-      <ng-container matColumnDef="apellidoProveedor">
-        <th mat-header-cell *matHeaderCellDef> Apellido </th>
-        <td mat-cell *matCellDef="let element"> {{element.apellidoProveedor}} </td>
-      </ng-container>
+    <ng-container matColumnDef="idProveedor">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+      <td mat-cell *matCellDef="let row"> {{row.idProveedor}} </td>
+    </ng-container>
 
-      <ng-container matColumnDef="rucProveedor">
-        <th mat-header-cell *matHeaderCellDef> RUC </th>
-        <td mat-cell *matCellDef="let element"> {{element.rucProveedor}} </td>
-      </ng-container>
+    <ng-container matColumnDef="nombreProveedor">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+      <td mat-cell *matCellDef="let row"> {{row.nombreProveedor}} </td>
+    </ng-container>
 
-      <ng-container matColumnDef="direccionProveedor">
-        <th mat-header-cell *matHeaderCellDef> Dirección </th>
-        <td mat-cell *matCellDef="let element"> {{element.direccionProveedor}} </td>
-      </ng-container>
+    <ng-container matColumnDef="apellidoProveedor">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Apellido </th>
+      <td mat-cell *matCellDef="let row"> {{row.apellidoProveedor}} </td>
+    </ng-container>
 
-      <ng-container matColumnDef="telefonoProveedor">
-        <th mat-header-cell *matHeaderCellDef> Teléfono </th>
-        <td mat-cell *matCellDef="let element"> {{element.telefonoProveedor}} </td>
-      </ng-container>
+    <ng-container matColumnDef="rucProveedor">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> RUC </th>
+      <td mat-cell *matCellDef="let row"> {{row.rucProveedor}} </td>
+    </ng-container>
 
-      <ng-container matColumnDef="emailProveedor">
-        <th mat-header-cell *matHeaderCellDef> Email </th>
-        <td mat-cell *matCellDef="let element"> {{element.emailProveedor}} </td>
-      </ng-container>
+    <ng-container matColumnDef="direccionProveedor">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Dirección </th>
+      <td mat-cell *matCellDef="let row"> {{row.direccionProveedor}} </td>
+    </ng-container>
 
-      <ng-container matColumnDef="estadoProveedor">
-        <th mat-header-cell *matHeaderCellDef> Estado </th>
-        <td mat-cell *matCellDef="let element"> {{element.estadoProveedor ? 'Activo' : 'Inactivo'}} </td>
-      </ng-container>
+    <ng-container matColumnDef="telefonoProveedor">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Teléfono </th>
+      <td mat-cell *matCellDef="let row"> {{row.telefonoProveedor}} </td>
+    </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+    <ng-container matColumnDef="emailProveedor">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+      <td mat-cell *matCellDef="let row"> {{row.emailProveedor}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="estadoProveedor">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+      <td mat-cell *matCellDef="let row"> 
+        {{row.estadoProveedor ? 'Disponible' : 'No disponible'}} 
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Acciones </th>
+      <td mat-cell *matCellDef="let row"> 
+        <button mat-icon-button [routerLink]="['edit', row.idProveedor]">
+            <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="delete(row.idProveedor)">
+            <mat-icon>delete</mat-icon>
+        </button>  
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="9">No hay datos que coincidan con "{{input.value}}"</td>
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25]" aria-label="Seleccionar página"></mat-paginator>
 </div>

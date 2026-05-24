@@ -1,0 +1,43 @@
+/* Contenedor principal del formulario */
+.example-container {
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    max-width: 600px; /* Limitamos el ancho para que no se estire demasiado */
+    margin: 20px auto; /* Centrado en pantalla */
+}
+
+/* Asegurar que los campos ocupen todo el ancho disponible */
+.example-container > * {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Estilo para mensajes de error de validación */
+.invalid {
+    color: #d32f2f;
+    font-size: 0.8rem;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Estilo para los botones */
+.example-container button {
+    margin-top: 15px;
+    padding: 10px;
+}
+
+.cancel-button {
+    background-color: #f44336;
+    color: white;
+    margin-left: 10px;
+}
+
+/* Espaciado para el formulario */
+mat-form-field {
+    margin-top: 10px;
+}

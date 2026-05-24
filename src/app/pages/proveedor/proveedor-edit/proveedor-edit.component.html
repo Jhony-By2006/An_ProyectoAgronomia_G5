@@ -1,0 +1,61 @@
+<form [formGroup]="$form()" (submit)="operate()" class="example-container" #frmProveedor="ngForm">
+
+    <div [hidden]="true">
+        <mat-form-field>
+            <mat-label>ID</mat-label>
+            <input matInput placeholder="ID" formControlName="idProveedor">
+        </mat-form-field>
+    </div>
+
+    <mat-form-field>
+        <mat-label>NOMBRE</mat-label>
+        <input matInput placeholder="Nombre" formControlName="nombreProveedor">
+        @if ($f()['nombreProveedor'].errors?.['required'] && $f()['nombreProveedor'].touched) {
+            <small class="invalid">Es requerido</small>
+        }
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>APELLIDO</mat-label>
+        <input matInput placeholder="Apellido" formControlName="apellidoProveedor">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>RUC</mat-label>
+        <input matInput placeholder="RUC" formControlName="rucProveedor">
+        @if ($f()['rucProveedor'].errors?.['required'] && $f()['rucProveedor'].touched) {
+            <small class="invalid">Es requerido</small>
+        }
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>DIRECCIÓN</mat-label>
+        <input matInput placeholder="Dirección" formControlName="direccionProveedor">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>TELÉFONO</mat-label>
+        <input matInput placeholder="Teléfono" formControlName="telefonoProveedor">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>EMAIL</mat-label>
+        <input matInput placeholder="Email" formControlName="emailProveedor">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>ESTADO</mat-label>
+        <input matInput placeholder="Estado" formControlName="estadoProveedor">
+    </mat-form-field>
+
+    <button mat-flat-button type="submit" [disabled]="frmProveedor.invalid">
+        <span>OK</span>
+        <mat-icon>done</mat-icon>
+    </button>
+
+    <button mat-flat-button type="button" class="cancel-button" routerLink="/pages/proveedor">
+        <span>Cancel</span>
+        <mat-icon>cancel</mat-icon>
+    </button>
+
+</form>
