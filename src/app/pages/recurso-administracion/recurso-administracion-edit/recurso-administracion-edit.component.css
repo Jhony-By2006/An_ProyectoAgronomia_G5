@@ -1,0 +1,109 @@
+/* ── Página ── */
+.form-page {
+  max-width: 700px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+.form-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1B4332;
+  margin-bottom: 20px;
+}
+
+/* ── Tarjeta ── */
+.form-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 28px 32px;
+}
+
+/* ── Grid de 2 columnas ── */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 20px;
+}
+
+.form-grid mat-form-field {
+  width: 100%;
+}
+
+/* Campo que ocupa las 2 columnas */
+.field-span2 {
+  grid-column: span 2;
+}
+
+/* ── Grupo anidado (recurso) ── */
+.nested-group {
+  background: #f4faf6;
+  border: 1px solid #c8e6c9;
+  border-radius: 10px;
+  padding: 12px 16px 4px;
+  margin-bottom: 8px;
+}
+
+.nested-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2D6A4F;
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* ── Mensajes de error ── */
+.invalid {
+  color: #b91c1c;
+  font-size: 11.5px;
+  margin-top: -16px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* ── Color verde al enfocar ── */
+.form-card mat-form-field.mat-focused .mdc-notched-outline__leading,
+.form-card mat-form-field.mat-focused .mdc-notched-outline__notch,
+.form-card mat-form-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: #1B4332 !important;
+}
+
+.form-card mat-form-field.mat-focused .mat-mdc-floating-label {
+  color: #1B4332 !important;
+}
+
+/* ── Botones ── */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid #e8f5e9;
+}
+
+.btn-submit {
+  background-color: #1B4332 !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  padding: 0 24px !important;
+  height: 40px !important;
+  font-weight: 500 !important;
+  gap: 6px;
+}
+
+.btn-cancel {
+  background-color: transparent !important;
+  color: #555 !important;
+  border: 1px solid #ccc !important;
+  border-radius: 8px !important;
+  height: 40px !important;
+  padding: 0 20px !important;
+  gap: 6px;
+}
