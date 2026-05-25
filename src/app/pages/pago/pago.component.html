@@ -1,1 +1,35 @@
-<p>pago works!</p>
+/*Html Pago*/
+<div class="contenedor-seccion">
+<h1 class="titulo pago-header">
+    Lista de Pagos
+</h1>
+<ul class="lista-items">
+    @for (item of Pagos; track item.idPago) {
+        <li class="elemento-categoria">
+            <div class="info">
+                <span class="nombre">
+                    {{ item.concepto }}
+                </span>
+                <span class="id">
+                    Monto: S/. {{ item.monto }}
+                </span>
+                <span class="id">
+                    Fecha de Pago: {{ item.fechaPago }}
+                </span>
+                <span class="id">
+                    Comprobante: {{ item.comprobante }}
+                </span>
+                <span class="id">
+                    ID Sistema: {{ item.idPago }}
+                </span>
+                <span class="id">
+                    Estado:
+                    {{ item.estadoPago ? 'Pagado' : 'Pendiente' }}
+                </span>
+            </div>
+        </li>
+    } @empty {
+        <p>No se encontraron pagos registrados.</p>
+    }
+</ul>
+</div>

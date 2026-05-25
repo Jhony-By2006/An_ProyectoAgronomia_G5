@@ -1,1 +1,28 @@
-<p>metodopago works!</p>
+/*Html MetodoPago*/
+<div class="contenedor-seccion">
+<h1 class="titulo metodo-pago-header">
+</h1>
+<ul class="lista-items">
+    @for (item of MetodosPago; track item.idMetodoPago) {
+        <li class="elemento-categoria">
+            <div class="info">
+                <span class="nombre">
+                    {{ item.nombre }}
+                </span>
+                <span class="id">
+                    Descripción: {{ item.descripcion }}
+                </span>
+                <span class="id">
+                    ID Sistema: {{ item.idMetodoPago }}
+                </span>
+                <span class="id">
+                    Estado:
+                    {{ item.estadoMetodoPago ? 'Activo' : 'Inactivo' }}
+                </span>
+            </div>
+        </li>
+    } @empty {
+        <p>No se encontraron métodos de pago.</p>
+    }
+</ul>
+</div>
