@@ -8,7 +8,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterModule , RouterOutlet} from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { switchMap, tap } from 'rxjs';
 
@@ -22,22 +22,20 @@ import { switchMap, tap } from 'rxjs';
     MatSortModule,
     MatButtonModule,
     MatIconModule,
-    RouterLink,
-    RouterOutlet,
-    MatSnackBarModule
+    MatSnackBarModule,
+    RouterModule, 
+    RouterOutlet
   ],
   templateUrl: './producto-inicial.component.html',
   styleUrl: './producto-inicial.component.css',
 })
 export class ProductoInicialComponent {
-
   private readonly productoInicialService = inject(ProductoInicialService);
   private readonly snackBar = inject(MatSnackBar);
 
   protected $dataSource = signal(new MatTableDataSource<ProductoInicial>());
   protected $paginator = viewChild(MatPaginator);
   protected $sort = viewChild(MatSort);
-
   protected $productos = this.productoInicialService.$listChange;
 
   protected displayedColumns: string[] = [
@@ -47,23 +45,31 @@ export class ProductoInicialComponent {
   ];
 
   constructor() {
-    this.productoInicialService.findAll().subscribe(data => this.productoInicialService.setListChange(data));
+    this.productoInicialService.findAll().subscribe(data =>
+      this.productoInicialService.setListChange(data)
+    );
+    this.initializeEffects();
+  }
 
+  private initializeEffects() {
     effect(() => {
       const data = this.$productos();
       const p = this.$paginator();
       const s = this.$sort();
       const ds = this.$dataSource();
-
       ds.data = data;
-      ds.paginator = p ? p : null;
-      ds.sort = s ? s : null;
+      ds.paginator = p ?? null;
+      ds.sort = s ?? null;
     });
 
     effect(() => {
       const message = this.productoInicialService.$messageChange();
       if (message) {
-        this.snackBar.open(message, 'INFO', { duration: 2000, horizontalPosition: 'right', verticalPosition: 'top' });
+        this.snackBar.open(message, 'INFO', {
+          duration: 2000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
         untracked(() => this.productoInicialService.setMessageChange(''));
       }
     });

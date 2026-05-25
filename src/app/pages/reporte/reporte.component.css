@@ -5,13 +5,11 @@
   justify-content: space-between;
   margin-bottom: 16px;
 }
-
 .page-title {
   font-size: 26px;
   font-weight: 700;
   color: #1B4332;
 }
-
 .btn-registrar {
   background-color: #2F6B52 !important;
   color: #fff !important;
@@ -20,23 +18,19 @@
   padding: 0 20px !important;
   height: 42px !important;
 }
-
-/* ── Buscador — respeta mat-form-field ── */
+/* ── Buscador ── */
 .search-field {
   width: 380px;
   margin-bottom: 16px;
 }
-
 .search-field .mdc-notched-outline__leading,
 .search-field .mdc-notched-outline__notch,
 .search-field .mdc-notched-outline__trailing {
   border-color: #1B4332 !important;
 }
-
 .search-field .mat-mdc-floating-label {
   color: #1B4332 !important;
 }
-
 /* ── Tabla ── */
 .table-card {
   background: #fff;
@@ -44,25 +38,20 @@
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
 }
-
 table {
   width: 100%;
 }
-
 .mat-mdc-table {
   background: transparent !important;
 }
-
 .mat-mdc-header-cell {
   font-weight: 600 !important;
   font-size: 13px !important;
   color: #2D6A4F !important;
 }
-
 .mat-mdc-cell {
   font-size: 13.5px;
 }
-
 /* ── Badges de estado ── */
 .badge {
   display: inline-block;
@@ -71,26 +60,21 @@ table {
   font-size: 12px;
   font-weight: 500;
 }
-
 .badge-active {
   background: #D8F3DC;
   color: #1B4332;
 }
-
 .badge-inactive {
   background: #fde8e8;
   color: #b91c1c;
 }
-
 /* ── Botones de acción ── */
 .btn-edit .mat-icon {
   color: #2D6A4F;
 }
-
 .btn-delete .mat-icon {
   color: #e57373;
 }
-
 /* ── Sin datos ── */
 .no-data {
   text-align: center;

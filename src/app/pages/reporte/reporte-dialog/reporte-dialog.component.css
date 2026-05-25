@@ -1,49 +1,67 @@
-.dialog-title{
-  color: #1B4332;
+/* ── Página ── */
+.form-page {
+  max-width: 700px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+.form-title {
+  font-size: 24px;
   font-weight: 700;
-  font-size: 22px;
-}
-
-.dialog-content{
-  min-width: 600px;
-  padding-top: 10px;
-}
-
-.info-grid{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px 20px;
+  color: #1B4332;
   margin-bottom: 20px;
 }
-
-.info-item{
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+/* ── Tarjeta ── */
+.form-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 28px 32px;
 }
-
-.info-item strong{
-  color: #1B4332;
+/* ── Grid de 2 columnas ── */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 20px;
 }
-
-.contenido-box{
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-textarea{
+.form-grid mat-form-field {
   width: 100%;
-  resize: none;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  padding: 12px;
-  font-family: inherit;
-  background: #fafafa;
 }
-
-.btn-close{
+.field-span2 {
+  grid-column: span 2;
+}
+/* ── Color verde al enfocar ── */
+.form-card mat-form-field.mat-focused .mdc-notched-outline__leading,
+.form-card mat-form-field.mat-focused .mdc-notched-outline__notch,
+.form-card mat-form-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: #1B4332 !important;
+}
+.form-card mat-form-field.mat-focused .mat-mdc-floating-label {
+  color: #1B4332 !important;
+}
+/* ── Botones ── */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid #e8f5e9;
+}
+.btn-submit {
   background-color: #1B4332 !important;
-  color: white !important;
+  color: #fff !important;
   border-radius: 8px !important;
+  padding: 0 24px !important;
+  height: 40px !important;
+  font-weight: 500 !important;
+  gap: 6px;
+}
+.btn-cancel {
+  background-color: transparent !important;
+  color: #555 !important;
+  border: 1px solid #ccc !important;
+  border-radius: 8px !important;
+  height: 40px !important;
+  padding: 0 20px !important;
+  gap: 6px;
 }

@@ -16,6 +16,7 @@ import { RecursoAdministracionEditComponent } from './pages/recurso-administraci
 import { TrabajadorComponent } from './pages/trabajador/trabajador.component';
 import { TrabajadorEditComponent } from './pages/trabajador/trabajador-edit/trabajador-edit.component';
 import { ReporteComponent } from './pages/reporte/reporte.component';
+import { AdministracionComponent } from './pages/administracion/administracion.component';
 
 export const routes: Routes = [
   // ── RUTAS DE PROVEEDOR ──
@@ -97,5 +98,9 @@ export const routes: Routes = [
       { path: 'new', component: RecursoAdministracionEditComponent },
       { path: 'edit/:id', component: RecursoAdministracionEditComponent }
     ]
-  }
+  },
+  {
+  path: 'pages/administracion',
+  component: AdministracionComponent,
+  },
 ];

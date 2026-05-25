@@ -10,14 +10,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { CommonModule } from '@angular/common';
 import { switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-producto-final',
-  standalone: true,
   imports: [
-    CommonModule,
     MatTableModule,
     MatFormFieldModule,
     MatInputModule,
@@ -33,53 +30,41 @@ import { switchMap, tap } from 'rxjs';
   styleUrl: './producto-final.component.css',
 })
 export class ProductoFinalComponent {
-
   private readonly productoFinalService = inject(ProductoFinalService);
   private readonly snackBar = inject(MatSnackBar);
 
   protected $dataSource = signal(new MatTableDataSource<ProductoFinal>());
   protected $paginator = viewChild(MatPaginator);
   protected $sort = viewChild(MatSort);
+  protected $productos = this.productoFinalService.$listChange;
 
-  // Enlazamos con el signal del servicio genérico para rastrear cambios en la lista
-  protected $productosFinales = this.productoFinalService.$listChange;
-
-  // Columnas exactas basadas en la imagen de tu interfaz de Agronomía Espinoza
   protected displayedColumns: string[] = [
-    'id', 
-    'idProductoFinal', 
-    'idProductoInicial', 
-    'nombreProductoFinal', 
-    'descripcionProductoFinal', 
-    'stockProductoFinal', 
-    'precioProductoFinal', 
-    'estadoProductoFinal', 
-    'actions'
+    'idProductoFinal', 'nombreProdF', 'descripcionProdF', 'cantidadProducidaProdF',
+    'unidadMedidaProdF', 'precioVentaProdF', 'fechaProduccionProdF',
+    'estadoProdF', 'actions'
   ];
 
   constructor() {
-    // Carga inicial de datos desde el backend
-    this.productoFinalService.findAll().subscribe(data => this.productoFinalService.setListChange(data));
+    this.productoFinalService.findAll().subscribe(data =>
+      this.productoFinalService.setListChange(data)
+    );
 
-    // Efecto reactivo para actualizar la tabla de Angular Material
     effect(() => {
-      const data = this.$productosFinales();
+      const data = this.$productos();
       const p = this.$paginator();
       const s = this.$sort();
       const ds = this.$dataSource();
-      
       ds.data = data;
       ds.paginator = p ? p : null;
       ds.sort = s ? s : null;
-    }); 
-    
-    // Efecto reactivo para escuchar notificaciones (Snackbars)
+    });
+
     effect(() => {
       const message = this.productoFinalService.$messageChange();
       if (message) {
         this.snackBar.open(message, 'INFO', {
-          duration: 2000, 
-          horizontalPosition: 'right', 
+          duration: 2000,
+          horizontalPosition: 'right',
           verticalPosition: 'top'
         });
         untracked(() => this.productoFinalService.setMessageChange(''));
@@ -93,15 +78,15 @@ export class ProductoFinalComponent {
   }
 
   delete(idProductoFinal: number) {
-    const ok = window.confirm('¿Estás seguro de que deseas eliminar este producto?');
+    const ok = window.confirm('¿Está seguro de eliminar este producto?');
     if (ok) {
       this.productoFinalService.delete(idProductoFinal)
-      .pipe(
-        switchMap(() => this.productoFinalService.findAll()),
-        tap(data => this.productoFinalService.setListChange(data)),
-        tap(() => this.productoFinalService.setMessageChange('ELIMINADO'))
-      )
-      .subscribe();
+        .pipe(
+          switchMap(() => this.productoFinalService.findAll()),
+          tap(data => this.productoFinalService.setListChange(data)),
+          tap(() => this.productoFinalService.setMessageChange('ELIMINADO'))
+        )
+        .subscribe();
     }
   }
 }

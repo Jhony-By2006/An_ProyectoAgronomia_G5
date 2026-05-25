@@ -12,7 +12,6 @@ import { switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-producto-final-edit',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -30,25 +29,24 @@ export class ProductoFinalEditComponent {
   private readonly router = inject(Router);
   private readonly productoFinalService = inject(ProductoFinalService);
 
-  // Formulario Reactivo configurado con las propiedades de ProductoFinal
   protected $form = signal(new FormGroup({
     idProductoFinal: new FormControl<number | null>(null),
-    idProductoInicial: new FormControl<number | null>(null), // Añadido según las columnas de tu vista
-    nombreProductoFinal: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(70)]),
-    descripcionProductoFinal: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(150)]),
-    precioProductoFinal: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-    stockProductoFinal: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-    estadoProductoFinal: new FormControl<boolean>(true, { nonNullable: true }),
+    nombreProdF: new FormControl<string>('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
+    descripcionProdF: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]),
+    cantidadFinalProdF: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+    unidadMedidaProdF: new FormControl<string>('', [Validators.required, Validators.maxLength(30)]),
+    costoUnitarioProdF: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+    fechaIngresoProdF: new FormControl<string>('', [Validators.required]),
+    proveedorOrigenProdF: new FormControl<string>('', [Validators.required, Validators.maxLength(100)]),
+    estadoProdF: new FormControl<boolean | null>(true),
   }));
 
-  // Parámetros de la URL administrados mediante un Signal reactivo
   private readonly $params = toSignal(this.route.params, { initialValue: {} });
   protected $id = computed(() => this.$params()['id']);
-  protected $isEdit = computed(() => !!this.$id()); // true si estamos editando un id existente, false si es nuevo
-  protected $f = computed(() => this.$form().controls); // Atajo limpio para el HTML
+  protected $isEdit = computed(() => !!this.$id());
+  protected $f = computed(() => this.$form().controls);
 
   constructor() {
-    // Si el ID cambia o se detecta en la URL, se cargan los datos automáticamente para editar
     effect(() => {
       const id = this.$id();
       if (id) {
@@ -57,24 +55,22 @@ export class ProductoFinalEditComponent {
     });
   }
 
-  // Operación unificada para Guardar (Save) o Actualizar (Update)
   operate() {
     const form = this.$form();
     const isEdit = this.$isEdit();
-    
+
     if (form.invalid) return;
 
-    const productoFinal: ProductoFinal = form.value as ProductoFinal;
+    const producto: ProductoFinal = form.value as ProductoFinal;
 
-    // Ejecuta dinámicamente la operación requerida en el backend
-    const operation$ = isEdit 
-      ? this.productoFinalService.update(productoFinal.idProductoFinal!, productoFinal) 
-      : this.productoFinalService.save(productoFinal);
+    const operation$ = isEdit
+      ? this.productoFinalService.update(producto.idProductoFinal!, producto)
+      : this.productoFinalService.save(producto);
 
     operation$.pipe(
       switchMap(() => this.productoFinalService.findAll()),
       tap(data => this.productoFinalService.setListChange(data)),
-      tap(() => this.productoFinalService.setMessageChange(isEdit ? 'MODIFICADO' : 'CREADO'))
+      tap(() => this.productoFinalService.setMessageChange(isEdit ? 'ACTUALIZADO' : 'CREADO'))
     )
     .subscribe(() => {
       this.router.navigate(['/pages/producto-final']);

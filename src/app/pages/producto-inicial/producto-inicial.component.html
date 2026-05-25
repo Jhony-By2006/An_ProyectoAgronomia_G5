@@ -1,5 +1,4 @@
 <router-outlet></router-outlet>
-
 <div class="page-header">
   <h2 class="page-title">Gestión de Productos Iniciales</h2>
   <button mat-flat-button class="btn-registrar" routerLink="/pages/producto-inicial/new">
@@ -43,11 +42,11 @@
 
     <ng-container matColumnDef="costoUnitarioProdI">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo Unitario </th>
-      <td mat-cell *matCellDef="let row"> S/. {{row.costoUnitarioProdI}} </td>
+      <td mat-cell *matCellDef="let row"> {{row.costoUnitarioProdI}} </td>
     </ng-container>
 
     <ng-container matColumnDef="fechaIngresoProdI">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de Ingreso </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Ingreso </th>
       <td mat-cell *matCellDef="let row"> {{row.fechaIngresoProdI}} </td>
     </ng-container>
 
@@ -79,7 +78,6 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
     <tr class="mat-row" *matNoDataRow>
       <td class="mat-cell no-data" colspan="10">
         No hay resultados para "{{input.value}}"
@@ -91,3 +89,4 @@
     aria-label="Seleccionar página">
   </mat-paginator>
 </div>
+

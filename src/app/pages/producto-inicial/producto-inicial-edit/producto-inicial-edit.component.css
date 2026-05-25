@@ -4,7 +4,6 @@
   margin: 24px auto;
   padding: 0 16px;
 }
-
 .form-title {
   font-size: 24px;
   font-weight: 700;
@@ -26,12 +25,9 @@
   grid-template-columns: 1fr 1fr;
   gap: 0 20px;
 }
-
 .form-grid mat-form-field {
   width: 100%;
 }
-
-/* Campo que ocupa las 2 columnas */
 .field-span2 {
   grid-column: span 2;
 }
@@ -51,7 +47,6 @@
 .form-card mat-form-field.mat-focused .mdc-notched-outline__trailing {
   border-color: #1B4332 !important;
 }
-
 .form-card mat-form-field.mat-focused .mat-mdc-floating-label {
   color: #1B4332 !important;
 }
@@ -65,7 +60,6 @@
   padding-top: 20px;
   border-top: 1px solid #e8f5e9;
 }
-
 .btn-submit {
   background-color: #1B4332 !important;
   color: #fff !important;
@@ -75,7 +69,6 @@
   font-weight: 500 !important;
   gap: 6px;
 }
-
 .btn-cancel {
   background-color: transparent !important;
   color: #555 !important;
