@@ -1,124 +1,93 @@
-import { Component, effect, inject, signal, untracked, viewChild } from '@angular/core';
-import { Trabajador } from '../../../model/trabajador';
-import { TrabajadorService } from '../../../services/trabajador.service';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { Component, Inject, inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { switchMap, tap } from 'rxjs';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
+import { TrabajadorService } from '../../../services/trabajador.service';
+import { Trabajador } from '../../../model/trabajador';
+
+export const MY_DATE_FORMATS = {
+  parse: { dateInput: 'DD/MM/YYYY' },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'DD/MM/YYYY',
+    monthYearA11yLabel: 'MMMM YYYY',
+  }
+};
 
 @Component({
   selector: 'app-trabajador-edit',
+  standalone: true,
   imports: [
-    MatTableModule,
+    MatDialogModule,
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatPaginatorModule,
-    MatSortModule,
     MatButtonModule,
-    MatIconModule,
-    RouterLink,
-    RouterOutlet,
-    MatSnackBarModule
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule
+  ],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
   ],
   templateUrl: './trabajador-edit.component.html',
-  styleUrl: './trabajador-edit.component.css',
+  styleUrl: './trabajador-edit.component.css'
 })
-export class TrabajadorEditComponent {
-
+export class TrabajadorEditComponent implements OnInit {
+  private readonly dialogRef = inject(MatDialogRef<TrabajadorEditComponent>);
   private readonly trabajadorService = inject(TrabajadorService);
-  private readonly snackBar = inject(MatSnackBar);
+  protected readonly data: Trabajador = inject(MAT_DIALOG_DATA);
 
-  protected $dataSource = signal(new MatTableDataSource<Trabajador>());
-  protected $paginator = viewChild(MatPaginator);
-  protected $sort = viewChild(MatSort);
+  protected form!: FormGroup;
 
-  protected $trabajadores = this.trabajadorService.$listChange;
-
-  protected displayedColumns: string[] = [
-    'idTrabajador',
-    'nombre',
-    'apellido',
-    'cargo',
-    'telefono',
-    'email',
-    'estadoTrabajador',
-    'actions'
-  ];
-
-  constructor() {
-
-    this.trabajadorService.findAll().subscribe(
-      data => this.trabajadorService.setListChange(data)
-    );
-
-    effect(() => {
-
-      const data = this.$trabajadores();
-      const p = this.$paginator();
-      const s = this.$sort();
-      const ds = this.$dataSource();
-
-      ds.data = data;
-      ds.paginator = p ? p : null;
-      ds.sort = s ? s : null;
-
+  ngOnInit() {
+    this.form = new FormGroup({
+      idTrabajador: new FormControl(this.data?.idTrabajador || null),
+      nombreTrabajador: new FormControl(this.data?.nombreTrabajador || '', [Validators.required]),
+      apellidosTrabajador: new FormControl(this.data?.apellidosTrabajador || '', [Validators.required]),
+      dni: new FormControl(this.data?.dni || '', [Validators.required, Validators.maxLength(15)]),
+      cargo: new FormControl(this.data?.cargo || ''),
+      telefono: new FormControl(this.data?.telefono || ''),
+      email: new FormControl(this.data?.email || '', [Validators.email]),
+      fechaContratoT: new FormControl(
+        this.data?.fechaContratoT ? new Date(this.data.fechaContratoT) : null
+      ),
+      estado: new FormControl(this.data?.estado ?? true)
     });
+  }
 
-    effect(() => {
+  guardar() {
+    if (this.form.valid) {
+      const formValue: Trabajador = this.form.value as Trabajador;
 
-      const message = this.trabajadorService.$messageChange();
-
-      if(message){
-
-        this.snackBar.open(
-          message,
-          'INFO',
-          {
-            duration: 2000,
-            horizontalPosition: 'right',
-            verticalPosition: 'top'
-          }
-        );
-
-        untracked(() =>
-          this.trabajadorService.setMessageChange('')
-        );
-
+      if (formValue.idTrabajador) {
+        this.trabajadorService.update(formValue.idTrabajador, formValue).subscribe({
+          next: () => {
+            this.trabajadorService.setMessageChange('TRABAJADOR ACTUALIZADO');
+            this.dialogRef.close(true);
+          },
+          error: (err) => console.error('Error al actualizar:', err)
+        });
+      } else {
+        this.trabajadorService.save(formValue).subscribe({
+          next: () => {
+            this.trabajadorService.setMessageChange('TRABAJADOR REGISTRADO');
+            this.dialogRef.close(true);
+          },
+          error: (err) => console.error('Error al guardar:', err)
+        });
       }
-
-    });
-
-  }
-
-  applyFilter(e: any){
-
-    const filterValue = e.target.value;
-    this.$dataSource().filter = filterValue.trim().toLowerCase();
-
-  }
-
-  delete(idTrabajador: number){
-
-    const ok = window.confirm('Are you sure to delete?');
-
-    if(ok){
-
-      this.trabajadorService.delete(idTrabajador)
-      .pipe(
-        switchMap(() => this.trabajadorService.findAll()),
-        tap(data => this.trabajadorService.setListChange(data)),
-        tap(() => this.trabajadorService.setMessageChange('DELETED'))
-      )
-      .subscribe();
-
     }
-
   }
 
+  cancelar() {
+    this.dialogRef.close(false);
+  }
 }

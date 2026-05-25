@@ -1,177 +1,49 @@
-<router-outlet></router-outlet>
-
-<div class="page-header">
-  <h2 class="page-title">Gestión de Trabajadores</h2>
-
-  <button
-    mat-flat-button
-    class="btn-registrar"
-    routerLink="/pages/trabajador/new">
-
-    <mat-icon>add</mat-icon>
-    Registrar Trabajador
-
-  </button>
-</div>
-
-<mat-form-field class="search-field" appearance="outline">
-
-  <mat-label>Buscar Trabajadores</mat-label>
-
-  <mat-icon matPrefix>search</mat-icon>
-
-  <input
-    matInput
-    (keyup)="applyFilter($event)"
-    placeholder="Ej. Carlos"
-    #input>
-
-</mat-form-field>
-
-<div class="table-card">
-
-  <table mat-table [dataSource]="$dataSource()" matSort>
-
-    <ng-container matColumnDef="idTrabajador">
-
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        ID
-      </th>
-
-      <td mat-cell *matCellDef="let row">
-        {{row.idTrabajador}}
-      </td>
-
-    </ng-container>
-
-    <ng-container matColumnDef="nombre">
-
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        Nombre
-      </th>
-
-      <td mat-cell *matCellDef="let row">
-        {{row.nombre}}
-      </td>
-
-    </ng-container>
-
-    <ng-container matColumnDef="apellido">
-
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        Apellido
-      </th>
-
-      <td mat-cell *matCellDef="let row">
-        {{row.apellido}}
-      </td>
-
-    </ng-container>
-
-    <ng-container matColumnDef="cargo">
-
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        Cargo
-      </th>
-
-      <td mat-cell *matCellDef="let row">
-        {{row.cargo}}
-      </td>
-
-    </ng-container>
-
-    <ng-container matColumnDef="telefono">
-
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        Teléfono
-      </th>
-
-      <td mat-cell *matCellDef="let row">
-        {{row.telefono}}
-      </td>
-
-    </ng-container>
-
-    <ng-container matColumnDef="email">
-
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        Email
-      </th>
-
-      <td mat-cell *matCellDef="let row">
-        {{row.email}}
-      </td>
-
-    </ng-container>
-
-    <ng-container matColumnDef="estadoTrabajador">
-
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        Estado
-      </th>
-
-      <td mat-cell *matCellDef="let row">
-
-        <span [class]="row.estadoTrabajador ? 'badge badge-active' : 'badge badge-inactive'">
-
-          {{ row.estadoTrabajador ? 'Disponible' : 'No disponible' }}
-
-        </span>
-
-      </td>
-
-    </ng-container>
-
-    <ng-container matColumnDef="actions">
-
-      <th mat-header-cell *matHeaderCellDef>
-        Acciones
-      </th>
-
-      <td mat-cell *matCellDef="let row">
-
-        <button
-          mat-icon-button
-          class="btn-edit"
-          [routerLink]="['edit', row.idTrabajador]">
-
-          <mat-icon>edit</mat-icon>
-
-        </button>
-
-        <button
-          mat-icon-button
-          class="btn-delete"
-          (click)="delete(row.idTrabajador)">
-
-          <mat-icon>delete</mat-icon>
-
-        </button>
-
-      </td>
-
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-    <tr class="mat-row" *matNoDataRow>
-
-      <td class="mat-cell no-data" colspan="8">
-
-        No hay resultados para "{{input.value}}"
-
-      </td>
-
-    </tr>
-
-  </table>
-
-  <mat-paginator
-    [pageSizeOptions]="[5, 10, 25]"
-    aria-label="Seleccionar página">
-
-  </mat-paginator>
-
-</div>
+<h2 mat-dialog-title>{{ data ? 'Detalles del Trabajador' : 'Nuevo Trabajador' }}</h2>
+
+<mat-dialog-content [formGroup]="form" style="display: flex; flex-direction: column; gap: 12px; padding-top: 8px;">
+  
+  <mat-form-field appearance="outline">
+    <mat-label>Nombre</mat-label>
+    <input matInput formControlName="nombreTrabajador" placeholder="Ej. Juan">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Apellidos</mat-label>
+    <input matInput formControlName="apellidosTrabajador" placeholder="Ej. Pérez">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>DNI / Documento</mat-label>
+    <input matInput formControlName="dni" placeholder="Ej. 75849302">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Cargo</mat-label>
+    <input matInput formControlName="cargo" placeholder="Ej. Supervisor, Operario">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Teléfono</mat-label>
+    <input matInput formControlName="telefono" placeholder="Ej. 930875930">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Email</mat-label>
+    <input matInput type="email" formControlName="email" placeholder="correo@ejemplo.com">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Fecha de Contrato</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="fechaContratoT">
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-checkbox formControlName="estado" color="primary">Trabajador Activo</mat-checkbox>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button style="background-color: #2e694e; color: white;" [disabled]="form.invalid" (click)="guardar()">OK</button>
+</mat-dialog-actions>

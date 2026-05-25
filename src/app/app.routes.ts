@@ -3,6 +3,9 @@ import { RecursoComponent } from './pages/recurso/recurso.component';
 import { ProveedorComponent } from './pages/proveedor/proveedor.component';
 import { ProveedorEditComponent } from './pages/proveedor/proveedor-edit/proveedor-edit.component';
 import { RecursoEditComponent } from './pages/recurso/recurso-edit/recurso-edit.component';
+import { TrabajadorComponent } from './pages/trabajador/trabajador.component';
+import { TrabajadorEditComponent } from './pages/trabajador/trabajador-edit/trabajador-edit.component';
+import { ReporteComponent } from './pages/reporte/reporte.component';
 
 export const routes: Routes = [
   { 
@@ -21,4 +24,14 @@ export const routes: Routes = [
       { path: 'edit/:id', component: RecursoEditComponent },
     ],
   },
+    { 
+        path: 'pages/trabajador', 
+        component: TrabajadorComponent,
+        children: [
+            { path: 'new', component: TrabajadorEditComponent },
+            { path: 'edit/:id', component: TrabajadorEditComponent },
+        ],
+    }, 
+    { path: 'pages/reporte', 
+      component: ReporteComponent },  
 ];

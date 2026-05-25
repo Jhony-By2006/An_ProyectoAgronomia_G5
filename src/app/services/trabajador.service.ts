@@ -9,6 +9,6 @@ import { GenericSignalService } from './generic-signal.service';
 
 export class TrabajadorService extends GenericSignalService<Trabajador> {
 
-  protected override url: string = `${environment.HOST}/Trabajador`;
+  protected override url: string = `${environment.HOST}/Trabajadores`;
 
 }

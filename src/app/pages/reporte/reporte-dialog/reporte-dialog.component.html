@@ -1,72 +1,52 @@
-<mat-dialog-content>
+<h2 mat-dialog-title>{{ data ? 'Detalles del Reporte' : 'Nuevo Reporte' }}</h2>
 
-    <mat-toolbar>
-        <span>Reporte Info</span>
-    </mat-toolbar>
+<mat-dialog-content [formGroup]="form" style="display: flex; flex-direction: column; gap: 12px; padding-top: 8px;">
+  
+  <mat-form-field appearance="outline">
+    <mat-label>Título</mat-label>
+    <input matInput formControlName="titulo" placeholder="Ej. Reporte Mensual de Riego">
+    @if (form.get('titulo')?.hasError('required') && form.get('titulo')?.touched) {
+      <mat-error>El título es obligatorio</mat-error>
+    }
+  </mat-form-field>
 
-    <div class="example-container">
+  <mat-form-field appearance="outline">
+    <mat-label>Tipo de Reporte</mat-label>
+    <input matInput formControlName="tipoReporte" placeholder="Ej. Agrónomo, Financiero">
+    @if (form.get('tipoReporte')?.hasError('required') && form.get('tipoReporte')?.touched) {
+      <mat-error>El tipo de reporte es obligatorio</mat-error>
+    }
+  </mat-form-field>
 
-        <mat-form-field>
-            <input
-                matInput
-                placeholder="Título"
-                [(ngModel)]="$reporte().titulo">
-        </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Fecha de Generación</mat-label>
+    <input matInput type="date" formControlName="fechaGeneracion">
+    @if (form.get('fechaGeneracion')?.hasError('required') && form.get('fechaGeneracion')?.touched) {
+      <mat-error>La fecha es obligatoria</mat-error>
+    }
+  </mat-form-field>
 
-        <mat-form-field>
-            <input
-                matInput
-                placeholder="Tipo Reporte"
-                [(ngModel)]="$reporte().tipoReporte">
-        </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Generado Por</mat-label>
+    <input matInput formControlName="generadoPor" placeholder="Nombre del encargado">
+    @if (form.get('generadoPor')?.hasError('required') && form.get('generadoPor')?.touched) {
+      <mat-error>Este campo es obligatorio</mat-error>
+    }
+  </mat-form-field>
 
-        <mat-form-field>
-            <input
-                matInput
-                placeholder="Fecha Generación"
-                [(ngModel)]="$reporte().fechaGeneracion">
-        </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Contenido / Detalles</mat-label>
+    <textarea matInput formControlName="contenido" placeholder="Escribe el contenido aquí..." rows="4"></textarea>
+    @if (form.get('contenido')?.hasError('required') && form.get('contenido')?.touched) {
+      <mat-error>El contenido es obligatorio</mat-error>
+    }
+  </mat-form-field>
 
-        <mat-form-field>
-            <input
-                matInput
-                placeholder="Contenido"
-                [(ngModel)]="$reporte().contenido">
-        </mat-form-field>
-
-        <mat-form-field>
-            <input
-                matInput
-                placeholder="Generado Por"
-                [(ngModel)]="$reporte().generadoPor">
-        </mat-form-field>
-
-        <mat-form-field>
-            <input
-                matInput
-                placeholder="Estado Reporte"
-                [(ngModel)]="$reporte().estadoReporte">
-        </mat-form-field>
-
-        <button mat-flat-button (click)="operate()">
-
-            <span>OK</span>
-
-            <mat-icon>done</mat-icon>
-
-        </button>
-
-        <button
-            mat-flat-button
-            class="cancel-button"
-            (click)="close()">
-
-            <span>Cancel</span>
-
-            <mat-icon>cancel</mat-icon>
-
-        </button>
-
-    </div>
+  <mat-checkbox formControlName="estadoReporte" color="primary">Reporte Activo</mat-checkbox>
 
 </mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button type="button" style="background-color: #2e694e; color: white;" (click)="guardar()">OK</button>
+</mat-dialog-actions>
