@@ -1,18 +1,12 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { RecursoAdministracion } from '../model/recurso-administracion';
-
+import { RecursoAdministracion } from '../model/recurso-administracion'; 
+import { GenericSignalService } from './generic-signal.service'; 
 
 @Injectable({
   providedIn: 'root',
 })
-export class RecursoAdministracionService {
-  private url = `${environment.HOST}/RecusoAdministracion`;
-  private readonly http = inject(HttpClient);
-
-  findAll(): Observable<RecursoAdministracion[]> {
-    return this.http.get<RecursoAdministracion[]>(this.url);
-  }
+export class RecursoAdministracionService extends GenericSignalService<RecursoAdministracion> { 
+  // Sobreescribimos la url para que apunte a la ruta de recurso administracion en el backend
+  protected override url: string = `${environment.HOST}/RecusoAdministracion`;  //Es RecursoAdministracion
 }

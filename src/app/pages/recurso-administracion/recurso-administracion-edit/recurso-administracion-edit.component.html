@@ -1,0 +1,79 @@
+<div class="form-page">
+  <h2 class="form-title">{{ $isEdit() ? 'Editar Recurso de Administración' : 'Registrar Recurso de Administración' }}</h2>
+
+  <form [formGroup]="$form()" (submit)="operate()"
+        class="form-card" #frmRecurso="ngForm">
+
+    <div [hidden]="true">
+      <mat-form-field>
+        <mat-label>ID</mat-label>
+        <input matInput formControlName="idRecursoAdministracion">
+      </mat-form-field>
+    </div>
+
+    <div class="form-grid">
+
+      <!-- Grupo anidado para el objeto Recurso -->
+      <div formGroupName="recurso" class="field-span2 nested-group">
+        <p class="nested-label">Recurso</p>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>ID del Recurso</mat-label>
+          <input matInput type="number" placeholder="Ej. 1" formControlName="idRecurso">
+          @if ($f()['recurso'].get('idRecurso')?.errors?.['required'] && $f()['recurso'].get('idRecurso')?.touched) {
+            <small class="invalid">Es requerido</small>
+          }
+          @if ($f()['recurso'].get('idRecurso')?.errors?.['min'] && $f()['recurso'].get('idRecurso')?.touched) {
+            <small class="invalid">Debe ser un ID válido (mayor a 0)</small>
+          }
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha de Recepción</mat-label>
+        <input matInput type="date" formControlName="fechaRecepcion">
+        @if ($f()['fechaRecepcion'].errors?.['required'] && $f()['fechaRecepcion'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Cantidad Recibida</mat-label>
+        <input matInput type="number" placeholder="0" formControlName="cantidadRecibida">
+        @if ($f()['cantidadRecibida'].errors?.['required'] && $f()['cantidadRecibida'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+        @if ($f()['cantidadRecibida'].errors?.['min'] && $f()['cantidadRecibida'].touched) {
+          <small class="invalid">Debe ser al menos 1</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Observaciones</mat-label>
+        <input matInput placeholder="Observaciones adicionales" formControlName="observaciones">
+        @if ($f()['observaciones'].errors?.['maxlength'] && $f()['observaciones'].touched) {
+          <small class="invalid">Máximo 300 caracteres</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Estado</mat-label>
+        <input matInput placeholder="true / false" formControlName="estadoRecursoA">
+      </mat-form-field>
+
+    </div>
+
+    <div class="form-actions">
+      <button mat-flat-button type="button"
+              class="btn-cancel" routerLink="/pages/recurso-administracion">
+        <mat-icon>cancel</mat-icon>
+        <span>Cancelar</span>
+      </button>
+      <button mat-flat-button type="submit"
+              class="btn-submit" [disabled]="frmRecurso.invalid">
+        <mat-icon>done</mat-icon>
+        <span>Guardar</span>
+      </button>
+    </div>
+
+  </form>
+</div>

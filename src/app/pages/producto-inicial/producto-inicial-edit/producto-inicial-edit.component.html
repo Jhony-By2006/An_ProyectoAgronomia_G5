@@ -1,0 +1,102 @@
+<div class="form-page">
+  <h2 class="form-title">{{ $isEdit() ? 'Editar Producto Inicial' : 'Registrar Producto Inicial' }}</h2>
+
+  <form [formGroup]="$form()" (submit)="operate()"
+        class="form-card" #frmProducto="ngForm">
+
+    <div [hidden]="true">
+      <mat-form-field>
+        <mat-label>ID</mat-label>
+        <input matInput formControlName="idProductoInicial">
+      </mat-form-field>
+    </div>
+
+    <div class="form-grid">
+
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Nombre del Producto</mat-label>
+        <input matInput placeholder="Ej. Arroz integral" formControlName="nombreProdI">
+        @if ($f()['nombreProdI'].errors?.['required'] && $f()['nombreProdI'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+        @if ($f()['nombreProdI'].errors?.['minlength'] && $f()['nombreProdI'].touched) {
+          <small class="invalid">Mínimo 2 caracteres</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Descripción</mat-label>
+        <input matInput placeholder="Descripción del producto" formControlName="descripcionProdI">
+        @if ($f()['descripcionProdI'].errors?.['required'] && $f()['descripcionProdI'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Cantidad Inicial</mat-label>
+        <input matInput type="number" placeholder="0" formControlName="cantidadInicialProdI">
+        @if ($f()['cantidadInicialProdI'].errors?.['required'] && $f()['cantidadInicialProdI'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+        @if ($f()['cantidadInicialProdI'].errors?.['min'] && $f()['cantidadInicialProdI'].touched) {
+          <small class="invalid">Debe ser mayor o igual a 0</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Unidad de Medida</mat-label>
+        <input matInput placeholder="Ej. kg, litros, unidades" formControlName="unidadMedidaProdI">
+        @if ($f()['unidadMedidaProdI'].errors?.['required'] && $f()['unidadMedidaProdI'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Costo Unitario (S/.)</mat-label>
+        <input matInput type="number" placeholder="0.00" formControlName="costoUnitarioProdI">
+        @if ($f()['costoUnitarioProdI'].errors?.['required'] && $f()['costoUnitarioProdI'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+        @if ($f()['costoUnitarioProdI'].errors?.['min'] && $f()['costoUnitarioProdI'].touched) {
+          <small class="invalid">Debe ser mayor o igual a 0</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha de Ingreso</mat-label>
+        <input matInput type="date" formControlName="fechaIngresoProdI">
+        @if ($f()['fechaIngresoProdI'].errors?.['required'] && $f()['fechaIngresoProdI'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Proveedor Origen</mat-label>
+        <input matInput placeholder="Nombre del proveedor" formControlName="proveedorOrigenProdI">
+        @if ($f()['proveedorOrigenProdI'].errors?.['required'] && $f()['proveedorOrigenProdI'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Estado</mat-label>
+        <input matInput placeholder="true / false" formControlName="estadoProdI">
+      </mat-form-field>
+
+    </div>
+
+    <div class="form-actions">
+      <button mat-flat-button type="button"
+              class="btn-cancel" routerLink="/pages/producto-inicial">
+        <mat-icon>cancel</mat-icon>
+        <span>Cancelar</span>
+      </button>
+      <button mat-flat-button type="submit"
+              class="btn-submit" [disabled]="frmProducto.invalid">
+        <mat-icon>done</mat-icon>
+        <span>Guardar</span>
+      </button>
+    </div>
+
+  </form>
+</div>

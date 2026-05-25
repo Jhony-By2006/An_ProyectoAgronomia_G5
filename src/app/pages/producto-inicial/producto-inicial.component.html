@@ -1,1 +1,93 @@
-<p>producto-inicial works!</p>
+<router-outlet></router-outlet>
+
+<div class="page-header">
+  <h2 class="page-title">Gestión de Productos Iniciales</h2>
+  <button mat-flat-button class="btn-registrar" routerLink="/pages/producto-inicial/new">
+    <mat-icon>add</mat-icon> Registrar Producto
+  </button>
+</div>
+
+<mat-form-field class="search-field" appearance="outline">
+  <mat-label>Buscar Productos</mat-label>
+  <mat-icon matPrefix>search</mat-icon>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Arroz" #input>
+</mat-form-field>
+
+<div class="table-card">
+  <table mat-table [dataSource]="$dataSource()" matSort>
+
+    <ng-container matColumnDef="idProductoInicial">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+      <td mat-cell *matCellDef="let row"> {{row.idProductoInicial}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nombreProdI">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+      <td mat-cell *matCellDef="let row"> {{row.nombreProdI}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="descripcionProdI">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+      <td mat-cell *matCellDef="let row"> {{row.descripcionProdI}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cantidadInicialProdI">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad Inicial </th>
+      <td mat-cell *matCellDef="let row"> {{row.cantidadInicialProdI}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="unidadMedidaProdI">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Unidad de Medida </th>
+      <td mat-cell *matCellDef="let row"> {{row.unidadMedidaProdI}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="costoUnitarioProdI">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo Unitario </th>
+      <td mat-cell *matCellDef="let row"> S/. {{row.costoUnitarioProdI}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaIngresoProdI">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de Ingreso </th>
+      <td mat-cell *matCellDef="let row"> {{row.fechaIngresoProdI}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="proveedorOrigenProdI">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Proveedor Origen </th>
+      <td mat-cell *matCellDef="let row"> {{row.proveedorOrigenProdI}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="estadoProdI">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+      <td mat-cell *matCellDef="let row">
+        <span [class]="row.estadoProdI ? 'badge badge-active' : 'badge badge-inactive'">
+          {{ row.estadoProdI ? 'Disponible' : 'No disponible' }}
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Acciones </th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-icon-button class="btn-edit" [routerLink]="['edit', row.idProductoInicial]">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button class="btn-delete" (click)="delete(row.idProductoInicial)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell no-data" colspan="10">
+        No hay resultados para "{{input.value}}"
+      </td>
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25]"
+    aria-label="Seleccionar página">
+  </mat-paginator>
+</div>
