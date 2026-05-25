@@ -1,17 +1,12 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment.development';
 import { ProductoFinal } from '../model/producto-final';
-import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { GenericSignalService } from './generic-signal.service'; // Importamos la clase genérica
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProductoFinalService {
-    private url = `${environment.HOST}/ProductosFinales`; 
-  
-  private readonly http = inject(HttpClient); 
-
-  findAll() { 
-    return this.http.get<ProductoFinal[]>(this.url); 
-  }
+export class ProductoFinalService extends GenericSignalService<ProductoFinal> { 
+  // Sobreescribimos la url para que apunte a la ruta de productos finales en el backend
+  protected override url: string = `${environment.HOST}/ProductosFinales`;  
 }

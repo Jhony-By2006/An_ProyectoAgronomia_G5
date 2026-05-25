@@ -1,0 +1,96 @@
+<div class="form-page">
+  <h2 class="form-title">Gestión de Pagos</h2>
+
+  <form [formGroup]="$form()" (submit)="operate()" class="form-card" #frmPago="ngForm">
+
+    <!-- Campo ID oculto -->
+    <div [hidden]="true">
+      <mat-form-field>
+        <mat-label>ID</mat-label>
+        <input matInput formControlName="idPago">
+      </mat-form-field>
+    </div>
+
+    <div class="form-grid">
+
+      <!-- Método de Pago (ocupa 2 columnas) -->
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Método de Pago</mat-label>
+        <mat-select formControlName="metodoPago" [compareWith]="compareObjects">
+          @for (m of $metodosPagoList(); track m.idMetodoPago) {
+            <mat-option [value]="m">
+              {{ m.nombre }}
+            </mat-option>
+          }
+        </mat-select>
+        @if ($f()['metodoPago'].errors?.['required'] && $f()['metodoPago'].touched) {
+          <small class="invalid">Seleccionar un método de pago es requerido</small>
+        }
+      </mat-form-field>
+
+      <!-- Monto -->
+      <mat-form-field appearance="outline">
+        <mat-label>Monto (S/.)</mat-label>
+        <input type="number" matInput placeholder="Ej. 150.00" formControlName="monto">
+        @if ($f()['monto'].errors?.['required'] && $f()['monto'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+        @if ($f()['monto'].errors?.['min'] && $f()['monto'].touched) {
+          <small class="invalid">El monto debe ser mayor a 0</small>
+        }
+      </mat-form-field>
+
+      <!-- Fecha de Pago -->
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha de Pago</mat-label>
+        <input matInput type="date" formControlName="fechaPago">
+        @if ($f()['fechaPago'].errors?.['required'] && $f()['fechaPago'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+      </mat-form-field>
+
+      <!-- Concepto (ocupa 2 columnas) -->
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Concepto</mat-label>
+        <input matInput placeholder="Ej. Pago de insumos agrícolas" formControlName="concepto">
+        @if ($f()['concepto'].errors?.['required'] && $f()['concepto'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+        @if ($f()['concepto'].errors?.['minlength'] && $f()['concepto'].touched) {
+          <small class="invalid">Mínimo 3 caracteres</small>
+        }
+      </mat-form-field>
+
+      <!-- Comprobante -->
+      <mat-form-field appearance="outline">
+        <mat-label>Comprobante</mat-label>
+        <input matInput placeholder="Ej. Factura N° 001-00123" formControlName="comprobante">
+        @if ($f()['comprobante'].errors?.['required'] && $f()['comprobante'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+      </mat-form-field>
+
+      <!-- Estado -->
+      <mat-form-field appearance="outline">
+        <mat-label>Estado</mat-label>
+        <mat-select formControlName="estadoPago">
+          <mat-option [value]="true">Pagado</mat-option>
+          <mat-option [value]="false">Pendiente</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+
+    <div class="form-actions">
+      <button mat-flat-button type="button" class="btn-cancel" routerLink="/pages/pago">
+        <mat-icon>cancel</mat-icon>
+        <span>Cancelar</span>
+      </button>
+      <button mat-flat-button type="submit" class="btn-submit" [disabled]="frmPago.invalid">
+        <mat-icon>done</mat-icon>
+        <span>Guardar</span>
+      </button>
+    </div>
+
+  </form>
+</div>

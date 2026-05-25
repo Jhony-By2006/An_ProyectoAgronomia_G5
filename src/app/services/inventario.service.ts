@@ -1,17 +1,12 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment.development';
 import { Inventario } from '../model/inventario';
-import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { GenericSignalService } from './generic-signal.service'; // Importamos la clase genérica
 
 @Injectable({
   providedIn: 'root',
 })
-export class InventarioService {
-      private url = `${environment.HOST}/Inventario`; 
-  
-  private readonly http = inject(HttpClient); 
-
-  findAll() { 
-    return this.http.get<Inventario[]>(this.url); 
-  }
+export class InventarioService extends GenericSignalService<Inventario> { 
+  // Sobreescribimos la url para que apunte a la ruta de inventario en el backend
+  protected override url: string = `${environment.HOST}/Inventario`;  
 }

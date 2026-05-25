@@ -35,14 +35,14 @@ export class RecursoEditComponent {
   private readonly recursoService = inject(RecursoService);     // Servicio CRUD para Recursos
   private readonly proveedorService = inject(ProveedorService); // Servicio CRUD para jalar los Proveedores de la BD
 
-  // EXPLICACIÓN: Guardamos la lista de proveedores en una Señal (Signal) reactiva para alimentar el mat-select del HTML
+  //  Guardamos la lista de proveedores en una Señal (Signal) reactiva para alimentar el mat-select del HTML
   protected $proveedoresList = signal<Proveedor[]>([]);
 
   // Estructura del Formulario Reactivo usando Signals para rastrear su estado en tiempo real
   protected $form = signal(new FormGroup({
     idRecurso: new FormControl<number | null>(null),
     
-    // EXPLICACIÓN: 'proveedor' almacena el objeto Proveedor completo que Spring Boot espera debido al @ManyToOne
+    // El 'proveedor' almacena el objeto Proveedor completo que Spring Boot espera debido al @ManyToOne
     proveedor: new FormControl<any>(null, [Validators.required]),
     nombreRecurso: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
     tipoRecurso: new FormControl<string>('', [Validators.required]),
@@ -67,9 +67,9 @@ export class RecursoEditComponent {
   protected $f = computed(() => this.$form().controls);
 
   /**
-   * EXPLICACIÓN IMPORTANTE (Mecanismo de comparación):
-   * Angular Material necesita saber cuál de todos los proveedores de la lista desplegable debe marcar como "seleccionado".
-   * Como 'o1' y 'o2' son objetos completos (JSON), los comparamos únicamente por su clave primaria 'idProveedor'.
+
+    Angular Material necesita saber cuál de todos los proveedores de la lista desplegable debe marcar como "seleccionado".
+   Como 'o1' y 'o2' son objetos completos (JSON), los comparamos únicamente por su clave primaria 'idProveedor'.
    */
   compareObjects(o1: any, o2: any): boolean {
     return o1 && o2 ? o1.idProveedor === o2.idProveedor : o1 === o2;
