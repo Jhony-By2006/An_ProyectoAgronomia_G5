@@ -6,11 +6,14 @@ import { RecursoEditComponent } from './pages/recurso/recurso-edit/recurso-edit.
 import { ProductoFinalComponent } from './pages/producto-final/producto-final.component';
 import { ProductoFinalEditComponent } from './pages/producto-final/producto-final-edit/producto-final-edit.component';
 import { InventarioComponent } from './pages/inventario/inventario.component';
+import { PagoComponent } from './pages/pago/pago.component';
+import { PagoEditComponent } from './pages/pago/pago-edit/pago-edit.component';
+import { MetodoPagoComponent } from './pages/metodopago/metodopago.component';
 
 export const routes: Routes = [
   // ── RUTAS DE PROVEEDOR ──
-  { 
-    path: 'pages/proveedor', 
+  {
+    path: 'pages/proveedor',
     component: ProveedorComponent,
     children: [
       { path: 'new', component: ProveedorEditComponent },
@@ -19,8 +22,8 @@ export const routes: Routes = [
   },
 
   // ── RUTAS DE RECURSO ──
-  { 
-    path: 'pages/recurso', 
+  {
+    path: 'pages/recurso',
     component: RecursoComponent,
     children: [
       { path: 'new', component: RecursoEditComponent },
@@ -38,9 +41,25 @@ export const routes: Routes = [
     ],
   },
 
-  // ── RUTA DE INVENTARIO (Abre Dialog, no necesita children) ──
+  // ── RUTA DE INVENTARIO ──
   {
     path: 'pages/inventario',
-    component: InventarioComponent
-  }
+    component: InventarioComponent,
+  },
+
+  // ── RUTA DE MÉTODO DE PAGO  ──
+  {
+    path: 'pages/metodo-pago',
+    component: MetodoPagoComponent,
+  },
+
+  // ── RUTAS DE PAGO ──
+  {
+    path: 'pages/pago',
+    component: PagoComponent,
+    children: [
+      { path: 'new', component: PagoEditComponent },
+      { path: 'edit/:id', component: PagoEditComponent },
+    ],
+  },
 ];

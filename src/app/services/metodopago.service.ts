@@ -1,17 +1,11 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
+import { GenericSignalService } from './generic-signal.service';
 import { MetodoPago } from '../model/metodopago';
-/*Metodo Pago.ts*/
+
 @Injectable({
   providedIn: 'root',
 })
-export class MetodoPagoService {
-  private url = `${environment.HOST}/MetodoPago`;
-  private readonly http = inject(HttpClient);
-
-  findAll(): Observable<MetodoPago[]> {
-    return this.http.get<MetodoPago[]>(this.url);
-  }
+export class MetodoPagoService extends GenericSignalService<MetodoPago> {
+  protected override url: string = `${environment.HOST}/MetodoPago`; 
 }

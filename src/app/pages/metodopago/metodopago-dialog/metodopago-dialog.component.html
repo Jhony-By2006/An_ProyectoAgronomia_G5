@@ -1,0 +1,40 @@
+<div class="form-page">
+  <h2 class="form-title">Gestión de Métodos de Pago</h2>
+
+  <div class="form-card">
+    <div class="form-grid">
+
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Nombre</mat-label>
+        <input matInput placeholder="Ej. Efectivo" [(ngModel)]="$metodoPago().nombre">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Descripción</mat-label>
+        <textarea matInput rows="3" placeholder="Ej. Pago en efectivo al momento de la entrega"
+          [(ngModel)]="$metodoPago().descripcion">
+        </textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Estado</mat-label>
+        <mat-select [(ngModel)]="$metodoPago().estadoMetodoPago">
+          <mat-option [value]="true">Activo</mat-option>
+          <mat-option [value]="false">Inactivo</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+
+    <div class="form-actions">
+      <button mat-flat-button type="button" class="btn-cancel" (click)="close()">
+        <mat-icon>cancel</mat-icon>
+        <span>Cancelar</span>
+      </button>
+      <button mat-flat-button type="button" class="btn-submit" (click)="operate()">
+        <mat-icon>done</mat-icon>
+        <span>Guardar</span>
+      </button>
+    </div>
+  </div>
+</div>

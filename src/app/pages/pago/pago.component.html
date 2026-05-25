@@ -1,35 +1,84 @@
-/*Html Pago*/
-<div class="contenedor-seccion">
-<h1 class="titulo pago-header">
-    Lista de Pagos
-</h1>
-<ul class="lista-items">
-    @for (item of Pagos; track item.idPago) {
-        <li class="elemento-categoria">
-            <div class="info">
-                <span class="nombre">
-                    {{ item.concepto }}
-                </span>
-                <span class="id">
-                    Monto: S/. {{ item.monto }}
-                </span>
-                <span class="id">
-                    Fecha de Pago: {{ item.fechaPago }}
-                </span>
-                <span class="id">
-                    Comprobante: {{ item.comprobante }}
-                </span>
-                <span class="id">
-                    ID Sistema: {{ item.idPago }}
-                </span>
-                <span class="id">
-                    Estado:
-                    {{ item.estadoPago ? 'Pagado' : 'Pendiente' }}
-                </span>
-            </div>
-        </li>
-    } @empty {
-        <p>No se encontraron pagos registrados.</p>
-    }
-</ul>
+<router-outlet></router-outlet>
+
+<div class="page-header">
+  <h2 class="page-title">Gestión de Pagos</h2>
+  <button mat-flat-button class="btn-registrar" routerLink="/pages/pago/new">
+    <mat-icon>add</mat-icon> Registrar Pago
+  </button>
+</div>
+
+<mat-form-field class="search-field" appearance="outline">
+  <mat-label>Buscar Pagos</mat-label>
+  <mat-icon matPrefix>search</mat-icon>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Efectivo" #input>
+</mat-form-field>
+
+<div class="table-card">
+  <table mat-table [dataSource]="$dataSource()" matSort>
+
+    <ng-container matColumnDef="idPago">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+      <td mat-cell *matCellDef="let row"> {{ row.idPago }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="monto">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Monto </th>
+      <td mat-cell *matCellDef="let row"> S/. {{ row.monto | number:'1.2-2' }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaPago">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de Pago </th>
+      <td mat-cell *matCellDef="let row"> {{ row.fechaPago }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="concepto">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Concepto </th>
+      <td mat-cell *matCellDef="let row"> {{ row.concepto }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="comprobante">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Comprobante </th>
+      <td mat-cell *matCellDef="let row"> {{ row.comprobante }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="metodoPago">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Método de Pago </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.metodoPago ? row.metodoPago.nombre : 'Sin método' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="estadoPago">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+      <td mat-cell *matCellDef="let row">
+        <span [class]="row.estadoPago ? 'badge badge-active' : 'badge badge-inactive'">
+          {{ row.estadoPago ? 'Pagado' : 'Pendiente' }}
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Acciones </th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-icon-button class="btn-edit" [routerLink]="['edit', row.idPago]">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button class="btn-delete" (click)="delete(row.idPago)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell no-data" colspan="8">
+        No hay resultados para "{{ input.value }}"
+      </td>
+    </tr>
+
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25]" aria-label="Seleccionar página"></mat-paginator>
 </div>
