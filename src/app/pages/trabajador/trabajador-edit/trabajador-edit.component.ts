@@ -1,89 +1,93 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
+import { Component, Inject, inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { TrabajadorService } from '../../../services/trabajador.service';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { Trabajador } from '../../../model/trabajador';
-import { switchMap, tap } from 'rxjs';
+
+export const MY_DATE_FORMATS = {
+  parse: { dateInput: 'DD/MM/YYYY' },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'DD/MM/YYYY',
+    monthYearA11yLabel: 'MMMM YYYY',
+  }
+};
 
 @Component({
   selector: 'app-trabajador-edit',
+  standalone: true,
   imports: [
+    MatDialogModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule,
-    RouterLink
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule
+  ],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
   ],
   templateUrl: './trabajador-edit.component.html',
-  styleUrl: './trabajador-edit.component.css',
+  styleUrl: './trabajador-edit.component.css'
 })
-export class TrabajadorEditComponent {
-
-  private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
+export class TrabajadorEditComponent implements OnInit {
+  private readonly dialogRef = inject(MatDialogRef<TrabajadorEditComponent>);
   private readonly trabajadorService = inject(TrabajadorService);
+  protected readonly data: Trabajador = inject(MAT_DIALOG_DATA);
 
-  protected $form = signal(new FormGroup({
-    idTrabajador: new FormControl<number | null>(null),
-    nombre: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(70)]),
-    apellido: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(70)]),
-    cargo: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(70)]),
-    telefono: new FormControl<string>('', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]),
-    email: new FormControl<string>('', [Validators.required, Validators.email]),
-    estadoTrabajador: new FormControl<boolean | null>(true),
-  }));
+  protected form!: FormGroup;
 
-  private readonly $params = toSignal(this.route.params, { initialValue: {} });
+  ngOnInit() {
+    this.form = new FormGroup({
+      idTrabajador: new FormControl(this.data?.idTrabajador || null),
+      nombreTrabajador: new FormControl(this.data?.nombreTrabajador || '', [Validators.required]),
+      apellidosTrabajador: new FormControl(this.data?.apellidosTrabajador || '', [Validators.required]),
+      dni: new FormControl(this.data?.dni || '', [Validators.required, Validators.maxLength(15)]),
+      cargo: new FormControl(this.data?.cargo || ''),
+      telefono: new FormControl(this.data?.telefono || ''),
+      email: new FormControl(this.data?.email || '', [Validators.email]),
+      fechaContratoT: new FormControl(
+        this.data?.fechaContratoT ? new Date(this.data.fechaContratoT) : null
+      ),
+      estado: new FormControl(this.data?.estado ?? true)
+    });
+  }
 
-  protected $id = computed(() => this.$params()['id']);
-  protected $isEdit = computed(() => !!this.$id());
-  protected $f = computed(() => this.$form().controls);
+  guardar() {
+    if (this.form.valid) {
+      const formValue: Trabajador = this.form.value as Trabajador;
 
-  constructor() {
-
-    effect(() => {
-
-      const id = this.$id();
-
-      if(id){
-
-        this.trabajadorService.findById(id)
-          .subscribe(data => this.$form().patchValue(data));
-
+      if (formValue.idTrabajador) {
+        this.trabajadorService.update(formValue.idTrabajador, formValue).subscribe({
+          next: () => {
+            this.trabajadorService.setMessageChange('TRABAJADOR ACTUALIZADO');
+            this.dialogRef.close(true);
+          },
+          error: (err) => console.error('Error al actualizar:', err)
+        });
+      } else {
+        this.trabajadorService.save(formValue).subscribe({
+          next: () => {
+            this.trabajadorService.setMessageChange('TRABAJADOR REGISTRADO');
+            this.dialogRef.close(true);
+          },
+          error: (err) => console.error('Error al guardar:', err)
+        });
       }
-
-    });
-
+    }
   }
 
-  operate(){
-
-    const form = this.$form();
-    const isEdit = this.$isEdit();
-
-    if(form.invalid) return;
-
-    const trabajador: Trabajador = form.value as Trabajador;
-
-    const operation$ = isEdit
-      ? this.trabajadorService.update(trabajador.idTrabajador!, trabajador)
-      : this.trabajadorService.save(trabajador);
-
-    operation$.pipe(
-      switchMap(() => this.trabajadorService.findAll()),
-      tap(data => this.trabajadorService.setListChange(data)),
-      tap(() => this.trabajadorService.setMessageChange(isEdit ? 'UPDATED' : 'CREATED'))
-    )
-    .subscribe(() => {
-      this.router.navigate(['/pages/trabajador']);
-    });
-
+  cancelar() {
+    this.dialogRef.close(false);
   }
-
 }

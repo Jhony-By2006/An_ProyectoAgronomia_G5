@@ -1,100 +1,49 @@
-<div class="form-page">
+<h2 mat-dialog-title>{{ data ? 'Detalles del Trabajador' : 'Nuevo Trabajador' }}</h2>
 
-  <h2 class="form-title">Gestión de Trabajadores</h2>
+<mat-dialog-content [formGroup]="form" style="display: flex; flex-direction: column; gap: 12px; padding-top: 8px;">
+  
+  <mat-form-field appearance="outline">
+    <mat-label>Nombre</mat-label>
+    <input matInput formControlName="nombreTrabajador" placeholder="Ej. Juan">
+  </mat-form-field>
 
-  <form [formGroup]="$form()" (submit)="operate()"
-        class="form-card" #frmTrabajador="ngForm">
+  <mat-form-field appearance="outline">
+    <mat-label>Apellidos</mat-label>
+    <input matInput formControlName="apellidosTrabajador" placeholder="Ej. Pérez">
+  </mat-form-field>
 
-    <div [hidden]="true">
-      <mat-form-field>
-        <mat-label>ID</mat-label>
-        <input matInput placeholder="ID" formControlName="idTrabajador">
-      </mat-form-field>
-    </div>
+  <mat-form-field appearance="outline">
+    <mat-label>DNI / Documento</mat-label>
+    <input matInput formControlName="dni" placeholder="Ej. 75849302">
+  </mat-form-field>
 
-    <div class="form-grid">
+  <mat-form-field appearance="outline">
+    <mat-label>Cargo</mat-label>
+    <input matInput formControlName="cargo" placeholder="Ej. Supervisor, Operario">
+  </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input matInput placeholder="Nombre" formControlName="nombre">
+  <mat-form-field appearance="outline">
+    <mat-label>Teléfono</mat-label>
+    <input matInput formControlName="telefono" placeholder="Ej. 930875930">
+  </mat-form-field>
 
-        @if ($f()['nombre'].errors?.['required'] && $f()['nombre'].touched) {
-          <small class="invalid">Es requerido</small>
-        }
+  <mat-form-field appearance="outline">
+    <mat-label>Email</mat-label>
+    <input matInput type="email" formControlName="email" placeholder="correo@ejemplo.com">
+  </mat-form-field>
 
-      </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Fecha de Contrato</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="fechaContratoT">
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Apellido</mat-label>
-        <input matInput placeholder="Apellido" formControlName="apellido">
+  <mat-checkbox formControlName="estado" color="primary">Trabajador Activo</mat-checkbox>
 
-        @if ($f()['apellido'].errors?.['required'] && $f()['apellido'].touched) {
-          <small class="invalid">Es requerido</small>
-        }
+</mat-dialog-content>
 
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Cargo</mat-label>
-        <input matInput placeholder="Cargo" formControlName="cargo">
-
-        @if ($f()['cargo'].errors?.['required'] && $f()['cargo'].touched) {
-          <small class="invalid">Es requerido</small>
-        }
-
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Teléfono</mat-label>
-        <input matInput placeholder="Teléfono" formControlName="telefono">
-
-        @if ($f()['telefono'].errors?.['required'] && $f()['telefono'].touched) {
-          <small class="invalid">Es requerido</small>
-        }
-
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="field-span2">
-        <mat-label>Email</mat-label>
-        <input matInput placeholder="Email" formControlName="email">
-
-        @if ($f()['email'].errors?.['required'] && $f()['email'].touched) {
-          <small class="invalid">Es requerido</small>
-        }
-
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Estado</mat-label>
-        <input matInput placeholder="Estado" formControlName="estadoTrabajador">
-      </mat-form-field>
-
-    </div>
-
-    <div class="form-actions">
-
-      <button mat-flat-button
-              type="button"
-              class="btn-cancel"
-              routerLink="/pages/trabajador">
-
-        <mat-icon>cancel</mat-icon>
-        <span>Cancelar</span>
-
-      </button>
-
-      <button mat-flat-button
-              type="submit"
-              class="btn-submit"
-              [disabled]="frmTrabajador.invalid">
-
-        <mat-icon>done</mat-icon>
-        <span>Guardar</span>
-
-      </button>
-
-    </div>
-
-  </form>
-
-</div>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button style="background-color: #2e694e; color: white;" [disabled]="form.invalid" (click)="guardar()">OK</button>
+</mat-dialog-actions>

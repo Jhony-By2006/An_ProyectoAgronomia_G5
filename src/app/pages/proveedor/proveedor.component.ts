@@ -96,26 +96,4 @@ export class ProveedorComponent {
       .subscribe();
     }
   }
-
-  /*
-  protected proveedores : Proveedor[] = [];
-  protected $dataSource = signal(new MatTableDataSource<Proveedor>());
-  //protected dataSource2$ = new Observable<MatTableDataSource<Proveedor>>();
-  protected displayedColumns: string[] = ['idProveedor', 'nombreProveedor', 'apellidoProveedor', 'rucProveedor', 'direccionProveedor', 'telefonoProveedor', 'emailProveedor', 'estadoProveedor'];
-
-  private readonly proveedorService = inject(ProveedorService);
-
-  ngOnInit() : void{
-    // this.proveedorService.findAll().subscribe(data => console.log(data));
-    //this.proveedorService.findAll().subscribe(data => this.proveedores = data);
-    this.proveedorService.findAll().subscribe(data => {
-      this.$dataSource.set(new MatTableDataSource<Proveedor>(data));
-    });
-  }
-
-  applyFilter(e: any){
-   console.log(e);
-  }
-*/
-  
 }

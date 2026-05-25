@@ -13,6 +13,9 @@ import { ProductoInicialComponent } from './pages/producto-inicial/producto-inic
 import { ProductoInicialEditComponent } from './pages/producto-inicial/producto-inicial-edit/producto-inicial-edit.component';
 import { RecursoAdministracionComponent } from './pages/recurso-administracion/recurso-administracion.component';
 import { RecursoAdministracionEditComponent } from './pages/recurso-administracion/recurso-administracion-edit/recurso-administracion-edit.component';
+import { TrabajadorComponent } from './pages/trabajador/trabajador.component';
+import { TrabajadorEditComponent } from './pages/trabajador/trabajador-edit/trabajador-edit.component';
+import { ReporteComponent } from './pages/reporte/reporte.component';
 
 export const routes: Routes = [
   // ── RUTAS DE PROVEEDOR ──
@@ -34,6 +37,17 @@ export const routes: Routes = [
       { path: 'edit/:id', component: RecursoEditComponent },
     ],
   },
+    { 
+        path: 'pages/trabajador', 
+        component: TrabajadorComponent,
+        children: [
+            { path: 'new', component: TrabajadorEditComponent },
+            { path: 'edit/:id', component: TrabajadorEditComponent },
+        ],
+    }, 
+    { path: 'pages/reporte', 
+      component: ReporteComponent },  
+
 
   // ── RUTAS DE PRODUCTO FINAL ──
   {
