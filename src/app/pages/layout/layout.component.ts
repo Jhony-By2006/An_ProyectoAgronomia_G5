@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { LoginService } from '../../services/login.service';
+import { environment } from '../../../environments/environment.development';
 @Component({
   selector: 'app-layout',
   imports: [
@@ -23,4 +24,19 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css',
 })
-export class LayoutComponent {}
+export class LayoutComponent {
+  private readonly loginService = inject(LoginService);
+private readonly router = inject(Router);
+
+logout() {
+  this.loginService.logout().subscribe({
+    next: () => this.finalizarSesion(),
+    error: () => this.finalizarSesion()
+  });
+}
+
+private finalizarSesion() {
+  sessionStorage.removeItem(environment.TOKEN_NAME);
+  this.router.navigate(['/login']);
+}
+}

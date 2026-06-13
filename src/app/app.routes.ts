@@ -17,90 +17,106 @@ import { TrabajadorComponent } from './pages/trabajador/trabajador.component';
 import { TrabajadorEditComponent } from './pages/trabajador/trabajador-edit/trabajador-edit.component';
 import { ReporteComponent } from './pages/reporte/reporte.component';
 import { AdministracionComponent } from './pages/administracion/administracion.component';
+import { LayoutComponent } from './pages/layout/layout.component';
+import { LoginComponent } from './login/login.component';
 
 export const routes: Routes = [
-  // ── RUTAS DE PROVEEDOR ──
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
   {
-    path: 'pages/proveedor',
-    component: ProveedorComponent,
+    path: 'pages',
+    component: LayoutComponent,
     children: [
-      { path: 'new', component: ProveedorEditComponent },
-      { path: 'edit/:id', component: ProveedorEditComponent },
-    ],
-  },
+      // ── RUTAS DE PROVEEDOR ──
+      {
+        path: 'proveedor',
+        component: ProveedorComponent,
+        children: [
+          { path: 'new', component: ProveedorEditComponent },
+          { path: 'edit/:id', component: ProveedorEditComponent },
+        ],
+      },
 
-  // ── RUTAS DE RECURSO ──
-  {
-    path: 'pages/recurso',
-    component: RecursoComponent,
-    children: [
-      { path: 'new', component: RecursoEditComponent },
-      { path: 'edit/:id', component: RecursoEditComponent },
-    ],
-  },
-    { 
-        path: 'pages/trabajador', 
+      // ── RUTAS DE RECURSO ──
+      {
+        path: 'recurso',
+        component: RecursoComponent,
+        children: [
+          { path: 'new', component: RecursoEditComponent },
+          { path: 'edit/:id', component: RecursoEditComponent },
+        ],
+      },
+
+      // ── RUTAS DE TRABAJADOR ──
+      {
+        path: 'trabajador',
         component: TrabajadorComponent,
         children: [
-            { path: 'new', component: TrabajadorEditComponent },
-            { path: 'edit/:id', component: TrabajadorEditComponent },
+          { path: 'new', component: TrabajadorEditComponent },
+          { path: 'edit/:id', component: TrabajadorEditComponent },
         ],
-    }, 
-    { path: 'pages/reporte', 
-      component: ReporteComponent },  
+      },
 
+      // ── RUTA DE REPORTE ──
+      { path: 'reporte', component: ReporteComponent },
 
-  // ── RUTAS DE PRODUCTO FINAL ──
-  {
-    path: 'pages/producto-final',
-    component: ProductoFinalComponent,
-    children: [
-      { path: 'new', component: ProductoFinalEditComponent },
-      { path: 'edit/:id', component: ProductoFinalEditComponent },
+      // ── RUTAS DE PRODUCTO FINAL ──
+      {
+        path: 'producto-final',
+        component: ProductoFinalComponent,
+        children: [
+          { path: 'new', component: ProductoFinalEditComponent },
+          { path: 'edit/:id', component: ProductoFinalEditComponent },
+        ],
+      },
+
+      // ── RUTA DE INVENTARIO ──
+      {
+        path: 'inventario',
+        component: InventarioComponent,
+      },
+
+      // ── RUTA DE MÉTODO DE PAGO ──
+      {
+        path: 'metodo-pago',
+        component: MetodoPagoComponent,
+      },
+
+      // ── RUTAS DE PAGO ──
+      {
+        path: 'pago',
+        component: PagoComponent,
+        children: [
+          { path: 'new', component: PagoEditComponent },
+          { path: 'edit/:id', component: PagoEditComponent },
+        ],
+      },
+
+      // ── RUTAS DE PRODUCTO INICIAL ──
+      {
+        path: 'producto-inicial',
+        component: ProductoInicialComponent,
+        children: [
+          { path: 'new', component: ProductoInicialEditComponent },
+          { path: 'edit/:id', component: ProductoInicialEditComponent },
+        ],
+      },
+
+      // ── RUTAS DE RECURSO ADMINISTRACIÓN ──
+      {
+        path: 'recurso-administracion',
+        component: RecursoAdministracionComponent,
+        children: [
+          { path: 'new', component: RecursoAdministracionEditComponent },
+          { path: 'edit/:id', component: RecursoAdministracionEditComponent },
+        ],
+      },
+
+      // ── RUTA DE ADMINISTRACIÓN ──
+      {
+        path: 'administracion',
+        component: AdministracionComponent,
+      },
     ],
-  },
-
-  // ── RUTA DE INVENTARIO ──
-  {
-    path: 'pages/inventario',
-    component: InventarioComponent,
-  },
-
-  // ── RUTA DE MÉTODO DE PAGO  ──
-  {
-    path: 'pages/metodo-pago',
-    component: MetodoPagoComponent,
-  },
-
-  // ── RUTAS DE PAGO ──
-  {
-    path: 'pages/pago',
-    component: PagoComponent,
-    children: [
-      { path: 'new', component: PagoEditComponent },
-      { path: 'edit/:id', component: PagoEditComponent },
-    ],
-  },
-
-  {
-    path: 'pages/producto-inicial',
-    component: ProductoInicialComponent,
-    children: [
-
-      { path: 'new', component: ProductoInicialEditComponent },
-      { path: 'edit/:id', component: ProductoInicialEditComponent }
-    ]
-  },
-  {
-    path: 'pages/recurso-administracion',
-    component: RecursoAdministracionComponent,
-    children: [
-      { path: 'new', component: RecursoAdministracionEditComponent },
-      { path: 'edit/:id', component: RecursoAdministracionEditComponent }
-    ]
-  },
-  {
-  path: 'pages/administracion',
-  component: AdministracionComponent,
   },
 ];

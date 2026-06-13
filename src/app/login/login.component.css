@@ -1,0 +1,180 @@
+.login-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 24px 64px;
+}
+
+.logo {
+  width: 128px;
+  height: 74px;
+}
+
+.brand-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  color: #000000;
+}
+
+.login-content {
+  width: 728px;
+  margin-top: 40px;
+  text-align: center;
+}
+
+.title {
+  font-family: 'Volkhov', serif;
+  font-weight: 700;
+  font-size: 64px;
+  color: #000000;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 20px;
+  color: #0D0D0D;
+  margin-bottom: 40px;
+}
+
+.input-field {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  height: 70px;
+  padding: 0 24px;
+  background: #FFFFFF;
+  border: 1px solid #8A8A8A;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+
+.input-field input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  color: #0D0D0D;
+}
+
+.input-field mat-icon {
+  color: #8A8A8A;
+}
+
+.input-field .eye-icon {
+  cursor: pointer;
+  color: #0D0D0D;
+}
+
+.error-text {
+  color: #d32f2f;
+  font-size: 13px;
+  text-align: left;
+  margin: 0 0 12px 4px;
+}
+
+.select-label {
+  text-align: left;
+  font-size: 20px;
+  color: #0D0D0D;
+  margin: 24px 0 12px 0;
+}
+
+.role-selector {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.role-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #000000;
+  border-radius: 14px;
+  cursor: pointer;
+  position: relative;
+}
+
+.role-card.active {
+  background: #F6FDF5;
+  border: 1px solid #2F6B52;
+}
+
+.role-card mat-icon {
+  width: 59px;
+  height: 59px;
+  font-size: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #F6FDF5;
+  color: #2F6B52;
+}
+
+.role-card.active mat-icon {
+  border: 1px solid #2F6B52;
+}
+
+.role-card span {
+  font-size: 20px;
+  color: #0D0D0D;
+}
+
+.role-card input[type="radio"] {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  accent-color: #2F6B52;
+  width: 18px;
+  height: 18px;
+}
+
+.error-message {
+  color: #d32f2f;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.continue-btn {
+  width: 100%;
+  height: 88px;
+  background: #2F6B52;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0px 20px 35px rgba(0, 0, 0, 0.15);
+  margin-bottom: 60px;
+}
+
+.continue-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.footer-bar {
+  width: 100%;
+  height: 112px;
+  background: #F2F5FF;
+  margin-top: auto;
+}
