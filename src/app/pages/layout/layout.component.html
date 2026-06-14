@@ -16,10 +16,12 @@
 
       <div class="nav-section-label">Gestión</div>
 
-      <button mat-menu-item routerLink="/pages/administracion" routerLinkActive="active">
-        <mat-icon>settings</mat-icon>
-        <span>Administración</span>
-      </button>
+      @if (isAdmin) {
+        <button mat-menu-item routerLink="/pages/administracion" routerLinkActive="active">
+          <mat-icon>settings</mat-icon>
+          <span>Administración</span>
+        </button>
+      }
 
       <button mat-menu-item routerLink="/pages/inventario" routerLinkActive="active">
         <mat-icon>inventory_2</mat-icon>
@@ -56,20 +58,24 @@
         <span>Recursos</span>
       </button>
 
-      <button mat-menu-item routerLink="/pages/recurso-administracion" routerLinkActive="active">
-        <mat-icon>settings</mat-icon>
-        <span>Recursos Admin</span>
-      </button>
+      @if (isAdmin) {
+        <button mat-menu-item routerLink="/pages/recurso-administracion" routerLinkActive="active">
+          <mat-icon>settings</mat-icon>
+          <span>Recursos Admin</span>
+        </button>
+      }
 
       <button mat-menu-item routerLink="/pages/reporte" routerLinkActive="active">
         <mat-icon>bar_chart</mat-icon>
         <span>Reportes</span>
       </button>
 
-      <button mat-menu-item routerLink="/pages/trabajador" routerLinkActive="active">
-        <mat-icon>people</mat-icon>
-        <span>Trabajadores</span>
-      </button>
+      @if (isAdmin) {
+        <button mat-menu-item routerLink="/pages/trabajador" routerLinkActive="active">
+          <mat-icon>people</mat-icon>
+          <span>Trabajadores</span>
+        </button>
+      }
 
       <mat-divider class="nav-divider"></mat-divider>
 

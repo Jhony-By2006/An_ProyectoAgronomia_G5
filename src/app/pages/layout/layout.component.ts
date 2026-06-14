@@ -8,10 +8,11 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { LoginService } from '../../services/login.service';
 import { environment } from '../../../environments/environment.development';
+
 @Component({
   selector: 'app-layout',
   imports: [
-    MatButtonModule, 
+    MatButtonModule,
     MatDividerModule,
     MatIconModule,
     MatMenuModule,
@@ -26,17 +27,29 @@ import { environment } from '../../../environments/environment.development';
 })
 export class LayoutComponent {
   private readonly loginService = inject(LoginService);
-private readonly router = inject(Router);
+  private readonly router = inject(Router);
 
-logout() {
-  this.loginService.logout().subscribe({
-    next: () => this.finalizarSesion(),
-    error: () => this.finalizarSesion()
-  });
-}
+  get isAdmin(): boolean {
+    const token = sessionStorage.getItem(environment.TOKEN_NAME);
+    if (!token) return false;
 
-private finalizarSesion() {
-  sessionStorage.removeItem(environment.TOKEN_NAME);
-  this.router.navigate(['/login']);
-}
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.role === 'ADMIN';
+    } catch {
+      return false;
+    }
+  }
+
+  logout() {
+    this.loginService.logout().subscribe({
+      next: () => this.finalizarSesion(),
+      error: () => this.finalizarSesion()
+    });
+  }
+
+  private finalizarSesion() {
+    sessionStorage.removeItem(environment.TOKEN_NAME);
+    this.router.navigate(['/login']);
+  }
 }
