@@ -96,27 +96,30 @@ export class PagoEditComponent {
     });
   }
 
-  operate() {
-    const form = this.$form();
-    const isEdit = this.$isEdit();
+operate() {
+  const form = this.$form();
+  const isEdit = this.$isEdit();
 
-    if (form.invalid) return;
+  if (form.invalid) return;
 
-    // El formulario maneja fechaPago como string 'YYYY-MM-DD' (necesario para el input HTML),
-    // por eso el cast pasa por unknown antes de Pago para evitar el conflicto con el tipo Date del modelo.
-    const pago: Pago = form.value as unknown as Pago;
+  const formValue = form.value;
+  const pago: any = {
+    ...formValue,
+    idMetodoPago: formValue.metodoPago?.idMetodoPago,
+  };
+  delete pago.metodoPago;
 
-    const operation$ = isEdit
-      ? this.pagoService.update(pago.idPago!, pago)
-      : this.pagoService.save(pago);
+  const operation$ = isEdit
+    ? this.pagoService.update(pago.idPago!, pago)
+    : this.pagoService.save(pago);
 
-    operation$.pipe(
-      switchMap(() => this.pagoService.findAll()),
-      tap(data => this.pagoService.setListChange(data)),
-      tap(() => this.pagoService.setMessageChange(isEdit ? 'ACTUALIZADO' : 'REGISTRADO'))
-    )
-    .subscribe(() => {
-      this.router.navigate(['/pages/pago']);
-    });
-  }
+  operation$.pipe(
+    switchMap(() => this.pagoService.findAll()),
+    tap(data => this.pagoService.setListChange(data)),
+    tap(() => this.pagoService.setMessageChange(isEdit ? 'ACTUALIZADO' : 'REGISTRADO'))
+  )
+  .subscribe(() => {
+    this.router.navigate(['/pages/pago']);
+  });
+}
 }
