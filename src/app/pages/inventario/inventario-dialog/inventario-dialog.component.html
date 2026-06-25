@@ -1,78 +1,82 @@
-<h2 mat-dialog-title class="form-title">
-  {{ $inventario().idInventario > 0 ? 'Modificar' : 'Registrar' }} Ítem de Inventario
-</h2>
+<div class="form-page">
+  <h2 class="form-title">
+    {{ $inventario().idInventario > 0 ? 'Modificar' : 'Registrar' }} Ítem de Inventario
+  </h2>
 
-<mat-dialog-content class="dialog-content">
-  <div class="form-grid">
+  <div class="form-card">
+    <div class="form-grid">
 
-    <mat-form-field appearance="outline" class="field-span2">
-      <mat-label>Producto Final Asociado</mat-label>
-      <mat-select [(ngModel)]="$inventario().productoFinal"
-                  [compareWith]="compareObjects">
-        @for (pf of $productosFinalesList(); track pf.idProductoFinal) {
-          <mat-option [value]="pf">
-            {{ pf.nombreProdF }} (ID: {{ pf.idProductoFinal }})
-          </mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Producto Final Asociado</mat-label>
+        <mat-select [(ngModel)]="$inventario().productoFinal" [compareWith]="compareFinal">
+          @for (pf of $productosFinalesList(); track pf.idProductoFinal) {
+            <mat-option [value]="pf">
+              {{ pf.nombreProdF }} (ID: {{ pf.idProductoFinal }})
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="field-span2">
-      <mat-label>Nombre Inventario</mat-label>
-      <input matInput placeholder="Ej. Lote de Maíz Blanco"
-             [(ngModel)]="$inventario().nombreInven" required>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Producto Inicial Asociado</mat-label>
+        <mat-select [(ngModel)]="$inventario().productoInicial" [compareWith]="compareInicial">
+          @for (pi of $productosInicialesList(); track pi.idProductoInicial) {
+            <mat-option [value]="pi">
+              {{ pi.nombreProdI }} (ID: {{ pi.idProductoInicial }})
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="field-span2">
-      <mat-label>Descripción</mat-label>
-      <textarea matInput placeholder="Detalles de las existencias..."
-                [(ngModel)]="$inventario().descripcionInven"
-                rows="2" required>
-      </textarea>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Nombre Inventario</mat-label>
+        <input matInput placeholder="Ej. Lote de Maíz Blanco" [(ngModel)]="$inventario().nombreInven" required>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Stock Actual</mat-label>
-      <input type="number" matInput placeholder="0"
-             [(ngModel)]="$inventario().stockActualInven" required>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Descripción</mat-label>
+        <textarea matInput placeholder="Detalles opcionales..." [(ngModel)]="$inventario().descripcionInven" rows="2"></textarea>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Stock Mínimo</mat-label>
-      <input type="number" matInput placeholder="0"
-             [(ngModel)]="$inventario().stockMinimoInven" required>
-    </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Stock Actual</mat-label>
+        <input type="number" matInput [(ngModel)]="$inventario().stockActualInven" required>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Unidad de Medida</mat-label>
-      <input matInput placeholder="Ej. Sacos, Kg"
-             [(ngModel)]="$inventario().unidadMedidaInven" required>
-    </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Stock Mínimo</mat-label>
+        <input type="number" matInput [(ngModel)]="$inventario().stockMinimoInven" required>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Fecha Actualización</mat-label>
-      <input matInput type="date"
-             [(ngModel)]="$inventario().fechaActualizacionInven" required>
-    </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Unidad de Medida</mat-label>
+        <input matInput placeholder="Ej. Sacos, Kg" [(ngModel)]="$inventario().unidadMedidaInven" required>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="field-span2">
-      <mat-label>Estado</mat-label>
-      <mat-select [(ngModel)]="$inventario().estadoInven">
-        <mat-option [value]="true">Activo</mat-option>
-        <mat-option [value]="false">Inactivo</mat-option>
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha Actualización</mat-label>
+        <input matInput type="date" [(ngModel)]="$inventario().fechaActualizacionInven" required>
+      </mat-form-field>
 
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Estado</mat-label>
+        <mat-select [(ngModel)]="$inventario().estadoInven">
+          <mat-option [value]="true">Activo</mat-option>
+          <mat-option [value]="false">Inactivo</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+
+    <div class="form-actions">
+      <button mat-flat-button type="button" class="btn-cancel" (click)="close()">
+        <mat-icon>cancel</mat-icon>
+        <span>Cancelar</span>
+      </button>
+      <button mat-flat-button type="button" class="btn-submit" (click)="operate()">
+        <mat-icon>done</mat-icon>
+        <span>Guardar</span>
+      </button>
+    </div>
   </div>
-</mat-dialog-content>
-
-<mat-dialog-actions class="form-actions">
-  <button mat-flat-button type="button" class="btn-cancel" (click)="close()">
-    <mat-icon>cancel</mat-icon>
-    <span>Cancelar</span>
-  </button>
-  <button mat-flat-button type="button" class="btn-submit" (click)="operate()">
-    <mat-icon>done</mat-icon>
-    <span>Guardar</span>
-  </button>
-</mat-dialog-actions>
+</div>

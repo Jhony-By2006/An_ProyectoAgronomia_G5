@@ -19,6 +19,9 @@ import { ReporteComponent } from './pages/reporte/reporte.component';
 import { AdministracionComponent } from './pages/administracion/administracion.component';
 import { LayoutComponent } from './pages/layout/layout.component';
 import { LoginComponent } from './login/login.component';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { environment } from '../environments/environment';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -26,6 +29,29 @@ export const routes: Routes = [
   {
     path: 'pages',
     component: LayoutComponent,
+    canActivate: [() => {
+      const router = inject(Router);
+      const token = sessionStorage.getItem(environment.TOKEN_NAME);
+
+      if (!token) {
+        router.navigate(['/login']);
+        return false;
+      }
+
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        if (payload.exp * 1000 < Date.now()) {
+          sessionStorage.removeItem(environment.TOKEN_NAME);
+          router.navigate(['/login']);
+          return false;
+        }
+      } catch {
+        router.navigate(['/login']);
+        return false;
+      }
+
+      return true;
+    }],
     children: [
       // ── RUTAS DE PROVEEDOR ──
       {

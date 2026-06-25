@@ -1,53 +1,68 @@
 <div class="form-page">
-  <h2 class="form-title">Gestión de Reportes</h2>
-  <div class="form-card">
+  <h2 class="form-title">{{ $isEdit() ? 'Editar Reporte' : 'Registrar Reporte' }}</h2>
+  
+  <form [formGroup]="$form()" (submit)="operate()" class="form-card" #frmReporte="ngForm">
     <div class="form-grid">
 
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Título</mat-label>
-        <input matInput placeholder="Ej. Reporte mensual de ventas" [(ngModel)]="$reporte().titulo">
+        <input matInput placeholder="Ej. Reporte mensual de ventas" formControlName="titulo">
+        @if (getControl('titulo')?.errors?.['required'] && getControl('titulo')?.touched) {
+          <small class="invalid">Es requerido</small>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Tipo de Reporte</mat-label>
-        <input matInput placeholder="Ej. Ventas" [(ngModel)]="$reporte().tipoReporte">
+        <input matInput placeholder="Ej. Ventas" formControlName="tipoReporte">
+        @if (getControl('tipoReporte')?.errors?.['required'] && getControl('tipoReporte')?.touched) {
+          <small class="invalid">Es requerido</small>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Fecha de Generación</mat-label>
-        <input matInput type="date" [(ngModel)]="$reporte().fechaGeneracion">
+        <input matInput type="date" formControlName="fechaGeneracion">
+        @if (getControl('fechaGeneracion')?.errors?.['required'] && getControl('fechaGeneracion')?.touched) {
+          <small class="invalid">Es requerido</small>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Contenido</mat-label>
-        <textarea matInput rows="4" placeholder="Descripción del contenido del reporte"
-          [(ngModel)]="$reporte().contenido">
-        </textarea>
+        <textarea matInput rows="4" placeholder="Descripción del contenido del reporte" formControlName="contenido"></textarea>
+        @if (getControl('contenido')?.errors?.['required'] && getControl('contenido')?.touched) {
+          <small class="invalid">Es requerido</small>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Generado por</mat-label>
-        <input matInput placeholder="Ej. Admin" [(ngModel)]="$reporte().generadoPor">
+        <input matInput placeholder="Ej. Admin" formControlName="generadoPor">
+        @if (getControl('generadoPor')?.errors?.['required'] && getControl('generadoPor')?.touched) {
+          <small class="invalid">Es requerido</small>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Estado</mat-label>
-        <mat-select [(ngModel)]="$reporte().estadoReporte">
+        <mat-select formControlName="estadoReporte">
           <mat-option [value]="true">Activo</mat-option>
           <mat-option [value]="false">Inactivo</mat-option>
         </mat-select>
       </mat-form-field>
 
     </div>
+    
     <div class="form-actions">
       <button mat-flat-button type="button" class="btn-cancel" (click)="close()">
         <mat-icon>cancel</mat-icon>
         <span>Cancelar</span>
       </button>
-      <button mat-flat-button type="button" class="btn-submit" (click)="operate()">
+      <button mat-flat-button type="submit" class="btn-submit" [disabled]="frmReporte.invalid">
         <mat-icon>done</mat-icon>
         <span>Guardar</span>
       </button>
     </div>
-  </div>
+  </form>
 </div>

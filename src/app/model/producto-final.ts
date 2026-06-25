@@ -6,7 +6,7 @@ export interface ProductoFinal {
     cantidadProducidaProdF: number;
     unidadMedidaProdF: string;
     precioVentaProdF: number;
-    fechaProduccionProdF: Date;
+    fechaProduccionProdF: string;
     estadoProdF: boolean;
     
 }

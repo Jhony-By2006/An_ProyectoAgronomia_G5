@@ -20,7 +20,6 @@ export class LoginComponent {
   loginForm: FormGroup = new FormGroup({
     username: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    role: new FormControl('ADMIN', [Validators.required])
   });
 
   isFormValid = toSignal(
@@ -31,28 +30,53 @@ export class LoginComponent {
   isLoggingIn = signal(false);
   errorMessage = signal('');
   showPassword = signal(false);
+  selectedRole = signal<string>('ADMIN');
 
   togglePassword() {
     this.showPassword.set(!this.showPassword());
   }
 
-  login() {
-    if (this.loginForm.valid) {
-      this.isLoggingIn.set(true);
-      this.errorMessage.set('');
+  selectRole(role: string) {
+    this.selectedRole.set(role);
+  }
 
-      this.loginService.login(this.loginForm.value.username, this.loginForm.value.password)
-        .subscribe({
-          next: (data) => {
+  login() {
+  if (this.loginForm.valid) {
+    this.isLoggingIn.set(true);
+    this.errorMessage.set('');
+
+    this.loginService.login(this.loginForm.value.username, this.loginForm.value.password)
+      .subscribe({
+        next: (data) => {
+          try {
+            const payload = JSON.parse(atob(data.access_token.split('.')[1]));
+            const roleFromToken = payload.role || '';
+
+            if (!roleFromToken.includes(this.selectedRole())) {
+              this.isLoggingIn.set(false);
+              this.errorMessage.set('No tienes permiso para acceder con ese rol');
+              return;
+            }
+
             sessionStorage.setItem(environment.TOKEN_NAME, data.access_token);
             this.isLoggingIn.set(false);
-            this.router.navigate(['/pages/administracion']);
-          },
-          error: () => {
+
+            if (roleFromToken.includes('ADMIN')) {
+              this.router.navigate(['/pages/administracion']);
+            } else {
+              this.router.navigate(['/pages/inventario']);
+            }
+          } catch {
             this.isLoggingIn.set(false);
-            this.errorMessage.set('Usuario o contraseña incorrectos');
+            this.errorMessage.set('Error al procesar el token');
           }
-        });
+        },
+        error: () => {
+          this.isLoggingIn.set(false);
+          this.errorMessage.set('Usuario o contraseña incorrectos');
+        }
+      });
     }
   }
 }
+

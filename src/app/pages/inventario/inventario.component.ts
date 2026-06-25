@@ -1,6 +1,5 @@
 import { Component, effect, inject, signal, untracked, viewChild } from '@angular/core';
-import { Inventario } from '../../model/inventario';
-import { InventarioService } from '../../services/inventario.service';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -10,7 +9,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { CommonModule } from '@angular/common';
+import { Inventario } from '../../model/inventario';
+import { InventarioService } from '../../services/inventario.service';
 import { InventarioDialogComponent } from './inventario-dialog/inventario-dialog.component';
 import { switchMap, tap } from 'rxjs';
 
@@ -42,26 +42,37 @@ export class InventarioComponent {
   protected $sort = viewChild(MatSort);
   protected $inventarios = this.inventarioService.$listChange;
 
-  protected displayedColumns: string[] = [
-    'id', 'nombre', 'descripcion', 'stockProgress',
-    'unidad', 'actualizacion', 'prodFinal', 'estado', 'actions'
-  ];
 
+  protected displayedColumns: string[] = [
+    'idInventario', 
+    'nombreInven', 
+    'descripcionInven', 
+    'stockActualInven', 
+    'unidadMedidaInven', 
+    'fechaActualizacionInven', 
+    'estadoInven', 
+    'actions'
+  ];
+  
   constructor() {
+    // Carga inicial de datos
     this.inventarioService.findAll().subscribe(data =>
       this.inventarioService.setListChange(data)
     );
 
+    // Efecto para controlar la reactividad de la tabla, paginador y ordenamiento
     effect(() => {
       const data = this.$inventarios();
       const p = this.$paginator();
       const s = this.$sort();
       const ds = this.$dataSource();
+      
       ds.data = data;
       ds.paginator = p ? p : null;
       ds.sort = s ? s : null;
     });
 
+    // Efecto para las notificaciones automáticas (SnackBars)
     effect(() => {
       const message = this.inventarioService.$messageChange();
       if (message) {

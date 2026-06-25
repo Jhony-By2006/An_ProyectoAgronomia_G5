@@ -1,12 +1,12 @@
 <div class="form-page">
   <h2 class="form-title">Gestión de Recursos</h2>
 
-  <form [formGroup]="$form()" (submit)="operate()" class="form-card" #frmRecurso="ngForm">
+  <form [formGroup]="$form()" (submit)="operate()" class="form-card">
 
     <div [hidden]="true">
       <mat-form-field>
         <mat-label>ID</mat-label>
-        <input matInput placeholder="ID" formControlName="idRecurso">
+        <input matInput formControlName="idRecurso">
       </mat-form-field>
     </div>
 
@@ -17,7 +17,7 @@
         <mat-select formControlName="proveedor" [compareWith]="compareObjects">
           @for (p of $proveedoresList(); track p.idProveedor) {
             <mat-option [value]="p">
-              {{ p.nombreProveedor }} {{ p.apellidoProveedor }} (RUC: {{ p.rucProveedor }})
+              {{ p.nombreProveedor }} {{ p.apellidoProveedor }}
             </mat-option>
           }
         </mat-select>
@@ -26,17 +26,17 @@
         }
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Nombre Recurso</mat-label>
-        <input matInput placeholder="Ej. Urea" formControlName="nombreRecurso">
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Nombre del Recurso</mat-label>
+        <input matInput placeholder="Ej. Fertilizante Premium" formControlName="nombreRecurso">
         @if ($f()['nombreRecurso'].errors?.['required'] && $f()['nombreRecurso'].touched) {
           <small class="invalid">Es requerido</small>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Tipo Recurso</mat-label>
-        <input matInput placeholder="Ej. Fertilizante" formControlName="tipoRecurso">
+        <mat-label>Tipo de Recurso</mat-label>
+        <input matInput placeholder="Ej. Químico, Herramienta" formControlName="tipoRecurso">
         @if ($f()['tipoRecurso'].errors?.['required'] && $f()['tipoRecurso'].touched) {
           <small class="invalid">Es requerido</small>
         }
@@ -44,37 +44,40 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Cantidad</mat-label>
-        <input type="number" matInput placeholder="Cantidad" formControlName="cantidadRecurso">
+        <input matInput type="number" placeholder="0" formControlName="cantidadRecurso">
         @if ($f()['cantidadRecurso'].errors?.['required'] && $f()['cantidadRecurso'].touched) {
           <small class="invalid">Es requerido</small>
+        }
+        @if ($f()['cantidadRecurso'].errors?.['min'] && $f()['cantidadRecurso'].touched) {
+          <small class="invalid">Mínimo 0</small>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Unidad de Medida</mat-label>
-        <input matInput placeholder="Ej. Kg, Litros" formControlName="unidadMedidaRecurso">
+        <input matInput placeholder="Ej. Litros, Kg, Unidades" formControlName="unidadMedidaRecurso">
         @if ($f()['unidadMedidaRecurso'].errors?.['required'] && $f()['unidadMedidaRecurso'].touched) {
           <small class="invalid">Es requerido</small>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Costo</mat-label>
-        <input type="number" matInput placeholder="Costo" formControlName="costoRecurso">
+        <mat-label>Costo (S/.)</mat-label>
+        <input matInput type="number" placeholder="0.00" formControlName="costoRecurso">
         @if ($f()['costoRecurso'].errors?.['required'] && $f()['costoRecurso'].touched) {
           <small class="invalid">Es requerido</small>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Fecha Ingreso</mat-label>
-        <input matInput placeholder="AAAA-MM-DD" formControlName="fechaIngresoRecurso">
+        <mat-label>Fecha de Ingreso</mat-label>
+        <input matInput type="date" formControlName="fechaIngresoRecurso">
         @if ($f()['fechaIngresoRecurso'].errors?.['required'] && $f()['fechaIngresoRecurso'].touched) {
           <small class="invalid">Es requerido</small>
         }
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="field-span2">
+      <mat-form-field appearance="outline">
         <mat-label>Estado</mat-label>
         <mat-select formControlName="estadoRecurso">
           <mat-option [value]="true">Disponible</mat-option>
@@ -89,7 +92,7 @@
         <mat-icon>cancel</mat-icon>
         <span>Cancelar</span>
       </button>
-      <button mat-flat-button type="submit" class="btn-submit" [disabled]="frmRecurso.invalid">
+      <button mat-flat-button type="submit" class="btn-submit" [disabled]="$form().invalid">
         <mat-icon>done</mat-icon>
         <span>Guardar</span>
       </button>

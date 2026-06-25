@@ -10,16 +10,6 @@ import { MatNativeDateModule, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular
 import { TrabajadorService } from '../../../services/trabajador.service';
 import { Trabajador } from '../../../model/trabajador';
 
-export const MY_DATE_FORMATS = {
-  parse: { dateInput: 'DD/MM/YYYY' },
-  display: {
-    dateInput: 'DD/MM/YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'DD/MM/YYYY',
-    monthYearA11yLabel: 'MMMM YYYY',
-  }
-};
-
 @Component({
   selector: 'app-trabajador-edit',
   standalone: true,
@@ -29,14 +19,9 @@ export const MY_DATE_FORMATS = {
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatCheckboxModule,
-    MatDatepickerModule,
-    MatNativeDateModule
+    MatCheckboxModule
   ],
-  providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },
-    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
-  ],
+
   templateUrl: './trabajador-edit.component.html',
   styleUrl: './trabajador-edit.component.css'
 })
@@ -48,6 +33,12 @@ export class TrabajadorEditComponent implements OnInit {
   protected form!: FormGroup;
 
   ngOnInit() {
+    
+    let fechaInicial = null;
+    if (this.data?.fechaContratoT) {
+      fechaInicial = this.data.fechaContratoT.split('T')[0];
+    }
+
     this.form = new FormGroup({
       idTrabajador: new FormControl(this.data?.idTrabajador || null),
       nombreTrabajador: new FormControl(this.data?.nombreTrabajador || '', [Validators.required]),
@@ -56,9 +47,7 @@ export class TrabajadorEditComponent implements OnInit {
       cargo: new FormControl(this.data?.cargo || ''),
       telefono: new FormControl(this.data?.telefono || ''),
       email: new FormControl(this.data?.email || '', [Validators.email]),
-      fechaContratoT: new FormControl(
-        this.data?.fechaContratoT ? new Date(this.data.fechaContratoT) : null
-      ),
+      fechaContratoT: new FormControl(fechaInicial),
       estado: new FormControl(this.data?.estado ?? true)
     });
   }

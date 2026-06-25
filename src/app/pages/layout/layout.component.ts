@@ -30,16 +30,16 @@ export class LayoutComponent {
   private readonly router = inject(Router);
 
   get isAdmin(): boolean {
-    const token = sessionStorage.getItem(environment.TOKEN_NAME);
-    if (!token) return false;
+  const token = sessionStorage.getItem(environment.TOKEN_NAME);
+  if (!token) return false;
 
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.role === 'ADMIN';
-    } catch {
-      return false;
-    }
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.role && payload.role.includes('ADMIN'); 
+  } catch {
+    return false;
   }
+}
 
   logout() {
     this.loginService.logout().subscribe({

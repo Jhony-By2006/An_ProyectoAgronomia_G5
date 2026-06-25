@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PagoService } from '../../../services/pago.service';
 import { MetodoPagoService } from '../../../services/metodopago.service';
 import { MetodoPago } from '../../../model/metodopago';
@@ -22,6 +22,7 @@ import { switchMap, tap } from 'rxjs';
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
+    RouterLink,
   ],
   templateUrl: './pago-edit.component.html',
   styleUrl: './pago-edit.component.css',
@@ -33,13 +34,10 @@ export class PagoEditComponent {
   private readonly pagoService = inject(PagoService);
   private readonly metodoPagoService = inject(MetodoPagoService);
 
-  // Lista de métodos de pago para el mat-select
   protected $metodosPagoList = signal<MetodoPago[]>([]);
 
   protected $form = signal(new FormGroup({
     idPago: new FormControl<number | null>(null),
-
-    // Objeto MetodoPago completo para que Spring Boot resuelva el @ManyToOne
     metodoPago: new FormControl<any>(null, [Validators.required]),
     monto: new FormControl<number | null>(null, [Validators.required, Validators.min(0.01)]),
     fechaPago: new FormControl<string>('', [Validators.required]),
@@ -53,25 +51,17 @@ export class PagoEditComponent {
   protected $isEdit = computed(() => !!this.$id());
   protected $f = computed(() => this.$form().controls);
 
-  /**
-   * Comparación de objetos MetodoPago por clave primaria para que Angular Material
-   * marque correctamente el ítem seleccionado en el mat-select al editar.
-   */
   compareObjects(o1: any, o2: any): boolean {
     return o1 && o2 ? o1.idMetodoPago === o2.idMetodoPago : o1 === o2;
   }
 
   constructor() {
-    // Carga los métodos de pago al iniciar el componente
     this.metodoPagoService.findAll().subscribe(data => this.$metodosPagoList.set(data));
 
-    // Si hay ID en la URL, se carga el pago para editar
     effect(() => {
       const id = this.$id();
       if (id) {
         this.pagoService.findById(id).subscribe(data => {
-
-          // Manejo de fecha: Spring Boot puede enviar LocalDate como array [year, month, day] o string ISO
           let fechaFormateada = '';
           if (data.fechaPago) {
             if (Array.isArray(data.fechaPago)) {
@@ -103,11 +93,19 @@ operate() {
   if (form.invalid) return;
 
   const formValue = form.value;
+
   const pago: any = {
-    ...formValue,
-    idMetodoPago: formValue.metodoPago?.idMetodoPago,
+    idMetodoPago: formValue.metodoPago?.idMetodoPago,  
+    monto: formValue.monto,
+    fechaPago: formValue.fechaPago,
+    concepto: formValue.concepto,
+    comprobante: formValue.comprobante,
+    estadoPago: formValue.estadoPago,
   };
-  delete pago.metodoPago;
+
+  if (isEdit) {
+    pago.idPago = formValue.idPago;
+  }
 
   const operation$ = isEdit
     ? this.pagoService.update(pago.idPago!, pago)

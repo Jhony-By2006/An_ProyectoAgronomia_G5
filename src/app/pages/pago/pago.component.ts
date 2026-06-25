@@ -27,6 +27,7 @@ import { switchMap, tap } from 'rxjs';
     RouterLink,
     RouterOutlet,
     MatSnackBarModule,
+
   ],
   templateUrl: './pago.component.html',
   styleUrl: './pago.component.css',
