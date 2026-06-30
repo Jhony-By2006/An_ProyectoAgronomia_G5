@@ -1,22 +1,22 @@
-/* ── Contenedor raíz — igual al docente ── */
 .example-container {
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: 0; bottom: 0; left: 0; right: 0;
+  inset: 0;
 }
 
 .example-sidenav-container {
   flex: 1;
 }
 
-/* ── Toolbar ── */
 .app-toolbar {
   background-color: #1B4332 !important;
   color: #fff !important;
   height: 60px !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18) !important;
   z-index: 10;
+  position: sticky;
+  top: 0;
 }
 
 .menu-toggle {
@@ -24,24 +24,18 @@
   margin-right: 8px;
 }
 
-.toolbar-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.brand-title {
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: #fff;
-}
-
 .example-spacer {
   flex: 1 1 auto;
 }
 
-/* ── Sidenav ── */
+.brand-logo {
+  height: 54px;
+  width: 134px;
+  object-fit: contain;
+  border-radius: 12px;
+  margin-left: 8px;
+}
+
 .app-sidenav {
   width: 240px !important;
   background: #fff !important;
@@ -49,9 +43,8 @@
   padding-top: 8px;
 }
 
-/* ── Etiqueta de sección ── */
 .nav-section-label {
- font-size: 14px;
+  font-size: 14px;
   font-weight: 700;
   color: #1B4332;
   padding: 2px 20px 8px;
@@ -59,7 +52,6 @@
   letter-spacing: 0.08em;
 }
 
-/* ── Items del menú ── */
 button[mat-menu-item] {
   display: flex;
   align-items: center;
@@ -68,7 +60,7 @@ button[mat-menu-item] {
   font-weight: 400;
   color: #3a3a3a;
   height: 48px;
-  margin: 2px 10px;
+  margin: 4px 10px;
   border-radius: 10px;
   width: calc(100% - 20px);
   transition: background 0.15s;
@@ -88,7 +80,6 @@ button[mat-menu-item]:hover mat-icon {
   color: #1B4332;
 }
 
-/* ── Item activo ── */
 button[mat-menu-item].active {
   background-color: #1B4332 !important;
   color: #fff !important;
@@ -99,13 +90,11 @@ button[mat-menu-item].active mat-icon {
   color: #fff !important;
 }
 
-/* ── Divider ── */
 .nav-divider {
   margin: 12px 0 !important;
   border-color: #e8f0e9 !important;
 }
 
-/* ── Botón cerrar sesión ── */
 .btn-logout {
   color: #888 !important;
 }
@@ -123,20 +112,29 @@ button[mat-menu-item].active mat-icon {
   color: #b91c1c !important;
 }
 
-/* ── Contenido principal ── */
 mat-sidenav-content {
   background-color: #f5f7f5 !important;
   padding: 28px 32px;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
-.brand-logo {
-  height: 400px;
-  width: 134px;
-  object-fit: contain;
-  border-radius: 50%;
-  margin-left: 8px;
-}
+@media (max-width: 768px) {
+  .app-toolbar {
+    height: 56px !important;
+    padding: 0 10px !important;
+  }
 
-button[mat-menu-item] {
-  margin: 4px 10px;
+  .brand-logo {
+    width: 105px;
+    height: 46px;
+  }
+
+  .app-sidenav {
+    width: min(82vw, 280px) !important;
+  }
+
+  mat-sidenav-content {
+    padding: 16px 12px;
+  }
 }
