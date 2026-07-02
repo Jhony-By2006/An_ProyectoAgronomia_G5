@@ -1,6 +1,6 @@
 <div class="login-container">
   <div class="header">
-  <img src="/Logo%20Agronomia.jpg" alt="Agronomia Espinoza" class="logo">
+    <img src="/Logo%20Agronomia.jpg" alt="Agronomia Espinoza" class="logo">
     <span class="brand-name">Agronomia Espinoza</span>
   </div>
 
@@ -9,6 +9,7 @@
     <p class="subtitle">Ingrese sus datos para continuar</p>
 
     <form [formGroup]="loginForm" (ngSubmit)="login()">
+
       <div class="input-field">
         <mat-icon>person</mat-icon>
         <input matInput formControlName="username" placeholder="Ingrese su correo electrónico">
@@ -28,14 +29,14 @@
 
       <p class="select-label">Seleccione su acceso</p>
       <div class="role-selector">
-        <label class="role-card" [class.active]="loginForm.value.role === 'ADMIN'">
-          <input type="radio" formControlName="role" value="ADMIN">
+        <label class="role-card" [class.active]="selectedRole() === 'ADMIN'"
+               (click)="selectRole('ADMIN')">
           <mat-icon>manage_accounts</mat-icon>
           <span>Administración</span>
         </label>
 
-        <label class="role-card" [class.active]="loginForm.value.role === 'TRABAJADOR'">
-          <input type="radio" formControlName="role" value="TRABAJADOR">
+        <label class="role-card" [class.active]="selectedRole() === 'TRABAJADOR'"
+               (click)="selectRole('TRABAJADOR')">
           <mat-icon>engineering</mat-icon>
           <span>Trabajador</span>
         </label>
@@ -48,6 +49,7 @@
       <button type="submit" class="continue-btn" [disabled]="!isFormValid() || isLoggingIn()">
         {{ isLoggingIn() ? 'Ingresando...' : 'Continuar' }}
       </button>
+
     </form>
   </div>
 

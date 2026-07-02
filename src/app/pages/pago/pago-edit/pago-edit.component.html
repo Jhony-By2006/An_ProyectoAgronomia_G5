@@ -1,7 +1,7 @@
 <div class="form-page">
   <h2 class="form-title">Gestión de Pagos</h2>
 
-  <form [formGroup]="$form()" (submit)="operate()" class="form-card" #frmPago="ngForm">
+  <form [formGroup]="$form()" (submit)="operate()" class="form-card">
 
     <!-- Campo ID oculto -->
     <div [hidden]="true">
@@ -86,7 +86,7 @@
         <mat-icon>cancel</mat-icon>
         <span>Cancelar</span>
       </button>
-      <button mat-flat-button type="submit" class="btn-submit" [disabled]="frmPago.invalid">
+      <button mat-flat-button type="submit" class="btn-submit" [disabled]="$form().invalid">
         <mat-icon>done</mat-icon>
         <span>Guardar</span>
       </button>

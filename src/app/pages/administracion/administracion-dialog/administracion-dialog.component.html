@@ -9,9 +9,9 @@
   @let admin = $administracion();
 
   <form (submit)="operate()" class="form-container" #frmAdmin="ngForm">
-    
+
     <div class="form-grid">
-      
+
       <mat-form-field appearance="outline">
         <mat-label>Nombre</mat-label>
         <input matInput placeholder="Nombre de la sede/área" [(ngModel)]="admin.nombre" name="nombre" required #nombreField="ngModel">
@@ -30,11 +30,11 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Fecha Registro</mat-label>
-        <input matInput type="date" [(ngModel)]="admin.fechaRegistro" name="fechaRegistro">
+        <input matInput type="date" [(ngModel)]="admin.fechaRegistro" name="fechaRegistro" required>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Estado de Administración</mat-label>
+        <mat-label>Estado</mat-label>
         <mat-select [(ngModel)]="admin.estadoAdmin" name="estadoAdmin">
           <mat-option [value]="true">Activo</mat-option>
           <mat-option [value]="false">Inactivo</mat-option>
@@ -44,6 +44,51 @@
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Descripción</mat-label>
         <textarea matInput placeholder="Detalles o anotaciones adicionales" [(ngModel)]="admin.descripcion" name="descripcion" rows="3"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Inventario</mat-label>
+        <mat-select [(ngModel)]="admin.idInventario" name="idInventario" required>
+          @for (i of $inventariosList(); track i.idInventario) {
+            <mat-option [value]="i.idInventario">{{ i.nombreInven }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Recurso Administración</mat-label>
+        <mat-select [(ngModel)]="admin.idRecursoAdministracion" name="idRecursoAdministracion" required>
+          @for (r of $recursosList(); track r.idRecursoAdministracion) {
+            <mat-option [value]="r.idRecursoAdministracion">{{ r.nombreRecurso ?? r.idRecursoAdministracion }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Reporte</mat-label>
+        <mat-select [(ngModel)]="admin.idReporte" name="idReporte" required>
+          @for (r of $reportesList(); track r.idReporte) {
+            <mat-option [value]="r.idReporte">{{ r.titulo }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Trabajador</mat-label>
+        <mat-select [(ngModel)]="admin.idTrabajador" name="idTrabajador" required>
+          @for (t of $trabajadoresList(); track t.idTrabajador) {
+            <mat-option [value]="t.idTrabajador">{{ t.nombreTrabajador }} {{ t.apellidosTrabajador }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Método de Pago</mat-label>
+        <mat-select [(ngModel)]="admin.idMetodoPago" name="idMetodoPago" required>
+          @for (m of $metodosPagoList(); track m.idMetodoPago) {
+            <mat-option [value]="m.idMetodoPago">{{ m.nombre }}</mat-option>
+          }
+        </mat-select>
       </mat-form-field>
 
     </div>

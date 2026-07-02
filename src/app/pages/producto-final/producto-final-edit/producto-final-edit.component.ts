@@ -33,18 +33,21 @@ export class ProductoFinalEditComponent {
     idProductoFinal: new FormControl<number | null>(null),
     nombreProdF: new FormControl<string>('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
     descripcionProdF: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]),
-    cantidadFinalProdF: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+    cantidadProducidaProdF: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
     unidadMedidaProdF: new FormControl<string>('', [Validators.required, Validators.maxLength(30)]),
-    costoUnitarioProdF: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-    fechaIngresoProdF: new FormControl<string>('', [Validators.required]),
-    proveedorOrigenProdF: new FormControl<string>('', [Validators.required, Validators.maxLength(100)]),
+    precioVentaProdF: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+    fechaProduccionProdF: new FormControl<string>('', [Validators.required]),
     estadoProdF: new FormControl<boolean | null>(true),
   }));
 
   private readonly $params = toSignal(this.route.params, { initialValue: {} });
   protected $id = computed(() => this.$params()['id']);
   protected $isEdit = computed(() => !!this.$id());
-  protected $f = computed(() => this.$form().controls);
+
+  
+  protected getControl(name: string) {
+    return this.$form().get(name);
+  }
 
   constructor() {
     effect(() => {

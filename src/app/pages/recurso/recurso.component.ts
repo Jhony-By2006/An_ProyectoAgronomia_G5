@@ -52,7 +52,7 @@ export class RecursoComponent {
     'unidadMedidaRecurso', 'costoRecurso', 'fechaIngresoRecurso', 'estadoRecurso', 'actions'
   ];
 
-  //Esta esuchando los signals de recurso, paginador y sort para actualizar la tabla cada vez que haya un cambio
+
   constructor() {
     // this.recursoService.findAll().subscribe(data => this.recursoService.setRecursoChange(data));
     this.recursoService.findAll().subscribe(data => this.recursoService.setListChange(data));
@@ -98,25 +98,4 @@ export class RecursoComponent {
     }
   }
 
-  /*
-  protected recursos : Recurso[] = [];
-  protected $dataSource = signal(new MatTableDataSource<Recurso>());
-  //protected dataSource2$ = new Observable<MatTableDataSource<Recurso>>();
-  protected displayedColumns: string[] = ['idRecurso', 'nombreRecurso', 'tipoRecurso', 'cantidadRecurso', 'unidadMedidaRecurso', 'costoRecurso', 'fechaIngresoRecurso', 'estadoRecurso'];
-
-  private readonly recursoService = inject(RecursoService);
-
-  ngOnInit() : void{
-    // this.recursoService.findAll().subscribe(data => console.log(data));
-    //this.recursoService.findAll().subscribe(data => this.recursos = data);
-    this.recursoService.findAll().subscribe(data => {
-      this.$dataSource.set(new MatTableDataSource<Recurso>(data));
-    });
-  }
-
-  applyFilter(e: any){
-   console.log(e);
-  }
-*/
-  
 }

@@ -32,11 +32,9 @@
     <input matInput type="email" formControlName="email" placeholder="correo@ejemplo.com">
   </mat-form-field>
 
-  <mat-form-field appearance="outline">
+<mat-form-field appearance="outline">
     <mat-label>Fecha de Contrato</mat-label>
-    <input matInput [matDatepicker]="picker" formControlName="fechaContratoT">
-    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
+    <input matInput type="date" formControlName="fechaContratoT">
   </mat-form-field>
 
   <mat-checkbox formControlName="estado" color="primary">Trabajador Activo</mat-checkbox>

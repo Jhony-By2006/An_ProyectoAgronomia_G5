@@ -16,10 +16,10 @@
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Nombre del Producto</mat-label>
         <input matInput placeholder="Ej. Arroz integral" formControlName="nombreProdF">
-        @if ($f()['nombreProdF'].errors?.['required'] && $f()['nombreProdF'].touched) {
+        @if (getControl('nombreProdF')?.errors?.['required'] && getControl('nombreProdF')?.touched) {
           <small class="invalid">Es requerido</small>
         }
-        @if ($f()['nombreProdF'].errors?.['minlength'] && $f()['nombreProdF'].touched) {
+        @if (getControl('nombreProdF')?.errors?.['minlength'] && getControl('nombreProdF')?.touched) {
           <small class="invalid">Mínimo 2 caracteres</small>
         }
       </mat-form-field>
@@ -27,18 +27,18 @@
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Descripción</mat-label>
         <input matInput placeholder="Descripción del producto" formControlName="descripcionProdF">
-        @if ($f()['descripcionProdF'].errors?.['required'] && $f()['descripcionProdF'].touched) {
+        @if (getControl('descripcionProdF')?.errors?.['required'] && getControl('descripcionProdF')?.touched) {
           <small class="invalid">Es requerido</small>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Cantidad Final</mat-label>
-        <input matInput type="number" placeholder="0" formControlName="cantidadFinalProdF">
-        @if ($f()['cantidadFinalProdF'].errors?.['required'] && $f()['cantidadFinalProdF'].touched) {
+        <mat-label>Cantidad Producida</mat-label>
+        <input matInput type="number" placeholder="0" formControlName="cantidadProducidaProdF">
+        @if (getControl('cantidadProducidaProdF')?.errors?.['required'] && getControl('cantidadProducidaProdF')?.touched) {
           <small class="invalid">Es requerido</small>
         }
-        @if ($f()['cantidadFinalProdF'].errors?.['min'] && $f()['cantidadFinalProdF'].touched) {
+        @if (getControl('cantidadProducidaProdF')?.errors?.['min'] && getControl('cantidadProducidaProdF')?.touched) {
           <small class="invalid">Debe ser mayor o igual a 0</small>
         }
       </mat-form-field>
@@ -46,34 +46,26 @@
       <mat-form-field appearance="outline">
         <mat-label>Unidad de Medida</mat-label>
         <input matInput placeholder="Ej. kg, litros, unidades" formControlName="unidadMedidaProdF">
-        @if ($f()['unidadMedidaProdF'].errors?.['required'] && $f()['unidadMedidaProdF'].touched) {
+        @if (getControl('unidadMedidaProdF')?.errors?.['required'] && getControl('unidadMedidaProdF')?.touched) {
           <small class="invalid">Es requerido</small>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Costo Unitario (S/.)</mat-label>
-        <input matInput type="number" placeholder="0.00" formControlName="costoUnitarioProdF">
-        @if ($f()['costoUnitarioProdF'].errors?.['required'] && $f()['costoUnitarioProdF'].touched) {
+        <mat-label>Precio de Venta (S/.)</mat-label>
+        <input matInput type="number" placeholder="0.00" formControlName="precioVentaProdF">
+        @if (getControl('precioVentaProdF')?.errors?.['required'] && getControl('precioVentaProdF')?.touched) {
           <small class="invalid">Es requerido</small>
         }
-        @if ($f()['costoUnitarioProdF'].errors?.['min'] && $f()['costoUnitarioProdF'].touched) {
+        @if (getControl('precioVentaProdF')?.errors?.['min'] && getControl('precioVentaProdF')?.touched) {
           <small class="invalid">Debe ser mayor o igual a 0</small>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Fecha de Ingreso</mat-label>
-        <input matInput type="date" formControlName="fechaIngresoProdF">
-        @if ($f()['fechaIngresoProdF'].errors?.['required'] && $f()['fechaIngresoProdF'].touched) {
-          <small class="invalid">Es requerido</small>
-        }
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="field-span2">
-        <mat-label>Proveedor Origen</mat-label>
-        <input matInput placeholder="Nombre del proveedor" formControlName="proveedorOrigenProdF">
-        @if ($f()['proveedorOrigenProdF'].errors?.['required'] && $f()['proveedorOrigenProdF'].touched) {
+        <mat-label>Fecha de Producción</mat-label>
+        <input matInput type="date" formControlName="fechaProduccionProdF">
+        @if (getControl('fechaProduccionProdF')?.errors?.['required'] && getControl('fechaProduccionProdF')?.touched) {
           <small class="invalid">Es requerido</small>
         }
       </mat-form-field>

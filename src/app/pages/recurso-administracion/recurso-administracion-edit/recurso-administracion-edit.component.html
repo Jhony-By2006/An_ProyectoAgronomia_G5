@@ -1,8 +1,7 @@
 <div class="form-page">
   <h2 class="form-title">{{ $isEdit() ? 'Editar Recurso de Administración' : 'Registrar Recurso de Administración' }}</h2>
 
-  <form [formGroup]="$form()" (submit)="operate()"
-        class="form-card" #frmRecurso="ngForm">
+  <form [formGroup]="$form()" (submit)="operate()" class="form-card">
 
     <div [hidden]="true">
       <mat-form-field>
@@ -13,20 +12,19 @@
 
     <div class="form-grid">
 
-      <!-- Grupo anidado para el objeto Recurso -->
-      <div formGroupName="recurso" class="field-span2 nested-group">
-        <p class="nested-label">Recurso</p>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>ID del Recurso</mat-label>
-          <input matInput type="number" placeholder="Ej. 1" formControlName="idRecurso">
-          @if ($f()['recurso'].get('idRecurso')?.errors?.['required'] && $f()['recurso'].get('idRecurso')?.touched) {
-            <small class="invalid">Es requerido</small>
+      <mat-form-field appearance="outline" class="field-span2">
+        <mat-label>Recurso</mat-label>
+        <mat-select formControlName="recurso" [compareWith]="compareObjects">
+          @for (r of $recursosList(); track r.idRecurso) {
+            <mat-option [value]="r">
+              {{ r.nombreRecurso }}
+            </mat-option>
           }
-          @if ($f()['recurso'].get('idRecurso')?.errors?.['min'] && $f()['recurso'].get('idRecurso')?.touched) {
-            <small class="invalid">Debe ser un ID válido (mayor a 0)</small>
-          }
-        </mat-form-field>
-      </div>
+        </mat-select>
+        @if ($f()['recurso'].errors?.['required'] && $f()['recurso'].touched) {
+          <small class="invalid">Seleccionar un recurso es requerido</small>
+        }
+      </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Fecha de Recepción</mat-label>
@@ -57,19 +55,20 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Estado</mat-label>
-        <input matInput placeholder="true / false" formControlName="estadoRecursoA">
+        <mat-select formControlName="estadoRecursoA">
+          <mat-option [value]="true">Activo</mat-option>
+          <mat-option [value]="false">Inactivo</mat-option>
+        </mat-select>
       </mat-form-field>
 
     </div>
 
     <div class="form-actions">
-      <button mat-flat-button type="button"
-              class="btn-cancel" routerLink="/pages/recurso-administracion">
+      <button mat-flat-button type="button" class="btn-cancel" routerLink="/pages/recurso-administracion">
         <mat-icon>cancel</mat-icon>
         <span>Cancelar</span>
       </button>
-      <button mat-flat-button type="submit"
-              class="btn-submit" [disabled]="frmRecurso.invalid">
+      <button mat-flat-button type="submit" class="btn-submit" [disabled]="$form().invalid">
         <mat-icon>done</mat-icon>
         <span>Guardar</span>
       </button>

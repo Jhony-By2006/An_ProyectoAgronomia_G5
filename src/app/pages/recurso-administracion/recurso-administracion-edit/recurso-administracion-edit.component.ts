@@ -9,13 +9,16 @@ import { RecursoAdministracionService } from '../../../services/recurso-administ
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RecursoAdministracion } from '../../../model/recurso-administracion';
 import { switchMap, tap } from 'rxjs';
-
+import { RecursoService } from '../../../services/recurso.service';
+import { Recurso } from '../../../model/recurso';
+import { MatSelectModule } from '@angular/material/select';
 @Component({
   selector: 'app-recurso-administracion-edit',
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatButtonModule,
     MatIconModule,
     RouterLink
@@ -28,13 +31,13 @@ export class RecursoAdministracionEditComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly recursoAdministracionService = inject(RecursoAdministracionService);
+  private readonly recursoService = inject(RecursoService);
+
+  protected $recursosList = signal<Recurso[]>([]);
 
   protected $form = signal(new FormGroup({
     idRecursoAdministracion: new FormControl<number | null>(null),
-    // El objeto recurso se maneja enviando solo el idRecurso anidado
-    recurso: new FormGroup({
-      idRecurso: new FormControl<number | null>(null, [Validators.required, Validators.min(1)])
-    }),
+    recurso: new FormControl<any>(null, [Validators.required]),
     fechaRecepcion: new FormControl<string>('', [Validators.required]),
     cantidadRecibida: new FormControl<number | null>(null, [Validators.required, Validators.min(1)]),
     observaciones: new FormControl<string>('', [Validators.maxLength(300)]),
@@ -46,11 +49,36 @@ export class RecursoAdministracionEditComponent {
   protected $isEdit = computed(() => !!this.$id());
   protected $f = computed(() => this.$form().controls);
 
+  compareObjects(o1: any, o2: any): boolean {
+    return o1 && o2 ? o1.idRecurso === o2.idRecurso : o1 === o2;
+  }
+
   constructor() {
+    this.recursoService.findAll().subscribe(data => this.$recursosList.set(data));
+
     effect(() => {
       const id = this.$id();
       if (id) {
-        this.recursoAdministracionService.findById(id).subscribe(data => this.$form().patchValue(data));
+        this.recursoAdministracionService.findById(id).subscribe(data => {
+          let fechaFormateada = '';
+          if (data.fechaRecepcion) {
+            if (Array.isArray(data.fechaRecepcion)) {
+              const [year, month, day] = data.fechaRecepcion;
+              fechaFormateada = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            } else if (typeof data.fechaRecepcion === 'string') {
+              fechaFormateada = (data.fechaRecepcion as string).split('T')[0];
+            }
+          }
+
+          this.$form().patchValue({
+            idRecursoAdministracion: data.idRecursoAdministracion,
+            recurso: data.recurso,
+            fechaRecepcion: fechaFormateada,
+            cantidadRecibida: data.cantidadRecibida,
+            observaciones: data.observaciones,
+            estadoRecursoA: data.estadoRecursoA,
+          });
+        });
       }
     });
   }
@@ -61,11 +89,20 @@ export class RecursoAdministracionEditComponent {
 
     if (form.invalid) return;
 
-    const recurso: RecursoAdministracion = form.value as RecursoAdministracion;
+    const formValue = form.value;
+    const payload: any = {
+      idRecurso: formValue.recurso?.idRecurso,
+      fechaRecepcion: formValue.fechaRecepcion,
+      cantidadRecibida: formValue.cantidadRecibida ? Number(formValue.cantidadRecibida) : null,
+      observaciones: formValue.observaciones,
+      estadoRecursoA: formValue.estadoRecursoA,
+    };
+
+    if (isEdit) payload.idRecursoAdministracion = formValue.idRecursoAdministracion;
 
     const operation$ = isEdit
-      ? this.recursoAdministracionService.update(recurso.idRecursoAdministracion!, recurso)
-      : this.recursoAdministracionService.save(recurso);
+      ? this.recursoAdministracionService.update(payload.idRecursoAdministracion!, payload)
+      : this.recursoAdministracionService.save(payload);
 
     operation$.pipe(
       switchMap(() => this.recursoAdministracionService.findAll()),

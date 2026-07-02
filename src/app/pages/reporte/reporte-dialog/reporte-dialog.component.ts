@@ -1,28 +1,25 @@
-import { Component, inject, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, computed, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { ReporteService } from '../../../services/reporte.service';
+import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ReporteService } from '../../../services/reporte.service'; 
+import { Reporte } from '../../../model/reporte'; 
 import { switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-reporte-dialog',
   imports: [
+    ReactiveFormsModule,
     MatDialogModule,
-    MatToolbarModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
-    MatCheckboxModule,
-    FormsModule,
   ],
   templateUrl: './reporte-dialog.component.html',
   styleUrl: './reporte-dialog.component.css',
@@ -32,11 +29,38 @@ export class ReporteDialogComponent {
   private readonly data = inject(MAT_DIALOG_DATA);
   private readonly dialogRef = inject(MatDialogRef<ReporteDialogComponent>);
 
-  protected $reporte = signal({ ...this.data });
+  // Definición del formulario reactivo encapsulado en una Señal
+  protected $form = signal(new FormGroup({
+    idReporte: new FormControl<number | null>(null),
+    titulo: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(150)]),
+    tipoReporte: new FormControl<string>('', [Validators.required]),
+    fechaGeneracion: new FormControl<string>('', [Validators.required]),
+    contenido: new FormControl<string>('', [Validators.required]),
+    generadoPor: new FormControl<string>('', [Validators.required]),
+    estadoReporte: new FormControl<boolean>(true, [Validators.required]),
+  }));
+
+  // Evaluación limpia de si es edición basándonos en la data inyectada
+  protected $isEdit = computed(() => !!this.data && this.data.idReporte > 0);
+
+  // Helper seguro para leer los controles desde el HTML sin romper el ciclo de vida
+  protected getControl(name: string) {
+    return this.$form().get(name);
+  }
+
+  constructor() {
+    // Si la data existe (Edición), rellenamos el formulario inmediatamente
+    if (this.data) {
+      this.$form().patchValue(this.data);
+    }
+  }
 
   operate() {
-    const reporte = this.$reporte();
-    const isEdit = reporte != null && reporte.idReporte > 0;
+    const form = this.$form();
+    if (form.invalid) return;
+
+    const reporte: Reporte = form.value as Reporte;
+    const isEdit = this.$isEdit();
     const msg = isEdit ? 'ACTUALIZADO' : 'REGISTRADO';
 
     const operation$ = isEdit
