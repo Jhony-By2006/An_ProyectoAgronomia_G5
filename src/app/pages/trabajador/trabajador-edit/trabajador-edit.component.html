@@ -2,46 +2,82 @@
 
 <mat-dialog-content [formGroup]="form" style="display: flex; flex-direction: column; gap: 4px; padding-top: 8px;">
 
+  <!-- Nombre -->
   <mat-form-field appearance="outline">
     <mat-label>Nombre</mat-label>
     <input matInput formControlName="nombreTrabajador" placeholder="Ej. Juan" maxlength="50">
-    <mat-error *ngIf="form.get('nombreTrabajador')?.invalid">{{ getError('nombreTrabajador') }}</mat-error>
+    @if (form.get('nombreTrabajador')?.errors?.['required'] && form.get('nombreTrabajador')?.touched) {
+      <small class="invalid">El nombre es requerido</small>
+    }
+    @if (form.get('nombreTrabajador')?.errors?.['pattern'] && form.get('nombreTrabajador')?.touched) {
+      <small class="invalid">Solo letras y espacios, entre 2 y 50 caracteres.</small>
+    }
   </mat-form-field>
 
+  <!-- Apellidos -->
   <mat-form-field appearance="outline">
     <mat-label>Apellidos</mat-label>
     <input matInput formControlName="apellidosTrabajador" placeholder="Ej. Pérez" maxlength="50">
-    <mat-error *ngIf="form.get('apellidosTrabajador')?.invalid">{{ getError('apellidosTrabajador') }}</mat-error>
+    @if (form.get('apellidosTrabajador')?.errors?.['required'] && form.get('apellidosTrabajador')?.touched) {
+      <small class="invalid">Los apellidos son requeridos</small>
+    }
+    @if (form.get('apellidosTrabajador')?.errors?.['pattern'] && form.get('apellidosTrabajador')?.touched) {
+      <small class="invalid">Solo letras y espacios, entre 2 y 50 caracteres.</small>
+    }
   </mat-form-field>
 
+  <!-- DNI -->
   <mat-form-field appearance="outline">
     <mat-label>DNI / Documento</mat-label>
     <input matInput formControlName="dni" placeholder="Ej. 75849302" maxlength="8">
-    <mat-error *ngIf="form.get('dni')?.invalid">{{ getError('dni') }}</mat-error>
+    @if (form.get('dni')?.errors?.['required'] && form.get('dni')?.touched) {
+      <small class="invalid">El DNI es requerido</small>
+    }
+    @if (form.get('dni')?.errors?.['pattern'] && form.get('dni')?.touched) {
+      <small class="invalid">El DNI debe tener exactamente 8 dígitos.</small>
+    }
   </mat-form-field>
 
+  <!-- Cargo -->
   <mat-form-field appearance="outline">
     <mat-label>Cargo</mat-label>
     <input matInput formControlName="cargo" placeholder="Ej. Supervisor, Operario" maxlength="40">
-    <mat-error *ngIf="form.get('cargo')?.invalid">{{ getError('cargo') }}</mat-error>
+    @if (form.get('cargo')?.errors?.['pattern'] && form.get('cargo')?.touched) {
+      <small class="invalid">Solo letras y espacios, entre 2 y 40 caracteres.</small>
+    }
   </mat-form-field>
 
+  <!-- Teléfono -->
   <mat-form-field appearance="outline">
     <mat-label>Teléfono</mat-label>
     <input matInput formControlName="telefono" placeholder="Ej. 930875930" maxlength="9">
-    <mat-error *ngIf="form.get('telefono')?.invalid">{{ getError('telefono') }}</mat-error>
+    @if (form.get('telefono')?.errors?.['pattern'] && form.get('telefono')?.touched) {
+      <small class="invalid">El teléfono debe iniciar con 9 y tener 9 dígitos.</small>
+    }
   </mat-form-field>
 
+  <!-- Email -->
   <mat-form-field appearance="outline">
     <mat-label>Email</mat-label>
     <input matInput type="email" formControlName="email" placeholder="correo@ejemplo.com" maxlength="100">
-    <mat-error *ngIf="form.get('email')?.invalid">{{ getError('email') }}</mat-error>
+    @if (form.get('email')?.errors?.['required'] && form.get('email')?.touched) {
+      <small class="invalid">El correo es requerido</small>
+    }
+    @if (form.get('email')?.errors?.['pattern'] && form.get('email')?.touched) {
+      <small class="invalid">Ingrese un correo válido (ej: nombre@dominio.com).</small>
+    }
   </mat-form-field>
 
+  <!-- Fecha de Contrato -->
   <mat-form-field appearance="outline">
     <mat-label>Fecha de Contrato</mat-label>
     <input matInput type="date" formControlName="fechaContratoT">
-    <mat-error *ngIf="form.get('fechaContratoT')?.invalid">{{ getError('fechaContratoT') }}</mat-error>
+    @if (form.get('fechaContratoT')?.errors?.['required'] && form.get('fechaContratoT')?.touched) {
+      <small class="invalid">La fecha de contrato es obligatoria</small>
+    }
+    @if (form.get('fechaContratoT')?.errors?.['fechaFutura'] && form.get('fechaContratoT')?.touched) {
+      <small class="invalid">La fecha de contrato no puede ser futura.</small>
+    }
   </mat-form-field>
 
   <mat-checkbox formControlName="estado" color="primary">Trabajador Activo</mat-checkbox>
@@ -50,5 +86,6 @@
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="cancelar()">Cancelar</button>
-  <button mat-flat-button style="background-color: #2e694e; color: white;" (click)="guardar()">OK</button>
+  <!-- Bloqueamos el botón si el formulario es inválido, igual que en método de pago -->
+  <button mat-flat-button style="background-color: #2e694e; color: white;" (click)="guardar()" [disabled]="form.invalid">OK</button>
 </mat-dialog-actions>

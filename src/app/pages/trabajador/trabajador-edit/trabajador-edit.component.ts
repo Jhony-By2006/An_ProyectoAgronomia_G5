@@ -9,9 +9,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { TrabajadorService } from '../../../services/trabajador.service';
 import { Trabajador } from '../../../model/trabajador';
+import { switchMap, tap } from 'rxjs';
 
-// ── (validaciones) ──
-export const REGEX_TRABAJADOR = { // Es nuestro disccionario para las validaciones.
+export const REGEX_TRABAJADOR = { 
   nombres: /^[a-zA-ZÀ-ÿ\s]{2,50}$/,
   apellidos: /^[a-zA-ZÀ-ÿ\s]{2,50}$/,
   dni: /^[0-9]{8}$/,
@@ -37,18 +37,15 @@ export const REGEX_TRABAJADOR = { // Es nuestro disccionario para las validacion
 export class TrabajadorEditComponent implements OnInit {
   private readonly dialogRef = inject(MatDialogRef<TrabajadorEditComponent>);
   private readonly trabajadorService = inject(TrabajadorService);
-  protected readonly data: Trabajador = inject(MAT_DIALOG_DATA);
+  protected readonly data: any = inject(MAT_DIALOG_DATA);
 
   protected form!: FormGroup;
 
   ngOnInit() {
-
     let fechaInicial = null;
     if (this.data?.fechaContratoT) {
       fechaInicial = this.data.fechaContratoT.split('T')[0];
     }
-
-    const hoy = new Date().toISOString().split('T')[0];
 
     this.form = new FormGroup({
       idTrabajador: new FormControl(this.data?.idTrabajador || null),
@@ -94,7 +91,6 @@ export class TrabajadorEditComponent implements OnInit {
     });
   }
 
-  // Validador custom: replica validarFechaContrato() del JS de MVC
   private fechaNoFuturaValidator(control: FormControl) {
     if (!control.value) return null;
     const fechaSeleccionada = new Date(control.value);
@@ -103,50 +99,25 @@ export class TrabajadorEditComponent implements OnInit {
     return fechaSeleccionada > hoy ? { fechaFutura: true } : null;
   }
 
-  // Helper para mostrar mensajes de error en el HTML
-  getError(campo: string): string {
-    const control = this.form.get(campo);
-    if (!control || !control.touched || control.valid) return '';
-
-    if (control.hasError('required')) return 'Este campo es obligatorio.';
-    if (control.hasError('pattern')) {
-      const mensajes: Record<string, string> = {
-        nombreTrabajador: 'Solo letras y espacios, entre 2 y 50 caracteres.',
-        apellidosTrabajador: 'Solo letras y espacios, entre 2 y 50 caracteres.',
-        dni: 'El DNI debe tener exactamente 8 dígitos.',
-        cargo: 'Solo letras y espacios, entre 2 y 40 caracteres.',
-        telefono: 'El teléfono debe iniciar con 9 y tener 9 dígitos.',
-        email: 'Ingrese un correo válido (ej: nombre@dominio.com).'
-      };
-      return mensajes[campo] || 'Formato inválido.';
-    }
-    if (control.hasError('maxlength')) return 'Excede el máximo de caracteres.';
-    if (control.hasError('fechaFutura')) return 'La fecha de contrato no puede ser futura.';
-
-    return '';
-  }
-
   guardar() {
     if (this.form.valid) {
-      const formValue: Trabajador = this.form.value as Trabajador;
+      const formValue: any = this.form.value;
+      const isEdit = !!formValue.idTrabajador;
+      const msg = isEdit ? 'TRABAJADOR ACTUALIZADO' : 'TRABAJADOR REGISTRADO';
 
-      if (formValue.idTrabajador) {
-        this.trabajadorService.update(formValue.idTrabajador, formValue).subscribe({
-          next: () => {
-            this.trabajadorService.setMessageChange('TRABAJADOR ACTUALIZADO');
-            this.dialogRef.close(true);
-          },
-          error: (err) => console.error('Error al actualizar:', err)
-        });
-      } else {
-        this.trabajadorService.save(formValue).subscribe({
-          next: () => {
-            this.trabajadorService.setMessageChange('TRABAJADOR REGISTRADO');
-            this.dialogRef.close(true);
-          },
-          error: (err) => console.error('Error al guardar:', err)
-        });
-      }
+      const operation$ = isEdit
+        ? this.trabajadorService.update(formValue.idTrabajador, formValue)
+        : this.trabajadorService.save(formValue);
+
+      operation$.pipe(
+        switchMap(() => this.trabajadorService.findAll()),
+        tap(data => this.trabajadorService.setListChange(data)),
+        tap(() => this.trabajadorService.setMessageChange(msg))
+      )
+      .subscribe({
+        next: () => this.dialogRef.close(true),
+        error: (err) => console.error('Error en el servidor:', err)
+      });
     } else {
       this.form.markAllAsTouched(); 
     }

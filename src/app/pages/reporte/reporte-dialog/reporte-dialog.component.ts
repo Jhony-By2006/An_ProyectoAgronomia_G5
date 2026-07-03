@@ -10,7 +10,6 @@ import { ReporteService } from '../../../services/reporte.service';
 import { Reporte } from '../../../model/reporte'; 
 import { switchMap, tap } from 'rxjs';
 
-// ── (Reporte) ──
 export const REGEX_REPORTE = {
   titulo: /^(?=.*[a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ0-9.,°\-\s]{5,100}$/,
   tipoReporte: /^[a-zA-ZÀ-ÿ\s]{3,40}$/,
@@ -20,6 +19,7 @@ export const REGEX_REPORTE = {
 
 @Component({
   selector: 'app-reporte-dialog',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     MatDialogModule,
@@ -91,13 +91,12 @@ export class ReporteDialogComponent {
 
     if (form.invalid) {
       form.markAllAsTouched();
-      alert('Revisa los campos, hay datos inválidos (formato incorrecto o vacíos).');
       return;
     }
 
-    const reporte: Reporte = form.value as Reporte;
+    const reporte: any = form.value;
     const isEdit = this.$isEdit();
-    const msg = isEdit ? 'ACTUALIZADO' : 'REGISTRADO';
+    const msg = isEdit ? 'REPORTE ACTUALIZADO' : 'REPORTE REGISTRADO';
 
     const operation$ = isEdit
       ? this.reporteService.update(reporte.idReporte, reporte)
@@ -108,7 +107,10 @@ export class ReporteDialogComponent {
       tap(data => this.reporteService.setListChange(data)),
       tap(() => this.reporteService.setMessageChange(msg))
     )
-    .subscribe(() => this.close());
+    .subscribe({
+      next: () => this.close(),
+      error: (err) => console.error('Error al procesar el reporte:', err)
+    });
   }
 
   close() {
