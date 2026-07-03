@@ -13,8 +13,18 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Recurso } from '../../../model/recurso';
 import { switchMap, tap } from 'rxjs';
 
+// (Validacion de Recurso)
+const NOMBRE_REGEX = /^[a-zA-ZÀ-ÿ\s]{3,100}$/;
+const TIPO_REGEX = /^[a-zA-ZÀ-ÿ\s]{3,50}$/;
+const UNIDAD_REGEX = /^[a-zA-ZÀ-ÿ.\s]{1,20}$/;
+const CANTIDAD_MIN = 1;
+const CANTIDAD_MAX = 100000;
+const COSTO_MIN = 0.01;
+const COSTO_MAX = 1000000;
+
 @Component({
   selector: 'app-recurso-edit',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -39,12 +49,33 @@ export class RecursoEditComponent {
   protected $form = signal(new FormGroup({
     idRecurso: new FormControl<number | null>(null),
     proveedor: new FormControl<any>(null, [Validators.required]), 
-    nombreRecurso: new FormControl<string>('', [Validators.required]),
-    tipoRecurso: new FormControl<string>('', [Validators.required]),
-    cantidadRecurso: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-    unidadMedidaRecurso: new FormControl<string>('', [Validators.required]),
-    costoRecurso: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-    fechaIngresoRecurso: new FormControl<string>('', [Validators.required]),
+    nombreRecurso: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(NOMBRE_REGEX),
+      Validators.maxLength(100)
+    ]),
+    tipoRecurso: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(TIPO_REGEX)
+    ]),
+    cantidadRecurso: new FormControl<number | null>(null, [
+      Validators.required,
+      Validators.min(CANTIDAD_MIN),
+      Validators.max(CANTIDAD_MAX)
+    ]),
+    unidadMedidaRecurso: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(UNIDAD_REGEX)
+    ]),
+    costoRecurso: new FormControl<number | null>(null, [
+      Validators.required,
+      Validators.min(COSTO_MIN),
+      Validators.max(COSTO_MAX)
+    ]),
+    fechaIngresoRecurso: new FormControl<string>('', [
+      Validators.required,
+      this.fechaNoFuturaValidator
+    ]),
     estadoRecurso: new FormControl<boolean>(true, [Validators.required])
   }));
 
@@ -53,9 +84,16 @@ export class RecursoEditComponent {
   protected $isEdit = computed(() => !!this.$id());
   protected $f = computed(() => this.$form().controls); 
 
-
   compareObjects(o1: any, o2: any): boolean {
     return o1 && o2 ? o1.idProveedor === o2.idProveedor : o1 === o2;
+  }
+
+  private fechaNoFuturaValidator(control: FormControl) {
+    if (!control.value) return null;
+    const fechaSeleccionada = new Date(control.value);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    return fechaSeleccionada > hoy ? { fechaFutura: true } : null;
   }
 
   constructor() {
@@ -65,7 +103,6 @@ export class RecursoEditComponent {
       const id = this.$id();
       if (id) {
         this.recursoService.findById(id).subscribe(data => {
-          
           let fechaFormateada = '';
           if (data.fechaIngresoRecurso) {
             if (Array.isArray(data.fechaIngresoRecurso)) {
@@ -96,7 +133,11 @@ export class RecursoEditComponent {
     const form = this.$form();
     const isEdit = this.$isEdit();
 
-    if (form.invalid) return;
+    if (form.invalid) {
+      form.markAllAsTouched();
+      alert('Revisa los campos, hay datos inválidos (formato incorrecto o vacíos).');
+      return;
+    }
 
     const formValue = form.value;
 

@@ -10,6 +10,14 @@ import { ReporteService } from '../../../services/reporte.service';
 import { Reporte } from '../../../model/reporte'; 
 import { switchMap, tap } from 'rxjs';
 
+// ── (Reporte) ──
+export const REGEX_REPORTE = {
+  titulo: /^(?=.*[a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ0-9.,°\-\s]{5,100}$/,
+  tipoReporte: /^[a-zA-ZÀ-ÿ\s]{3,40}$/,
+  contenido: /^(?=.*[a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ0-9.,°@\-\s]{10,2000}$/,
+  generadoPor: /^[a-zA-ZÀ-ÿ\s]{3,60}$/
+};
+
 @Component({
   selector: 'app-reporte-dialog',
   imports: [
@@ -29,35 +37,63 @@ export class ReporteDialogComponent {
   private readonly data = inject(MAT_DIALOG_DATA);
   private readonly dialogRef = inject(MatDialogRef<ReporteDialogComponent>);
 
-  // Definición del formulario reactivo encapsulado en una Señal
   protected $form = signal(new FormGroup({
     idReporte: new FormControl<number | null>(null),
-    titulo: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(150)]),
-    tipoReporte: new FormControl<string>('', [Validators.required]),
-    fechaGeneracion: new FormControl<string>('', [Validators.required]),
-    contenido: new FormControl<string>('', [Validators.required]),
-    generadoPor: new FormControl<string>('', [Validators.required]),
+    titulo: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(REGEX_REPORTE.titulo),
+      Validators.maxLength(100)
+    ]),
+    tipoReporte: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(REGEX_REPORTE.tipoReporte),
+      Validators.maxLength(40)
+    ]),
+    fechaGeneracion: new FormControl<string>('', [
+      Validators.required,
+      this.fechaNoFuturaValidator
+    ]),
+    contenido: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(REGEX_REPORTE.contenido),
+      Validators.maxLength(2000)
+    ]),
+    generadoPor: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(REGEX_REPORTE.generadoPor),
+      Validators.maxLength(60)
+    ]),
     estadoReporte: new FormControl<boolean>(true, [Validators.required]),
   }));
 
-  // Evaluación limpia de si es edición basándonos en la data inyectada
   protected $isEdit = computed(() => !!this.data && this.data.idReporte > 0);
 
-  // Helper seguro para leer los controles desde el HTML sin romper el ciclo de vida
   protected getControl(name: string) {
     return this.$form().get(name);
   }
 
   constructor() {
-    // Si la data existe (Edición), rellenamos el formulario inmediatamente
     if (this.data) {
       this.$form().patchValue(this.data);
     }
   }
 
+  private fechaNoFuturaValidator(control: FormControl) {
+    if (!control.value) return null;
+    const fechaSeleccionada = new Date(control.value);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    return fechaSeleccionada > hoy ? { fechaFutura: true } : null;
+  }
+
   operate() {
     const form = this.$form();
-    if (form.invalid) return;
+
+    if (form.invalid) {
+      form.markAllAsTouched();
+      alert('Revisa los campos, hay datos inválidos (formato incorrecto o vacíos).');
+      return;
+    }
 
     const reporte: Reporte = form.value as Reporte;
     const isEdit = this.$isEdit();

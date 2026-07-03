@@ -4,18 +4,28 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProveedorService } from '../../../services/proveedor.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Proveedor } from '../../../model/proveedor';
 import { switchMap, tap } from 'rxjs';
 
+// ── (Proveedor) ──
+const NOMBRE_REGEX = /^(?=.*[a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ0-9.,&\-\s]{3,80}$/;
+const RUC_REGEX = /^[0-9]{11}$/;
+const DIRECCION_REGEX = /^(?=.*[a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ0-9.,°#\-\s]{5,150}$/;
+const TELEFONO_REGEX = /^[0-9]{9}$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9](?:[a-zA-Z0-9._%+-]{1,63})@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.[a-zA-Z]{2,8}$/;
+
 @Component({
   selector: 'app-proveedor-edit',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule, 
     MatButtonModule,
     MatIconModule,
     RouterLink
@@ -29,45 +39,70 @@ export class ProveedorEditComponent {
   private readonly router = inject(Router);
   private readonly proveedorService = inject(ProveedorService);
 
-  // Definimos el formulario como un Signal para que Angular rastree sus cambios en tiempo real
   protected $form = signal(new FormGroup({
     idProveedor: new FormControl<number | null>(null),
-    nombreProveedor: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(70)]),
-    apellidoProveedor: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(70)]),
-    rucProveedor: new FormControl<string>('', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]),
-    direccionProveedor: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(150)]),
-    telefonoProveedor: new FormControl<string>('', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]),
-    emailProveedor: new FormControl<string>('', [Validators.required, Validators.email]),
-    estadoProveedor: new FormControl<boolean | null>(true),
+    nombreProveedor: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(NOMBRE_REGEX),
+      Validators.minLength(3),
+      Validators.maxLength(80)
+    ]),
+    apellidoProveedor: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(NOMBRE_REGEX),
+      Validators.minLength(3),
+      Validators.maxLength(70)
+    ]),
+    rucProveedor: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(RUC_REGEX),
+      Validators.minLength(11),
+      Validators.maxLength(11)
+    ]),
+    direccionProveedor: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(DIRECCION_REGEX),
+      Validators.maxLength(150)
+    ]),
+    telefonoProveedor: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(TELEFONO_REGEX),
+      Validators.minLength(9),
+      Validators.maxLength(9)
+    ]),
+    emailProveedor: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(EMAIL_REGEX)
+    ]),
+    estadoProveedor: new FormControl<boolean | null>(true, [Validators.required]),
   }));
 
-  // Convertimos los parámetros de la URL (el ID) a un Signal para saber si estamos editando o creando
   private readonly $params = toSignal(this.route.params, { initialValue: {} });
   protected $id = computed(() => this.$params()['id']);
-  protected $isEdit = computed(() => !!this.$id()); // Si hay ID, estamos editando (true). Si no, creando (false)
-  protected $f = computed(() => this.$form().controls); // Acceso rápido a los controles para el HTML
+  protected $isEdit = computed(() => !!this.$id());
+  protected $f = computed(() => this.$form().controls);
 
   constructor() {
-    // El effect se ejecuta cada vez que el ID cambia; ideal para cargar datos al editar
     effect(() => {
       const id = this.$id();
       if(id){
-        // Si hay ID, llamamos al servicio para traer los datos y llenar el form automáticamente
         this.proveedorService.findById(id).subscribe(data => this.$form().patchValue(data));
       }
     });
   }
 
-  // Este método unifica Create y Update en uno solo
   operate(){
     const form = this.$form();
     const isEdit = this.$isEdit();
     
-    if(form.invalid) return;
+    if(form.invalid) {
+      form.markAllAsTouched();
+      alert('Revisa los campos, hay datos inválidos (formato incorrecto o vacíos).');
+      return;
+    }
 
     const proveedor: Proveedor = form.value as Proveedor;
 
-    // Aquí usamos el servicio
     const operation$ = isEdit 
       ? this.proveedorService.update(proveedor.idProveedor!, proveedor) 
       : this.proveedorService.save(proveedor);
@@ -80,8 +115,5 @@ export class ProveedorEditComponent {
     .subscribe(() => {
       this.router.navigate(['/pages/proveedor']);
     });
-    
-
   }
-  
 }

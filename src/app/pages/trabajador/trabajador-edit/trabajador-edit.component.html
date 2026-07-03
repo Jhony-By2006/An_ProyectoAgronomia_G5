@@ -1,40 +1,47 @@
 <h2 mat-dialog-title>{{ data ? 'Detalles del Trabajador' : 'Nuevo Trabajador' }}</h2>
 
-<mat-dialog-content [formGroup]="form" style="display: flex; flex-direction: column; gap: 12px; padding-top: 8px;">
-  
+<mat-dialog-content [formGroup]="form" style="display: flex; flex-direction: column; gap: 4px; padding-top: 8px;">
+
   <mat-form-field appearance="outline">
     <mat-label>Nombre</mat-label>
-    <input matInput formControlName="nombreTrabajador" placeholder="Ej. Juan">
+    <input matInput formControlName="nombreTrabajador" placeholder="Ej. Juan" maxlength="50">
+    <mat-error *ngIf="form.get('nombreTrabajador')?.invalid">{{ getError('nombreTrabajador') }}</mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Apellidos</mat-label>
-    <input matInput formControlName="apellidosTrabajador" placeholder="Ej. Pérez">
+    <input matInput formControlName="apellidosTrabajador" placeholder="Ej. Pérez" maxlength="50">
+    <mat-error *ngIf="form.get('apellidosTrabajador')?.invalid">{{ getError('apellidosTrabajador') }}</mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>DNI / Documento</mat-label>
-    <input matInput formControlName="dni" placeholder="Ej. 75849302">
+    <input matInput formControlName="dni" placeholder="Ej. 75849302" maxlength="8">
+    <mat-error *ngIf="form.get('dni')?.invalid">{{ getError('dni') }}</mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Cargo</mat-label>
-    <input matInput formControlName="cargo" placeholder="Ej. Supervisor, Operario">
+    <input matInput formControlName="cargo" placeholder="Ej. Supervisor, Operario" maxlength="40">
+    <mat-error *ngIf="form.get('cargo')?.invalid">{{ getError('cargo') }}</mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Teléfono</mat-label>
-    <input matInput formControlName="telefono" placeholder="Ej. 930875930">
+    <input matInput formControlName="telefono" placeholder="Ej. 930875930" maxlength="9">
+    <mat-error *ngIf="form.get('telefono')?.invalid">{{ getError('telefono') }}</mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Email</mat-label>
-    <input matInput type="email" formControlName="email" placeholder="correo@ejemplo.com">
+    <input matInput type="email" formControlName="email" placeholder="correo@ejemplo.com" maxlength="100">
+    <mat-error *ngIf="form.get('email')?.invalid">{{ getError('email') }}</mat-error>
   </mat-form-field>
 
-<mat-form-field appearance="outline">
+  <mat-form-field appearance="outline">
     <mat-label>Fecha de Contrato</mat-label>
     <input matInput type="date" formControlName="fechaContratoT">
+    <mat-error *ngIf="form.get('fechaContratoT')?.invalid">{{ getError('fechaContratoT') }}</mat-error>
   </mat-form-field>
 
   <mat-checkbox formControlName="estado" color="primary">Trabajador Activo</mat-checkbox>
@@ -43,5 +50,5 @@
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="cancelar()">Cancelar</button>
-  <button mat-flat-button style="background-color: #2e694e; color: white;" [disabled]="form.invalid" (click)="guardar()">OK</button>
+  <button mat-flat-button style="background-color: #2e694e; color: white;" (click)="guardar()">OK</button>
 </mat-dialog-actions>

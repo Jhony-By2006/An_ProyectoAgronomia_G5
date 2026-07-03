@@ -21,8 +21,14 @@ import { Reporte } from '../../../model/reporte';
 import { Trabajador } from '../../../model/trabajador';
 import { MetodoPago } from '../../../model/metodopago';
 
+// ── (Administracion) ──
+const NOMBRE_REGEX = /^[a-zA-ZÀ-ÿ\s]{3,100}$/;
+const RESPONSABLE_REGEX = /^[a-zA-ZÀ-ÿ\s]{3,80}$/;
+const DESCRIPCION_REGEX = /^(?=.*[a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ0-9.,°@\-\s]{5,250}$/;
+
 @Component({
   selector: 'app-administracion-dialog',
+  standalone: true,
   imports: [
     MatDialogModule,
     MatToolbarModule,
@@ -43,14 +49,14 @@ export class AdministracionDialogComponent {
   private readonly reporteService = inject(ReporteService);
   private readonly trabajadorService = inject(TrabajadorService);
   private readonly metodoPagoService = inject(MetodoPagoService);
-  private readonly data = inject<Administracion>(MAT_DIALOG_DATA);
+  private readonly data = inject<any>(MAT_DIALOG_DATA);
   private readonly dialogRef = inject(MatDialogRef<AdministracionDialogComponent>);
 
-  protected $inventariosList = signal<Inventario[]>([]);
-  protected $recursosList = signal<RecursoAdministracion[]>([]);
-  protected $reportesList = signal<Reporte[]>([]);
-  protected $trabajadoresList = signal<Trabajador[]>([]);
-  protected $metodosPagoList = signal<MetodoPago[]>([]);
+  protected $inventariosList = signal<any[]>([]);
+  protected $recursosList = signal<any[]>([]);
+  protected $reportesList = signal<any[]>([]);
+  protected $trabajadoresList = signal<any[]>([]);
+  protected $metodosPagoList = signal<any[]>([]);
 
   protected $administracion = signal<any>(
     this.data
@@ -70,6 +76,12 @@ export class AdministracionDialogComponent {
         }
   );
 
+  // ── Enlaces de validación para la Vista ──
+  protected readonly nombrePattern = NOMBRE_REGEX;
+  protected readonly responsablePattern = RESPONSABLE_REGEX;
+  protected readonly descripcionPattern = DESCRIPCION_REGEX;
+  protected readonly maxFechaHoy = new Date().toISOString().split('T')[0];
+
   constructor() {
     this.inventarioService.findAll().subscribe(data => this.$inventariosList.set(data));
     this.recursoAdministracionService.findAll().subscribe(data => this.$recursosList.set(data));
@@ -78,7 +90,36 @@ export class AdministracionDialogComponent {
     this.metodoPagoService.findAll().subscribe(data => this.$metodosPagoList.set(data));
   }
 
+  private validar(): boolean {
+    const admin = this.$administracion();
+
+    const nombre = (admin.nombre ?? '').trim();
+    if (!nombre || !NOMBRE_REGEX.test(nombre)) return false;
+
+    const responsable = (admin.responsable ?? '').trim();
+    if (!responsable || !RESPONSABLE_REGEX.test(responsable)) return false;
+
+    const descripcion = (admin.descripcion ?? '').trim();
+    if (!descripcion || !DESCRIPCION_REGEX.test(descripcion)) return false;
+
+    if (!admin.fechaRegistro) return false;
+    const fechaSeleccionada = new Date(admin.fechaRegistro);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    if (fechaSeleccionada > hoy) return false;
+
+    if (!admin.idTrabajador) return false;
+    if (!admin.idInventario) return false;
+    if (!admin.idMetodoPago) return false;
+    if (!admin.idReporte) return false;
+    if (!admin.idRecursoAdministracion) return false;
+
+    return true;
+  }
+
   operate() {
+    if (!this.validar()) return;
+
     const admin = this.$administracion();
     const isEdit = admin.idAdministracion > 0;
 

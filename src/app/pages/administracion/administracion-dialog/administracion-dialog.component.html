@@ -8,87 +8,161 @@
 <mat-dialog-content class="dialog-container">
   @let admin = $administracion();
 
-  <form (submit)="operate()" class="form-container" #frmAdmin="ngForm">
+  <form (ngSubmit)="operate()" class="form-container" #frmAdmin="ngForm">
 
     <div class="form-grid">
 
+      <!-- Nombre -->
       <mat-form-field appearance="outline">
         <mat-label>Nombre</mat-label>
-        <input matInput placeholder="Nombre de la sede/área" [(ngModel)]="admin.nombre" name="nombre" required #nombreField="ngModel">
-        @if (nombreField.invalid && nombreField.touched) {
-          <small class="invalid">Es requerido</small>
+        <input matInput 
+               placeholder="Nombre de la sede/área" 
+               [(ngModel)]="admin.nombre" 
+               name="nombre" 
+               required 
+               [pattern]="nombrePattern"
+               maxlength="100"
+               #nombreField="ngModel">
+        @if (nombreField.errors?.['required'] && nombreField.touched) {
+          <small class="invalid">El nombre es requerido.</small>
+        }
+        @if (nombreField.errors?.['pattern'] && nombreField.touched) {
+          <small class="invalid">Solo letras y espacios (3-100 caracteres). Sin números ni @.</small>
         }
       </mat-form-field>
 
+      <!-- Responsable -->
       <mat-form-field appearance="outline">
         <mat-label>Responsable</mat-label>
-        <input matInput placeholder="Nombre del encargado" [(ngModel)]="admin.responsable" name="responsable" required #respField="ngModel">
-        @if (respField.invalid && respField.touched) {
-          <small class="invalid">Es requerido</small>
+        <input matInput 
+               placeholder="Nombre del encargado" 
+               [(ngModel)]="admin.responsable" 
+               name="responsable" 
+               required 
+               [pattern]="responsablePattern"
+               maxlength="80"
+               #respField="ngModel">
+        @if (respField.errors?.['required'] && respField.touched) {
+          <small class="invalid">El responsable es requerido.</small>
+        }
+        @if (respField.errors?.['pattern'] && respField.touched) {
+          <small class="invalid">Solo letras y espacios (3-80 caracteres). Sin números ni @.</small>
         }
       </mat-form-field>
 
+      <!-- Fecha Registro -->
       <mat-form-field appearance="outline">
         <mat-label>Fecha Registro</mat-label>
-        <input matInput type="date" [(ngModel)]="admin.fechaRegistro" name="fechaRegistro" required>
+        <input matInput 
+               type="date" 
+               [(ngModel)]="admin.fechaRegistro" 
+               name="fechaRegistro" 
+               required
+               [max]="maxFechaHoy"
+               #fechaField="ngModel">
+        @if (fechaField.errors?.['required'] && fechaField.touched) {
+          <small class="invalid">La fecha es requerida.</small>
+        }
+        @if (fechaField.errors?.['max'] && fechaField.touched) {
+          <small class="invalid">La fecha no puede ser futura.</small>
+        }
       </mat-form-field>
 
+      <!-- Estado -->
       <mat-form-field appearance="outline">
         <mat-label>Estado</mat-label>
-        <mat-select [(ngModel)]="admin.estadoAdmin" name="estadoAdmin">
+        <mat-select [(ngModel)]="admin.estadoAdmin" name="estadoAdmin" required #estadoField="ngModel">
           <mat-option [value]="true">Activo</mat-option>
           <mat-option [value]="false">Inactivo</mat-option>
         </mat-select>
+        @if (estadoField.errors?.['required'] && estadoField.touched) {
+          <small class="invalid">El estado es requerido.</small>
+        }
       </mat-form-field>
 
+      <!-- Descripción -->
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Descripción</mat-label>
-        <textarea matInput placeholder="Detalles o anotaciones adicionales" [(ngModel)]="admin.descripcion" name="descripcion" rows="3"></textarea>
+        <textarea matInput 
+                  placeholder="Detalles o anotaciones adicionales" 
+                  [(ngModel)]="admin.descripcion" 
+                  name="descripcion" 
+                  rows="3"
+                  required
+                  [pattern]="descripcionPattern"
+                  maxlength="250"
+                  #descField="ngModel"></textarea>
+        @if (descField.errors?.['required'] && descField.touched) {
+          <small class="invalid">La descripción es requerida.</small>
+        }
+        @if (descField.errors?.['pattern'] && descField.touched) {
+          <small class="invalid">Debe contener letras, entre 5 y 250 caracteres.</small>
+        }
       </mat-form-field>
 
+      <!-- Inventario -->
       <mat-form-field appearance="outline">
         <mat-label>Inventario</mat-label>
-        <mat-select [(ngModel)]="admin.idInventario" name="idInventario" required>
+        <mat-select [(ngModel)]="admin.idInventario" name="idInventario" required #invField="ngModel">
           @for (i of $inventariosList(); track i.idInventario) {
             <mat-option [value]="i.idInventario">{{ i.nombreInven }}</mat-option>
           }
         </mat-select>
+        @if (invField.errors?.['required'] && invField.touched) {
+          <small class="invalid">Seleccione un inventario.</small>
+        }
       </mat-form-field>
 
+      <!-- Recurso Administración -->
       <mat-form-field appearance="outline">
         <mat-label>Recurso Administración</mat-label>
-        <mat-select [(ngModel)]="admin.idRecursoAdministracion" name="idRecursoAdministracion" required>
+        <mat-select [(ngModel)]="admin.idRecursoAdministracion" name="idRecursoAdministracion" required #recField="ngModel">
           @for (r of $recursosList(); track r.idRecursoAdministracion) {
             <mat-option [value]="r.idRecursoAdministracion">{{ r.nombreRecurso ?? r.idRecursoAdministracion }}</mat-option>
           }
         </mat-select>
+        @if (recField.errors?.['required'] && recField.touched) {
+          <small class="invalid">Seleccione un recurso.</small>
+        }
       </mat-form-field>
 
+      <!-- Reporte -->
       <mat-form-field appearance="outline">
         <mat-label>Reporte</mat-label>
-        <mat-select [(ngModel)]="admin.idReporte" name="idReporte" required>
+        <mat-select [(ngModel)]="admin.idReporte" name="idReporte" required #repField="ngModel">
           @for (r of $reportesList(); track r.idReporte) {
             <mat-option [value]="r.idReporte">{{ r.titulo }}</mat-option>
           }
         </mat-select>
+        @if (repField.errors?.['required'] && repField.touched) {
+          <small class="invalid">Seleccione un reporte.</small>
+        }
       </mat-form-field>
 
+      <!-- Trabajador -->
       <mat-form-field appearance="outline">
         <mat-label>Trabajador</mat-label>
-        <mat-select [(ngModel)]="admin.idTrabajador" name="idTrabajador" required>
+        <mat-select [(ngModel)]="admin.idTrabajador" name="idTrabajador" required #trabField="ngModel">
           @for (t of $trabajadoresList(); track t.idTrabajador) {
             <mat-option [value]="t.idTrabajador">{{ t.nombreTrabajador }} {{ t.apellidosTrabajador }}</mat-option>
           }
         </mat-select>
+        @if (trabField.errors?.['required'] && trabField.touched) {
+          <small class="invalid">Seleccione un trabajador.</small>
+        }
       </mat-form-field>
 
+      <!-- Método de Pago -->
       <mat-form-field appearance="outline">
         <mat-label>Método de Pago</mat-label>
-        <mat-select [(ngModel)]="admin.idMetodoPago" name="idMetodoPago" required>
+        <mat-select [(ngModel)]="admin.idMetodoPago" name="idMetodoPago" required #pagoField="ngModel">
           @for (m of $metodosPagoList(); track m.idMetodoPago) {
             <mat-option [value]="m.idMetodoPago">{{ m.nombre }}</mat-option>
           }
         </mat-select>
+        @if (pagoField.errors?.['required'] && pagoField.touched) {
+          <small class="invalid">Seleccione un método de pago.</small>
+        }
       </mat-form-field>
 
     </div>

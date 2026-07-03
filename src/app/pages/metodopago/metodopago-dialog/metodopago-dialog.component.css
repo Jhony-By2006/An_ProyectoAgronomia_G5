@@ -45,6 +45,15 @@
 .form-card mat-form-field.mat-focused .mat-mdc-floating-label {
   color: #1B4332 !important;
 }
+/* ── Mensajes de error ── */
+.invalid {
+  color: #b91c1c;
+  font-size: 12.5px;
+  margin-top: -4px;
+  margin-bottom: 8px;
+  display: block;
+}
+
 
 /* ── Botones ── */
 .form-actions {

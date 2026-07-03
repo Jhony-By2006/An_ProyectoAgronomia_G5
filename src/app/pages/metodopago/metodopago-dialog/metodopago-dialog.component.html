@@ -1,27 +1,60 @@
 <div class="form-page">
   <h2 class="form-title">Gestión de Métodos de Pago</h2>
 
-  <div class="form-card">
+  <!-- Agregamos la etiqueta form para capturar el estado del formulario -->
+  <form #frmMetodo="ngForm" (ngSubmit)="operate()" class="form-card">
     <div class="form-grid">
 
+      <!-- Nombre -->
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Nombre</mat-label>
-        <input matInput placeholder="Ej. Efectivo" [(ngModel)]="$metodoPago().nombre">
+        <input matInput 
+               name="nombre"
+               placeholder="Ej. Efectivo" 
+               [(ngModel)]="$metodoPago().nombre"
+               #nombreCtrl="ngModel"
+               required
+               [pattern]="nombrePattern"
+               maxlength="60">
+        @if (nombreCtrl.errors?.['required'] && nombreCtrl.touched) {
+          <small class="invalid">El nombre es requerido</small>
+        }
+        @if (nombreCtrl.errors?.['pattern'] && nombreCtrl.touched) {
+          <small class="invalid">Solo letras y espacios (entre 3 y 60 caracteres). Sin números ni @</small>
+        }
       </mat-form-field>
 
+      <!-- Descripción -->
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Descripción</mat-label>
-        <textarea matInput rows="3" placeholder="Ej. Pago en efectivo al momento de la entrega"
-          [(ngModel)]="$metodoPago().descripcion">
+        <textarea matInput 
+                  name="descripcion"
+                  rows="3" 
+                  placeholder="Ej. Pago en efectivo al momento de la entrega"
+                  [(ngModel)]="$metodoPago().descripcion"
+                  #descCtrl="ngModel"
+                  required
+                  [pattern]="descripcionPattern"
+                  maxlength="200">
         </textarea>
+        @if (descCtrl.errors?.['required'] && descCtrl.touched) {
+          <small class="invalid">La descripción es requerida</small>
+        }
+        @if (descCtrl.errors?.['pattern'] && descCtrl.touched) {
+          <small class="invalid">Debe tener entre 5 y 200 caracteres y contener letras</small>
+        }
       </mat-form-field>
 
+      <!-- Estado -->
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Estado</mat-label>
-        <mat-select [(ngModel)]="$metodoPago().estadoMetodoPago">
+        <mat-select name="estadoMetodoPago" [(ngModel)]="$metodoPago().estadoMetodoPago" required #estadoCtrl="ngModel">
           <mat-option [value]="true">Activo</mat-option>
           <mat-option [value]="false">Inactivo</mat-option>
         </mat-select>
+        @if (estadoCtrl.errors?.['required'] && estadoCtrl.touched) {
+          <small class="invalid">El estado es requerido</small>
+        }
       </mat-form-field>
 
     </div>
@@ -31,10 +64,11 @@
         <mat-icon>cancel</mat-icon>
         <span>Cancelar</span>
       </button>
-      <button mat-flat-button type="button" class="btn-submit" (click)="operate()">
+      <!-- El botón se bloquea automáticamente si el formulario rompe el regex del HTML -->
+      <button mat-flat-button type="submit" class="btn-submit" [disabled]="frmMetodo.invalid">
         <mat-icon>done</mat-icon>
         <span>Guardar</span>
       </button>
     </div>
-  </div>
+  </form>
 </div>

@@ -12,6 +12,7 @@
 
     <div class="form-grid">
 
+      <!-- Proveedor -->
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Proveedor</mat-label>
         <mat-select formControlName="proveedor" [compareWith]="compareObjects">
@@ -26,22 +27,31 @@
         }
       </mat-form-field>
 
+      <!-- Nombre -->
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Nombre del Recurso</mat-label>
-        <input matInput placeholder="Ej. Fertilizante Premium" formControlName="nombreRecurso">
+        <input matInput placeholder="Ej. Fertilizante Premium" formControlName="nombreRecurso" maxlength="100">
         @if ($f()['nombreRecurso'].errors?.['required'] && $f()['nombreRecurso'].touched) {
           <small class="invalid">Es requerido</small>
         }
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Tipo de Recurso</mat-label>
-        <input matInput placeholder="Ej. Químico, Herramienta" formControlName="tipoRecurso">
-        @if ($f()['tipoRecurso'].errors?.['required'] && $f()['tipoRecurso'].touched) {
-          <small class="invalid">Es requerido</small>
+        @if ($f()['nombreRecurso'].errors?.['pattern'] && $f()['nombreRecurso'].touched) {
+          <small class="invalid">Solo letras y espacios (entre 3 y 100 caracteres)</small>
         }
       </mat-form-field>
 
+      <!-- Tipo -->
+      <mat-form-field appearance="outline">
+        <mat-label>Tipo de Recurso</mat-label>
+        <input matInput placeholder="Ej. Químico, Herramienta" formControlName="tipoRecurso" maxlength="50">
+        @if ($f()['tipoRecurso'].errors?.['required'] && $f()['tipoRecurso'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+        @if ($f()['tipoRecurso'].errors?.['pattern'] && $f()['tipoRecurso'].touched) {
+          <small class="invalid">Solo letras y espacios (entre 3 y 50 caracteres)</small>
+        }
+      </mat-form-field>
+
+      <!-- Cantidad -->
       <mat-form-field appearance="outline">
         <mat-label>Cantidad</mat-label>
         <input matInput type="number" placeholder="0" formControlName="cantidadRecurso">
@@ -49,34 +59,53 @@
           <small class="invalid">Es requerido</small>
         }
         @if ($f()['cantidadRecurso'].errors?.['min'] && $f()['cantidadRecurso'].touched) {
-          <small class="invalid">Mínimo 0</small>
+          <small class="invalid">Mínimo debe ser 1</small>
+        }
+        @if ($f()['cantidadRecurso'].errors?.['max'] && $f()['cantidadRecurso'].touched) {
+          <small class="invalid">Máximo permitido: 100,000</small>
         }
       </mat-form-field>
 
+      <!-- Unidad de Medida -->
       <mat-form-field appearance="outline">
         <mat-label>Unidad de Medida</mat-label>
-        <input matInput placeholder="Ej. Litros, Kg, Unidades" formControlName="unidadMedidaRecurso">
+        <input matInput placeholder="Ej. Litros, Kg, Unidades" formControlName="unidadMedidaRecurso" maxlength="20">
         @if ($f()['unidadMedidaRecurso'].errors?.['required'] && $f()['unidadMedidaRecurso'].touched) {
           <small class="invalid">Es requerido</small>
         }
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Costo (S/.)</mat-label>
-        <input matInput type="number" placeholder="0.00" formControlName="costoRecurso">
-        @if ($f()['costoRecurso'].errors?.['required'] && $f()['costoRecurso'].touched) {
-          <small class="invalid">Es requerido</small>
+        @if ($f()['unidadMedidaRecurso'].errors?.['pattern'] && $f()['unidadMedidaRecurso'].touched) {
+          <small class="invalid">Solo texto y puntos. Sin números ni @</small>
         }
       </mat-form-field>
 
+      <!-- Costo -->
+      <mat-form-field appearance="outline">
+        <mat-label>Costo (S/.)</mat-label>
+        <input matInput type="number" step="0.01" placeholder="0.00" formControlName="costoRecurso">
+        @if ($f()['costoRecurso'].errors?.['required'] && $f()['costoRecurso'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+        @if ($f()['costoRecurso'].errors?.['min'] && $f()['costoRecurso'].touched) {
+          <small class="invalid">El costo mínimo es S/. 0.01</small>
+        }
+        @if ($f()['costoRecurso'].errors?.['max'] && $f()['costoRecurso'].touched) {
+          <small class="invalid">El costo máximo es S/. 1'000,000</small>
+        }
+      </mat-form-field>
+
+      <!-- Fecha -->
       <mat-form-field appearance="outline">
         <mat-label>Fecha de Ingreso</mat-label>
         <input matInput type="date" formControlName="fechaIngresoRecurso">
         @if ($f()['fechaIngresoRecurso'].errors?.['required'] && $f()['fechaIngresoRecurso'].touched) {
           <small class="invalid">Es requerido</small>
         }
+        @if ($f()['fechaIngresoRecurso'].errors?.['fechaFutura'] && $f()['fechaIngresoRecurso'].touched) {
+          <small class="invalid">La fecha no puede ser mayor a la de hoy</small>
+        }
       </mat-form-field>
 
+      <!-- Estado -->
       <mat-form-field appearance="outline">
         <mat-label>Estado</mat-label>
         <mat-select formControlName="estadoRecurso">

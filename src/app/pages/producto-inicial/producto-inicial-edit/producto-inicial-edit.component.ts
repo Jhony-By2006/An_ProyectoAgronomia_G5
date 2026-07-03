@@ -10,6 +10,16 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ProductoInicial } from '../../../model/producto-inicial';
 import { switchMap, tap } from 'rxjs';
 
+// ── (ProductoInicial) ──
+const NOMBRE_REGEX = /^(?=.*[a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ0-9.,\-\s]{3,100}$/;
+const DESCRIPCION_REGEX = /^(?=.*[a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ0-9.,°@\-\s]{5,250}$/;
+const UNIDAD_REGEX = /^[a-zA-ZÀ-ÿ.\s]{1,20}$/;
+const PROVEEDOR_ORIGEN_REGEX = /^(?=.*[a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ0-9.,\-\s]{3,100}$/;
+const CANTIDAD_MIN = 1;
+const CANTIDAD_MAX = 100000;
+const COSTO_MIN = 0.01;
+const COSTO_MAX = 1000000;
+
 @Component({
   selector: 'app-producto-inicial-edit',
   imports: [
@@ -31,13 +41,39 @@ export class ProductoInicialEditComponent {
 
   protected $form = signal(new FormGroup({
     idProductoInicial: new FormControl<number | null>(null),
-    nombreProdI: new FormControl<string>('', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
-    descripcionProdI: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]),
-    cantidadInicialProdI: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-    unidadMedidaProdI: new FormControl<string>('', [Validators.required, Validators.maxLength(30)]),
-    costoUnitarioProdI: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-    fechaIngresoProdI: new FormControl<string>('', [Validators.required]),
-    proveedorOrigenProdI: new FormControl<string>('', [Validators.required, Validators.maxLength(100)]),
+    nombreProdI: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(NOMBRE_REGEX),
+      Validators.maxLength(100)
+    ]),
+    descripcionProdI: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(DESCRIPCION_REGEX),
+      Validators.maxLength(250)
+    ]),
+    cantidadInicialProdI: new FormControl<number | null>(null, [
+      Validators.required,
+      Validators.min(CANTIDAD_MIN),
+      Validators.max(CANTIDAD_MAX)
+    ]),
+    unidadMedidaProdI: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(UNIDAD_REGEX)
+    ]),
+    costoUnitarioProdI: new FormControl<number | null>(null, [
+      Validators.required,
+      Validators.min(COSTO_MIN),
+      Validators.max(COSTO_MAX)
+    ]),
+    fechaIngresoProdI: new FormControl<string>('', [
+      Validators.required,
+      this.fechaNoFuturaValidator
+    ]),
+    proveedorOrigenProdI: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(PROVEEDOR_ORIGEN_REGEX),
+      Validators.maxLength(100)
+    ]),
     estadoProdI: new FormControl<boolean | null>(true),
   }));
 
@@ -45,6 +81,14 @@ export class ProductoInicialEditComponent {
   protected $id = computed(() => this.$params()['id']);
   protected $isEdit = computed(() => !!this.$id());
   protected $f = computed(() => this.$form().controls);
+
+  private fechaNoFuturaValidator(control: FormControl) {
+    if (!control.value) return null;
+    const fechaSeleccionada = new Date(control.value);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    return fechaSeleccionada > hoy ? { fechaFutura: true } : null;
+  }
 
   constructor() {
     effect(() => {
@@ -59,7 +103,11 @@ export class ProductoInicialEditComponent {
     const form = this.$form();
     const isEdit = this.$isEdit();
 
-    if (form.invalid) return;
+    if (form.invalid) {
+      form.markAllAsTouched();
+      alert('Revisa los campos, hay datos inválidos (formato incorrecto o vacíos).');
+      return;
+    }
 
     const producto: ProductoInicial = form.value as ProductoInicial;
 

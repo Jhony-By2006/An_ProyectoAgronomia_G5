@@ -79,8 +79,8 @@
 /* Mensajes de error (por si los necesitas) */
 .invalid {
   color: #b91c1c;
-  font-size: 11.5px;
-  margin-top: -16px;
-  margin-bottom: 8px;
+  font-size: 12.5px;
+  margin-top: 2px;
+  margin-bottom: -4px;
   display: block;
 }

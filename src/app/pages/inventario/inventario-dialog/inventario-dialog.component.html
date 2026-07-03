@@ -3,80 +3,179 @@
     {{ $inventario().idInventario > 0 ? 'Modificar' : 'Registrar' }} Ítem de Inventario
   </h2>
 
-  <div class="form-card">
+  <form #frmInventario="ngForm" (ngSubmit)="operate()" class="form-card">
     <div class="form-grid">
 
+      <!-- Producto Final Asociado -->
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Producto Final Asociado</mat-label>
-        <mat-select [(ngModel)]="$inventario().productoFinal" [compareWith]="compareFinal">
+        <mat-select name="productoFinal" [(ngModel)]="$inventario().productoFinal" [compareWith]="compareFinal" required #prodFinalCtrl="ngModel">
           @for (pf of $productosFinalesList(); track pf.idProductoFinal) {
             <mat-option [value]="pf">
               {{ pf.nombreProdF }} (ID: {{ pf.idProductoFinal }})
             </mat-option>
           }
         </mat-select>
+        @if (prodFinalCtrl.errors?.['required'] && prodFinalCtrl.touched) {
+          <small class="invalid">Seleccione un producto final.</small>
+        }
       </mat-form-field>
 
+      <!-- Producto Inicial Asociado -->
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Producto Inicial Asociado</mat-label>
-        <mat-select [(ngModel)]="$inventario().productoInicial" [compareWith]="compareInicial">
+        <mat-select name="productoInicial" [(ngModel)]="$inventario().productoInicial" [compareWith]="compareInicial" required #prodInicialCtrl="ngModel">
           @for (pi of $productosInicialesList(); track pi.idProductoInicial) {
             <mat-option [value]="pi">
               {{ pi.nombreProdI }} (ID: {{ pi.idProductoInicial }})
             </mat-option>
           }
         </mat-select>
+        @if (prodInicialCtrl.errors?.['required'] && prodInicialCtrl.touched) {
+          <small class="invalid">Seleccione un producto inicial.</small>
+        }
       </mat-form-field>
 
+      <!-- Nombre Inventario -->
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Nombre Inventario</mat-label>
-        <input matInput placeholder="Ej. Lote de Maíz Blanco" [(ngModel)]="$inventario().nombreInven" required>
+        <input matInput 
+               name="nombreInven"
+               placeholder="Ej. Lote de Maíz Blanco" 
+               [(ngModel)]="$inventario().nombreInven" 
+               required
+               [pattern]="nombrePattern"
+               maxlength="100"
+               #nombreCtrl="ngModel">
+        @if (nombreCtrl.errors?.['required'] && nombreCtrl.touched) {
+          <small class="invalid">El nombre de inventario es requerido.</small>
+        }
+        @if (nombreCtrl.errors?.['pattern'] && nombreCtrl.touched) {
+          <small class="invalid">Solo letras y espacios (entre 3 y 100 caracteres). Sin números ni @.</small>
+        }
       </mat-form-field>
 
+      <!-- Descripción -->
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Descripción</mat-label>
-        <textarea matInput placeholder="Detalles opcionales..." [(ngModel)]="$inventario().descripcionInven" rows="2"></textarea>
+        <textarea matInput 
+                  name="descripcionInven"
+                  placeholder="Detalles opcionales..." 
+                  [(ngModel)]="$inventario().descripcionInven" 
+                  rows="2"
+                  required
+                  [pattern]="descripcionPattern"
+                  maxlength="250"
+                  #descCtrl="ngModel"></textarea>
+        @if (descCtrl.errors?.['required'] && descCtrl.touched) {
+          <small class="invalid">La descripción es requerida.</small>
+        }
+        @if (descCtrl.errors?.['pattern'] && descCtrl.touched) {
+          <small class="invalid">Debe contener letras, entre 5 y 250 caracteres.</small>
+        }
       </mat-form-field>
 
+      <!-- Stock Actual -->
       <mat-form-field appearance="outline">
         <mat-label>Stock Actual</mat-label>
-        <input type="number" matInput [(ngModel)]="$inventario().stockActualInven" required>
+        <input type="number" 
+               matInput 
+               name="stockActualInven"
+               [(ngModel)]="$inventario().stockActualInven" 
+               required
+               min="0"
+               [max]="stockMaxVal"
+               step="1"
+               #stockActualCtrl="ngModel">
+        @if (stockActualCtrl.errors?.['required'] && stockActualCtrl.touched) {
+          <small class="invalid">El stock actual es requerido.</small>
+        }
+        @if ((stockActualCtrl.errors?.['min'] || stockActualCtrl.errors?.['max']) && stockActualCtrl.touched) {
+          <small class="invalid">Debe ser un entero entre 0 y 1,000,000.</small>
+        }
       </mat-form-field>
 
+      <!-- Stock Mínimo -->
       <mat-form-field appearance="outline">
         <mat-label>Stock Mínimo</mat-label>
-        <input type="number" matInput [(ngModel)]="$inventario().stockMinimoInven" required>
+        <input type="number" 
+               matInput 
+               name="stockMinimoInven"
+               [(ngModel)]="$inventario().stockMinimoInven" 
+               required
+               min="0"
+               [max]="stockMaxVal"
+               step="1"
+               #stockMinimoCtrl="ngModel">
+        @if (stockMinimoCtrl.errors?.['required'] && stockMinimoCtrl.touched) {
+          <small class="invalid">El stock mínimo es requerido.</small>
+        }
+        @if ((stockMinimoCtrl.errors?.['min'] || stockMinimoCtrl.errors?.['max']) && stockMinimoCtrl.touched) {
+          <small class="invalid">Debe ser un entero entre 0 y 1,000,000.</small>
+        }
       </mat-form-field>
 
+      <!-- Unidad de Medida -->
       <mat-form-field appearance="outline">
         <mat-label>Unidad de Medida</mat-label>
-        <input matInput placeholder="Ej. Sacos, Kg" [(ngModel)]="$inventario().unidadMedidaInven" required>
+        <input matInput 
+               name="unidadMedidaInven"
+               placeholder="Ej. Sacos, Kg" 
+               [(ngModel)]="$inventario().unidadMedidaInven" 
+               required
+               [pattern]="unidadPattern"
+               maxlength="20"
+               #unidadCtrl="ngModel">
+        @if (unidadCtrl.errors?.['required'] && unidadCtrl.touched) {
+          <small class="invalid">La unidad de medida es requerida.</small>
+        }
+        @if (unidadCtrl.errors?.['pattern'] && unidadCtrl.touched) {
+          <small class="invalid">Solo letras y puntos (máx. 20 caracteres). Sin números ni @.</small>
+        }
       </mat-form-field>
 
+      <!-- Fecha Actualización -->
       <mat-form-field appearance="outline">
         <mat-label>Fecha Actualización</mat-label>
-        <input matInput type="date" [(ngModel)]="$inventario().fechaActualizacionInven" required>
+        <input matInput 
+               type="date" 
+               name="fechaActualizacionInven"
+               [(ngModel)]="$inventario().fechaActualizacionInven" 
+               required
+               [max]="maxFechaHoy"
+               #fechaCtrl="ngModel">
+        @if (fechaCtrl.errors?.['required'] && fechaCtrl.touched) {
+          <small class="invalid">La fecha es requerida.</small>
+        }
+        @if (fechaCtrl.errors?.['max'] && fechaCtrl.touched) {
+          <small class="invalid">La fecha no puede ser futura.</small>
+        }
       </mat-form-field>
 
+      <!-- Estado -->
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Estado</mat-label>
-        <mat-select [(ngModel)]="$inventario().estadoInven">
+        <mat-select name="estadoInven" [(ngModel)]="$inventario().estadoInven" required #estadoCtrl="ngModel">
           <mat-option [value]="true">Activo</mat-option>
           <mat-option [value]="false">Inactivo</mat-option>
         </mat-select>
+        @if (estadoCtrl.errors?.['required'] && estadoCtrl.touched) {
+          <small class="invalid">El estado es requerido.</small>
+        }
       </mat-form-field>
 
     </div>
 
+    <!-- Acciones -->
     <div class="form-actions">
       <button mat-flat-button type="button" class="btn-cancel" (click)="close()">
         <mat-icon>cancel</mat-icon>
         <span>Cancelar</span>
       </button>
-      <button mat-flat-button type="button" class="btn-submit" (click)="operate()">
+      <button mat-flat-button type="submit" class="btn-submit" [disabled]="frmInventario.invalid">
         <mat-icon>done</mat-icon>
         <span>Guardar</span>
       </button>
     </div>
-  </div>
+  </form>
 </div>

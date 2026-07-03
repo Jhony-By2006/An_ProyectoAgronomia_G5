@@ -1,8 +1,7 @@
 <div class="form-page">
   <h2 class="form-title">Gestión de Proveedores</h2>
 
-  <form [formGroup]="$form()" (submit)="operate()"
-        class="form-card" #frmProveedor="ngForm">
+  <form [formGroup]="$form()" (submit)="operate()" class="form-card">
 
     <div [hidden]="true">
       <mat-form-field>
@@ -13,57 +12,98 @@
 
     <div class="form-grid">
 
+      <!-- Nombre -->
       <mat-form-field appearance="outline">
         <mat-label>Nombre</mat-label>
-        <input matInput placeholder="Nombre" formControlName="nombreProveedor">
+        <input matInput placeholder="Ej. AgroIndustrias" formControlName="nombreProveedor" maxlength="80">
         @if ($f()['nombreProveedor'].errors?.['required'] && $f()['nombreProveedor'].touched) {
           <small class="invalid">Es requerido</small>
         }
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Apellido</mat-label>
-        <input matInput placeholder="Apellido" formControlName="apellidoProveedor">
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>RUC</mat-label>
-        <input matInput placeholder="RUC" formControlName="rucProveedor">
-        @if ($f()['rucProveedor'].errors?.['required'] && $f()['rucProveedor'].touched) {
-          <small class="invalid">Es requerido</small>
+        @if ($f()['nombreProveedor'].errors?.['pattern'] && $f()['nombreProveedor'].touched) {
+          <small class="invalid">Formato inválido (mínimo 3 caracteres)</small>
         }
       </mat-form-field>
 
+      <!-- Apellido -->
+      <mat-form-field appearance="outline">
+        <mat-label>Apellido / Razón Social Segundo</mat-label>
+        <input matInput placeholder="Ej. S.A.C." formControlName="apellidoProveedor" maxlength="70">
+        @if ($f()['apellidoProveedor'].errors?.['required'] && $f()['apellidoProveedor'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+        @if ($f()['apellidoProveedor'].errors?.['pattern'] && $f()['apellidoProveedor'].touched) {
+          <small class="invalid">Formato inválido (mínimo 3 caracteres)</small>
+        }
+      </mat-form-field>
+
+      <!-- RUC -->
+      <mat-form-field appearance="outline">
+        <mat-label>RUC</mat-label>
+        <input matInput placeholder="Ej. 20123456789" formControlName="rucProveedor" maxlength="11">
+        @if ($f()['rucProveedor'].errors?.['required'] && $f()['rucProveedor'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+        @if (($f()['rucProveedor'].errors?.['pattern'] || $f()['rucProveedor'].errors?.['minlength']) && $f()['rucProveedor'].touched) {
+          <small class="invalid">El RUC debe tener exactamente 11 números</small>
+        }
+      </mat-form-field>
+
+      <!-- Teléfono -->
       <mat-form-field appearance="outline">
         <mat-label>Teléfono</mat-label>
-        <input matInput placeholder="Teléfono" formControlName="telefonoProveedor">
+        <input matInput placeholder="Ej. 987654321" formControlName="telefonoProveedor" maxlength="9">
+        @if ($f()['telefonoProveedor'].errors?.['required'] && $f()['telefonoProveedor'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+        @if (($f()['telefonoProveedor'].errors?.['pattern'] || $f()['telefonoProveedor'].errors?.['minlength']) && $f()['telefonoProveedor'].touched) {
+          <small class="invalid">El teléfono debe tener exactamente 9 números</small>
+        }
       </mat-form-field>
 
+      <!-- Dirección -->
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Dirección</mat-label>
-        <input matInput placeholder="Dirección" formControlName="direccionProveedor">
+        <input matInput placeholder="Ej. Av. Larco 123" formControlName="direccionProveedor" maxlength="150">
+        @if ($f()['direccionProveedor'].errors?.['required'] && $f()['direccionProveedor'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+        @if ($f()['direccionProveedor'].errors?.['pattern'] && $f()['direccionProveedor'].touched) {
+          <small class="invalid">Dirección muy corta o con caracteres inválidos</small>
+        }
       </mat-form-field>
 
+      <!-- Email -->
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Email</mat-label>
-        <input matInput placeholder="Email" formControlName="emailProveedor">
+        <input matInput type="email" placeholder="Ej. proveedor@correo.com" formControlName="emailProveedor">
+        @if ($f()['emailProveedor'].errors?.['required'] && $f()['emailProveedor'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+        @if ($f()['emailProveedor'].errors?.['pattern'] && $f()['emailProveedor'].touched) {
+          <small class="invalid">Formato de correo electrónico inválido</small>
+        }
       </mat-form-field>
 
+      <!-- Estado -->
       <mat-form-field appearance="outline">
         <mat-label>Estado</mat-label>
-        <input matInput placeholder="Estado" formControlName="estadoProveedor">
+        <mat-select formControlName="estadoProveedor">
+          <mat-option [value]="true">Activo</mat-option>
+          <mat-option [value]="false">Inactivo</mat-option>
+        </mat-select>
+        @if ($f()['estadoProveedor'].errors?.['required'] && $f()['estadoProveedor'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
       </mat-form-field>
 
     </div>
 
     <div class="form-actions">
-      <button mat-flat-button type="button"
-              class="btn-cancel" routerLink="/pages/proveedor">
+      <button mat-flat-button type="button" class="btn-cancel" routerLink="/pages/proveedor">
         <mat-icon>cancel</mat-icon>
         <span>Cancelar</span>
       </button>
-      <button mat-flat-button type="submit"
-              class="btn-submit" [disabled]="frmProveedor.invalid">
+      <button mat-flat-button type="submit" class="btn-submit" [disabled]="$form().invalid">
         <mat-icon>done</mat-icon>
         <span>Guardar</span>
       </button>

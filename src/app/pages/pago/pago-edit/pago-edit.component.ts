@@ -13,6 +13,12 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Pago } from '../../../model/pago';
 import { switchMap, tap } from 'rxjs';
 
+// ── (Pago) ──
+const MONTO_MIN = 0.01;
+const MONTO_MAX = 1000000;
+const CONCEPTO_REGEX = /^(?=.*[a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ0-9.,\-\s]{5,150}$/;
+const COMPROBANTE_REGEX = /^(?=.*[a-zA-ZÀ-ÿ])[a-zA-Z0-9°.\-\s]{3,50}$/;
+
 @Component({
   selector: 'app-pago-edit',
   imports: [
@@ -39,10 +45,24 @@ export class PagoEditComponent {
   protected $form = signal(new FormGroup({
     idPago: new FormControl<number | null>(null),
     metodoPago: new FormControl<any>(null, [Validators.required]),
-    monto: new FormControl<number | null>(null, [Validators.required, Validators.min(0.01)]),
-    fechaPago: new FormControl<string>('', [Validators.required]),
-    concepto: new FormControl<string>('', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]),
-    comprobante: new FormControl<string>('', [Validators.required, Validators.maxLength(100)]),
+    monto: new FormControl<number | null>(null, [
+      Validators.required,
+      Validators.min(MONTO_MIN),
+      Validators.max(MONTO_MAX)
+    ]),
+    fechaPago: new FormControl<string>('', [
+      Validators.required,
+      this.fechaNoFuturaValidator
+    ]),
+    concepto: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(CONCEPTO_REGEX),
+      Validators.maxLength(150)
+    ]),
+    comprobante: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(COMPROBANTE_REGEX)
+    ]),
     estadoPago: new FormControl<boolean | null>(true),
   }));
 
@@ -53,6 +73,14 @@ export class PagoEditComponent {
 
   compareObjects(o1: any, o2: any): boolean {
     return o1 && o2 ? o1.idMetodoPago === o2.idMetodoPago : o1 === o2;
+  }
+
+  private fechaNoFuturaValidator(control: FormControl) {
+    if (!control.value) return null;
+    const fechaSeleccionada = new Date(control.value);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    return fechaSeleccionada > hoy ? { fechaFutura: true } : null;
   }
 
   constructor() {
@@ -90,7 +118,11 @@ operate() {
   const form = this.$form();
   const isEdit = this.$isEdit();
 
-  if (form.invalid) return;
+  if (form.invalid) {
+    form.markAllAsTouched();
+    alert('Revisa los campos, hay datos inválidos (formato incorrecto o vacíos).');
+    return;
+  }
 
   const formValue = form.value;
 

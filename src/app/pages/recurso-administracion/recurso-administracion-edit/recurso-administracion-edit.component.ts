@@ -12,6 +12,13 @@ import { switchMap, tap } from 'rxjs';
 import { RecursoService } from '../../../services/recurso.service';
 import { Recurso } from '../../../model/recurso';
 import { MatSelectModule } from '@angular/material/select';
+
+// ── (RecursoAdministracion) ──
+const CANTIDAD_MIN = 1;
+const CANTIDAD_MAX = 100000;
+const OBS_MIN = 5;
+const OBS_MAX = 250;
+
 @Component({
   selector: 'app-recurso-administracion-edit',
   imports: [
@@ -38,9 +45,20 @@ export class RecursoAdministracionEditComponent {
   protected $form = signal(new FormGroup({
     idRecursoAdministracion: new FormControl<number | null>(null),
     recurso: new FormControl<any>(null, [Validators.required]),
-    fechaRecepcion: new FormControl<string>('', [Validators.required]),
-    cantidadRecibida: new FormControl<number | null>(null, [Validators.required, Validators.min(1)]),
-    observaciones: new FormControl<string>('', [Validators.maxLength(300)]),
+    fechaRecepcion: new FormControl<string>('', [
+      Validators.required,
+      this.fechaNoFuturaValidator
+    ]),
+    cantidadRecibida: new FormControl<number | null>(null, [
+      Validators.required,
+      Validators.min(CANTIDAD_MIN),
+      Validators.max(CANTIDAD_MAX)
+    ]),
+    observaciones: new FormControl<string>('', [
+      Validators.required,
+      Validators.minLength(OBS_MIN),
+      Validators.maxLength(OBS_MAX)
+    ]),
     estadoRecursoA: new FormControl<boolean | null>(true),
   }));
 
@@ -51,6 +69,14 @@ export class RecursoAdministracionEditComponent {
 
   compareObjects(o1: any, o2: any): boolean {
     return o1 && o2 ? o1.idRecurso === o2.idRecurso : o1 === o2;
+  }
+
+  private fechaNoFuturaValidator(control: FormControl) {
+    if (!control.value) return null;
+    const fechaSeleccionada = new Date(control.value);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    return fechaSeleccionada > hoy ? { fechaFutura: true } : null;
   }
 
   constructor() {
@@ -87,7 +113,11 @@ export class RecursoAdministracionEditComponent {
     const form = this.$form();
     const isEdit = this.$isEdit();
 
-    if (form.invalid) return;
+    if (form.invalid) {
+      form.markAllAsTouched();
+      alert('Revisa los campos, hay datos inválidos (formato incorrecto o vacíos).');
+      return;
+    }
 
     const formValue = form.value;
     const payload: any = {
