@@ -1,4 +1,5 @@
 <div class="form-page">
+
   <h2 class="form-title">{{ $isEdit() ? 'Editar Producto Final' : 'Registrar Producto Final' }}</h2>
 
   <form [formGroup]="$form()" (submit)="operate()"
@@ -13,25 +14,37 @@
 
     <div class="form-grid">
 
+      <!-- Nombre -->
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Nombre del Producto</mat-label>
-        <input matInput placeholder="Ej. Arroz integral" formControlName="nombreProdF">
+        <input matInput placeholder="Ej. Arroz integral" formControlName="nombreProdF" maxlength="100">
         @if (getControl('nombreProdF')?.errors?.['required'] && getControl('nombreProdF')?.touched) {
           <small class="invalid">Es requerido</small>
         }
-        @if (getControl('nombreProdF')?.errors?.['minlength'] && getControl('nombreProdF')?.touched) {
-          <small class="invalid">Mínimo 2 caracteres</small>
+        @if (getControl('nombreProdF')?.errors?.['pattern'] && getControl('nombreProdF')?.touched) {
+          <small class="invalid">Formato inválido (mínimo 3 caracteres, solo letras, números, puntos, comas y guiones)</small>
+        }
+        @if (getControl('nombreProdF')?.errors?.['maxlength'] && getControl('nombreProdF')?.touched) {
+          <small class="invalid">Máximo 100 caracteres</small>
         }
       </mat-form-field>
 
+      <!-- Descripción -->
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Descripción</mat-label>
-        <input matInput placeholder="Descripción del producto" formControlName="descripcionProdF">
+        <input matInput placeholder="Descripción del producto" formControlName="descripcionProdF" maxlength="250">
         @if (getControl('descripcionProdF')?.errors?.['required'] && getControl('descripcionProdF')?.touched) {
           <small class="invalid">Es requerido</small>
         }
+        @if (getControl('descripcionProdF')?.errors?.['pattern'] && getControl('descripcionProdF')?.touched) {
+          <small class="invalid">Formato inválido (mínimo 5 caracteres)</small>
+        }
+        @if (getControl('descripcionProdF')?.errors?.['maxlength'] && getControl('descripcionProdF')?.touched) {
+          <small class="invalid">Máximo 250 caracteres</small>
+        }
       </mat-form-field>
 
+      <!-- Cantidad Producida -->
       <mat-form-field appearance="outline">
         <mat-label>Cantidad Producida</mat-label>
         <input matInput type="number" placeholder="0" formControlName="cantidadProducidaProdF">
@@ -39,18 +52,26 @@
           <small class="invalid">Es requerido</small>
         }
         @if (getControl('cantidadProducidaProdF')?.errors?.['min'] && getControl('cantidadProducidaProdF')?.touched) {
-          <small class="invalid">Debe ser mayor o igual a 0</small>
+          <small class="invalid">Debe ser mayor o igual a 1</small>
+        }
+        @if (getControl('cantidadProducidaProdF')?.errors?.['max'] && getControl('cantidadProducidaProdF')?.touched) {
+          <small class="invalid">No puede superar 100,000</small>
         }
       </mat-form-field>
 
+      <!-- Unidad de Medida -->
       <mat-form-field appearance="outline">
         <mat-label>Unidad de Medida</mat-label>
-        <input matInput placeholder="Ej. kg, litros, unidades" formControlName="unidadMedidaProdF">
+        <input matInput placeholder="Ej. kg, litros, unidades" formControlName="unidadMedidaProdF" maxlength="20">
         @if (getControl('unidadMedidaProdF')?.errors?.['required'] && getControl('unidadMedidaProdF')?.touched) {
           <small class="invalid">Es requerido</small>
         }
+        @if (getControl('unidadMedidaProdF')?.errors?.['pattern'] && getControl('unidadMedidaProdF')?.touched) {
+          <small class="invalid">Solo se permiten letras (máx. 20 caracteres)</small>
+        }
       </mat-form-field>
 
+      <!-- Precio de Venta -->
       <mat-form-field appearance="outline">
         <mat-label>Precio de Venta (S/.)</mat-label>
         <input matInput type="number" placeholder="0.00" formControlName="precioVentaProdF">
@@ -58,21 +79,35 @@
           <small class="invalid">Es requerido</small>
         }
         @if (getControl('precioVentaProdF')?.errors?.['min'] && getControl('precioVentaProdF')?.touched) {
-          <small class="invalid">Debe ser mayor o igual a 0</small>
+          <small class="invalid">Debe ser mayor o igual a 0.01</small>
+        }
+        @if (getControl('precioVentaProdF')?.errors?.['max'] && getControl('precioVentaProdF')?.touched) {
+          <small class="invalid">No puede superar 1,000,000</small>
         }
       </mat-form-field>
 
+      <!-- Fecha de Producción -->
       <mat-form-field appearance="outline">
         <mat-label>Fecha de Producción</mat-label>
         <input matInput type="date" formControlName="fechaProduccionProdF">
         @if (getControl('fechaProduccionProdF')?.errors?.['required'] && getControl('fechaProduccionProdF')?.touched) {
           <small class="invalid">Es requerido</small>
         }
+        @if (getControl('fechaProduccionProdF')?.errors?.['fechaFutura'] && getControl('fechaProduccionProdF')?.touched) {
+          <small class="invalid">La fecha no puede ser futura</small>
+        }
       </mat-form-field>
 
+      <!-- Estado -->
       <mat-form-field appearance="outline">
         <mat-label>Estado</mat-label>
-        <input matInput placeholder="true / false" formControlName="estadoProdF">
+        <mat-select formControlName="estadoProdF">
+          <mat-option [value]="true">Activo</mat-option>
+          <mat-option [value]="false">Inactivo</mat-option>
+        </mat-select>
+        @if (getControl('estadoProdF')?.errors?.['required'] && getControl('estadoProdF')?.touched) {
+          <small class="invalid">Es requerido</small>
+        }
       </mat-form-field>
 
     </div>

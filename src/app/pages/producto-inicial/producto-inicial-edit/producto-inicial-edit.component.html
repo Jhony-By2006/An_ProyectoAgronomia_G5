@@ -1,5 +1,5 @@
 <div class="form-page">
-  <h2 class="form-title">Gestión de Productos Iniciales</h2>
+  <h2 class="form-title">{{ $isEdit() ? 'Editar Producto Inicial' : 'Registrar Producto Inicial' }}</h2>
 
   <form [formGroup]="$form()" (submit)="operate()"
         class="form-card" #frmProductoInicial="ngForm">
@@ -13,59 +13,115 @@
 
     <div class="form-grid">
 
+      <!-- Nombre -->
       <mat-form-field appearance="outline">
         <mat-label>Nombre</mat-label>
-        <input matInput placeholder="Nombre del producto" formControlName="nombreProdI">
+        <input matInput placeholder="Nombre del producto" formControlName="nombreProdI" maxlength="100">
         @if ($f()['nombreProdI'].errors?.['required'] && $f()['nombreProdI'].touched) {
           <small class="invalid">Es requerido</small>
         }
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Unidad de Medida</mat-label>
-        <input matInput placeholder="Ej. kg, litros, unidades" formControlName="unidadMedidaProdI">
-        @if ($f()['unidadMedidaProdI'].errors?.['required'] && $f()['unidadMedidaProdI'].touched) {
-          <small class="invalid">Es requerido</small>
+        @if ($f()['nombreProdI'].errors?.['pattern'] && $f()['nombreProdI'].touched) {
+          <small class="invalid">Formato inválido (mínimo 3 caracteres)</small>
+        }
+        @if ($f()['nombreProdI'].errors?.['maxlength'] && $f()['nombreProdI'].touched) {
+          <small class="invalid">Máximo 100 caracteres</small>
         }
       </mat-form-field>
 
+      <!-- Unidad de Medida -->
+      <mat-form-field appearance="outline">
+        <mat-label>Unidad de Medida</mat-label>
+        <input matInput placeholder="Ej. kg, litros, unidades" formControlName="unidadMedidaProdI" maxlength="20">
+        @if ($f()['unidadMedidaProdI'].errors?.['required'] && $f()['unidadMedidaProdI'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+        @if ($f()['unidadMedidaProdI'].errors?.['pattern'] && $f()['unidadMedidaProdI'].touched) {
+          <small class="invalid">Solo se permiten letras (máx. 20 caracteres)</small>
+        }
+      </mat-form-field>
+
+      <!-- Cantidad Inicial -->
       <mat-form-field appearance="outline">
         <mat-label>Cantidad Inicial</mat-label>
         <input matInput type="number" placeholder="0" formControlName="cantidadInicialProdI">
         @if ($f()['cantidadInicialProdI'].errors?.['required'] && $f()['cantidadInicialProdI'].touched) {
           <small class="invalid">Es requerido</small>
         }
+        @if ($f()['cantidadInicialProdI'].errors?.['min'] && $f()['cantidadInicialProdI'].touched) {
+          <small class="invalid">Debe ser mayor o igual a 1</small>
+        }
+        @if ($f()['cantidadInicialProdI'].errors?.['max'] && $f()['cantidadInicialProdI'].touched) {
+          <small class="invalid">No puede superar 100,000</small>
+        }
       </mat-form-field>
 
+      <!-- Costo Unitario -->
       <mat-form-field appearance="outline">
         <mat-label>Costo Unitario</mat-label>
         <input matInput type="number" placeholder="0.00" formControlName="costoUnitarioProdI">
         @if ($f()['costoUnitarioProdI'].errors?.['required'] && $f()['costoUnitarioProdI'].touched) {
           <small class="invalid">Es requerido</small>
         }
+        @if ($f()['costoUnitarioProdI'].errors?.['min'] && $f()['costoUnitarioProdI'].touched) {
+          <small class="invalid">Debe ser mayor o igual a 0.01</small>
+        }
+        @if ($f()['costoUnitarioProdI'].errors?.['max'] && $f()['costoUnitarioProdI'].touched) {
+          <small class="invalid">No puede superar 1,000,000</small>
+        }
       </mat-form-field>
 
+      <!-- Fecha de Ingreso -->
       <mat-form-field appearance="outline">
         <mat-label>Fecha de Ingreso</mat-label>
         <input matInput type="date" formControlName="fechaIngresoProdI">
         @if ($f()['fechaIngresoProdI'].errors?.['required'] && $f()['fechaIngresoProdI'].touched) {
           <small class="invalid">Es requerido</small>
         }
+        @if ($f()['fechaIngresoProdI'].errors?.['fechaFutura'] && $f()['fechaIngresoProdI'].touched) {
+          <small class="invalid">La fecha no puede ser futura</small>
+        }
       </mat-form-field>
 
+      <!-- Proveedor Origen -->
       <mat-form-field appearance="outline">
         <mat-label>Proveedor Origen</mat-label>
-        <input matInput placeholder="Nombre del proveedor" formControlName="proveedorOrigenProdI">
+        <input matInput placeholder="Nombre del proveedor" formControlName="proveedorOrigenProdI" maxlength="100">
+        @if ($f()['proveedorOrigenProdI'].errors?.['required'] && $f()['proveedorOrigenProdI'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+        @if ($f()['proveedorOrigenProdI'].errors?.['pattern'] && $f()['proveedorOrigenProdI'].touched) {
+          <small class="invalid">Formato inválido (mínimo 3 caracteres)</small>
+        }
+        @if ($f()['proveedorOrigenProdI'].errors?.['maxlength'] && $f()['proveedorOrigenProdI'].touched) {
+          <small class="invalid">Máximo 100 caracteres</small>
+        }
       </mat-form-field>
 
+      <!-- Descripción -->
       <mat-form-field appearance="outline" class="field-span2">
         <mat-label>Descripción</mat-label>
-        <input matInput placeholder="Descripción del producto" formControlName="descripcionProdI">
+        <input matInput placeholder="Descripción del producto" formControlName="descripcionProdI" maxlength="250">
+        @if ($f()['descripcionProdI'].errors?.['required'] && $f()['descripcionProdI'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
+        @if ($f()['descripcionProdI'].errors?.['pattern'] && $f()['descripcionProdI'].touched) {
+          <small class="invalid">Formato inválido (mínimo 5 caracteres)</small>
+        }
+        @if ($f()['descripcionProdI'].errors?.['maxlength'] && $f()['descripcionProdI'].touched) {
+          <small class="invalid">Máximo 250 caracteres</small>
+        }
       </mat-form-field>
 
+      <!-- Estado -->
       <mat-form-field appearance="outline">
         <mat-label>Estado</mat-label>
-        <input matInput placeholder="Estado" formControlName="estadoProdI">
+        <mat-select formControlName="estadoProdI">
+          <mat-option [value]="true">Activo</mat-option>
+          <mat-option [value]="false">Inactivo</mat-option>
+        </mat-select>
+        @if ($f()['estadoProdI'].errors?.['required'] && $f()['estadoProdI'].touched) {
+          <small class="invalid">Es requerido</small>
+        }
       </mat-form-field>
 
     </div>

@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductoFinalService } from '../../../services/producto-final.service';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -22,9 +23,10 @@ const PRECIO_MAX = 1000000;
 @Component({
   selector: 'app-producto-final-edit',
   imports: [
-    ReactiveFormsModule,
+   ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatButtonModule,
     MatIconModule,
     RouterLink
